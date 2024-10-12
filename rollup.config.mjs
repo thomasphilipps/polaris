@@ -1,12 +1,12 @@
-import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import copy from "rollup-plugin-copy";
 import sass from "rollup-plugin-sass";
+import terser from "@rollup/plugin-terser";
 
 export default [
   {
-    input: "src/polaris.ts",
+    input: "src/polaris.js", // Utilisation de JavaScript pur
     output: {
       file: "dist/Data/systems/polaris/polaris.mjs",
       format: "esm",
@@ -15,7 +15,7 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      typescript({ tsconfig: "./tsconfig.build.json" }), // Utilise le fichier de configuration pour déclarations
+      terser(), // Minification pour un fichier plus compact
       copy({
         targets: [
           { src: "src/assets/**/*", dest: "dist/Data/systems/polaris/assets" },
