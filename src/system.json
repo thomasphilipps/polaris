@@ -21,7 +21,8 @@
   "styles": ["polaris.css"],
   "documentTypes": {
     "Item": {
-      "weapon": {}
+      "weapon": {},
+      "skill": {}
     }
   },
   "languages": [
