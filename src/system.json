@@ -1,0 +1,35 @@
+{
+  "id": "polaris",
+  "title": "Polaris pour FoundryVTT",
+  "description": "Système du jeu Polaris 3ème édition par Philippe Tessier, Raphaël Bombayl et François Menneteau, d'après l'univers crée par Philippe Tessier",
+  "version": "2.0.0",
+  "compatibility": {
+    "minimum": 12,
+    "verified": 12,
+    "maximum": 12
+  },
+  "url": "https://github.com/thomasphilipps/polaris/",
+  "manifest": "",
+  "download": "",
+  "authors": [
+    {
+      "name": "Loahn",
+      "discord": "loahn_68"
+    }
+  ],
+  "esmodules": ["polaris.mjs"],
+  "styles": ["polaris.css"],
+  "documentTypes": {
+    "Item": {
+      "weapon": {}
+    }
+  },
+  "languages": [
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "./lang/fr.json"
+    }
+  ],
+  "socket": true
+}
