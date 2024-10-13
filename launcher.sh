@@ -12,5 +12,5 @@ echo "Le conteneur est complètement démarré."
 
 # Changer les permissions du dossier spécifié
 echo "Changement des permissions sur le dossier ./dist/Data/systems/polaris"
-sudo chown -R 1000:1000 ./dist/Data/systems/polaris
+sudo chown -R 1000:1000 ./dist/Data
 echo "Permissions changées avec succès."

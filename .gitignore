@@ -6,3 +6,12 @@ dist/
 
 # Environment variables
 .env.local
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
