@@ -1,0 +1,24 @@
+{
+  "POL3": {
+    "ATTRIBUTE.Strength": "Force",
+    "ATTRIBUTE.StrengthAbbr": "FOR",
+    "ATTRIBUTE.Constitution": "Constitution",
+    "ATTRIBUTE.ConstitutionAbbr": "CON",
+    "ATTRIBUTE.Adaptation": "Adaptation",
+    "ATTRIBUTE.AdaptationAbbr": "ADA",
+    "ATTRIBUTE.Perception": "Perception",
+    "ATTRIBUTE.PerceptionAbbr": "PER",
+    "ATTRIBUTE.Intelligence": "Intelligence",
+    "ATTRIBUTE.IntelligenceAbbr": "INT",
+    "ATTRIBUTE.Willpower": "Volonté",
+    "ATTRIBUTE.WillpowerAbbr": "VOL",
+    "ATTRIBUTE.Presence": "Présence",
+    "ATTRIBUTE.PresenceAbbr": "PRE",
+    "ATTRIBUTE.Reaction": "Réaction",
+    "ATTRIBUTE.ReactionAbbr": "REA",
+    "ATTRIBUTE.Luck": "Chance",
+    "ATTRIBUTE.LuckAbbr": "CHA",
+    "Attribute.Build": "Gabarit",
+    "Attribute.BuildAbbr": "GAB"
+  }
+}

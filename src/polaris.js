@@ -1,4 +1,4 @@
-import { SkillDataModel, WeaponDataModel } from "./module/data/item.js";
+import { SkillDataModel, WeaponDataModel } from "./module/data/item/item.js";
 
 Hooks.once("init", () => {
   console.log("Polaris | Initializing Polaris system");
