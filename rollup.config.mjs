@@ -6,7 +6,7 @@ import terser from "@rollup/plugin-terser";
 
 export default [
   {
-    input: "src/polaris.js", // Utilisation de JavaScript pur
+    input: "src/polaris.mjs", // Utilisation de JavaScript pur
     output: {
       file: "dist/Data/systems/polaris/polaris.mjs",
       format: "esm",

@@ -18,7 +18,16 @@
     "ATTRIBUTE.ReactionAbbr": "REA",
     "ATTRIBUTE.Luck": "Chance",
     "ATTRIBUTE.LuckAbbr": "CHA",
-    "Attribute.Build": "Gabarit",
-    "Attribute.BuildAbbr": "GAB"
+    "ATTRIBUTE.Build": "Gabarit",
+    "ATTRIBUTE.BuildAbbr": "GAB",
+
+    "SHEETS.Skill": "Compétence"
+  },
+
+  "TYPES": {
+    "Item": {
+      "weapon": "Arme",
+      "skill": "Compétence"
+    }
   }
 }
