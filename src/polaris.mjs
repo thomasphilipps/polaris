@@ -25,4 +25,10 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "POL3.SHEETS.Skill",
   });
+
+  DocumentSheetConfig.registerSheet(Item, "polaris", applications.Pol3WeaponSheet, {
+    types: ["weapon"],
+    makeDefault: true,
+    label: "POL3.SHEETS.Weapon",
+  });
 });
