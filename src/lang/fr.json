@@ -1,70 +1,38 @@
 {
   "POL3": {
-    "ATTRIBUTE": {
-      "FirstAttribute": "Attribut 1",
-      "SecondAttribute": "Attribut 2",
-      "Strength": "FORce",
-      "StrengthAbbr": "FOR",
-      "Constitution": "CONstitution",
-      "ConstitutionAbbr": "CON",
-      "Adaptation": "ADAptation",
-      "AdaptationAbbr": "ADA",
-      "Perception": "PERception",
-      "PerceptionAbbr": "PER",
-      "Intelligence": "INTelligence",
-      "IntelligenceAbbr": "INT",
-      "Willpower": "VOLonté",
-      "WillpowerAbbr": "VOL",
-      "Presence": "PREsence",
-      "PresenceAbbr": "PRE",
-      "Reaction": "REAction",
-      "ReactionAbbr": "REA",
-      "Luck": "CHAnce",
-      "LuckAbbr": "CHA",
-      "Build": "GABarit",
-      "BuildAbbr": "GAB"
-    },
-    "SHEETS": {
-      "Skill": "Compétence",
-      "Weapon": "Arme"
-    },
-    "SKILL": {
-      "SHEET": {
-        "AssociatedAttributes": "Attributs associés",
-        "Properties": "Propriétés",
-        "Category": "Catégorie",
-        "Specialization": "Spécialisation"
-      },
-      "Category": {
-        "PhysicalAptitude": "Aptitudes physiques",
-        "CloseCombat": "Combat (contact)",
-        "RangedCombat": "Combat (tir)",
-        "Social": "Communication/Relations sociales",
-        "SpecialSkill": "Compétences spéciales",
-        "Knowledge": "Connaissances",
-        "Stealth": "Furtivité/Subterfuge",
-        "Language": "Langues/Langages",
-        "Pilot": "Pilotage",
-        "Survival": "Survie/Extérieur",
-        "Technique": "Techniques"
-      },
-      "Property": {
-        "Difficult": "Difficile",
-        "Reserved": "Réservée",
-        "LimitsOtherSkills": "Limitative",
-        "NaturalProgression": "Progression Naturelle",
-        "Prerequisites": "Pré requis Nécessaire"
-      }
-    },
-    "BOOKS": {
-      "BaseBook1": "Livre de base 1",
-      "BaseBook2": "Livre de base 2"
-    }
+    "ATTRIBUTE.Strength": "Force",
+    "ATTRIBUTE.StrengthAbbr": "FOR",
+    "ATTRIBUTE.Constitution": "Constitution",
+    "ATTRIBUTE.ConstitutionAbbr": "CON",
+    "ATTRIBUTE.Adaptation": "Adaptation",
+    "ATTRIBUTE.AdaptationAbbr": "ADA",
+    "ATTRIBUTE.Perception": "Perception",
+    "ATTRIBUTE.PerceptionAbbr": "PER",
+    "ATTRIBUTE.Intelligence": "Intelligence",
+    "ATTRIBUTE.IntelligenceAbbr": "INT",
+    "ATTRIBUTE.Willpower": "Volonté",
+    "ATTRIBUTE.WillpowerAbbr": "VOL",
+    "ATTRIBUTE.Presence": "Présence",
+    "ATTRIBUTE.PresenceAbbr": "PRE",
+    "ATTRIBUTE.Reaction": "Réaction",
+    "ATTRIBUTE.ReactionAbbr": "REA",
+    "ATTRIBUTE.Luck": "Chance",
+    "ATTRIBUTE.LuckAbbr": "CHA",
+    "ATTRIBUTE.Build": "Gabarit",
+    "ATTRIBUTE.BuildAbbr": "GAB",
+
+    "SHEETS.Skill": "Compétence"
   },
+
   "TYPES": {
     "Item": {
       "skill": "Compétence",
       "weapon": "Arme"
     }
+  },
+
+  "BOOKS" : {
+    "BaseBook1": "Livre de base 1",
+    "BaseBook2": "Livre de base 2"
   }
 }

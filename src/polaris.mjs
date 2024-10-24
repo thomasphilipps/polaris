@@ -1,10 +1,9 @@
 import * as models from "./module/models/item/_module.mjs";
 import * as documents from "./module/documents/_module.mjs";
 import * as applications from "./module/apps/_module.mjs";
-import {POL3} from "./module/config/config.mjs";
 
 Hooks.once("init", () => {
-  console.log("Polaris | Initializing Polaris config");
+  console.log("Polaris | Initializing Polaris system");
   globalThis.polaris = game.system;
 
   game.system.api = {
@@ -18,8 +17,6 @@ Hooks.once("init", () => {
     skill: models.Pol3Skill,
     weapon: models.Pol3Weapon,
   };
-
-  CONFIG.POL3 = POL3
 
   Items.unregisterSheet("core", ItemSheet);
 

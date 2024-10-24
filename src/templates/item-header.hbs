@@ -1,0 +1,26 @@
+<header class="sheet-header">
+  <img src="{{source.img}}" data-edit="img" title="{{source.name}}" height="64" width="64" />
+  <h1>
+    {{#if isEditable}}
+      {{formInput item.schema.fields.name value=source.name placeholder="Item Name"}}
+    {{else}}
+      {{source.name}}
+    {{/if}}
+  </h1>
+  <div class="book-reference">
+    <p>
+      {{#if isEditable}}
+        {{formInput fields.reference value=source.system.reference placeholder="reference"}}
+      {{else}}
+        {{source.system.reference}}
+      {{/if}}
+    </p>
+  </div>
+  <div class="tags header-tags">
+    {{#each tags as |value tag|}}
+      {{#if value}}
+        <span class="tag">{{tag}}</span>
+      {{/if}}
+    {{/each}}
+  </div>
+</header>

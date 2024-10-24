@@ -17,12 +17,13 @@ export default {
     terser(), // Minification pour un fichier plus compact
     copyWatch({
       targets: [
-        {src: ["src/assets/**/*", "!src/**/*~"], dest: "dist/Data/systems/polaris/assets"},
-        {src: ["src/lang/**/*", "!src/**/*~"], dest: "dist/Data/systems/polaris/lang"},
-        {src: ["src/templates/**/*", "!src/**/*~"], dest: "dist/Data/systems/polaris/templates"},
-        {src: ["src/config.json", "!src/**/*~"], dest: "dist/Data/systems/polaris"},
+        { src: "src/assets/**/*", dest: "dist/Data/systems/polaris/assets" },
+        { src: "src/lang/**/*", dest: "dist/Data/systems/polaris/lang" },
+        { src: "src/templates/**/*", dest: "dist/Data/systems/polaris/templates" },
+        { src: "src/system.json", dest: "dist/Data/systems/polaris" },
       ],
-      watch: ["src/assets/**/*", "src/lang/**/*", "src/templates/**/*", "src/config.json"],
+      // Utilisation de l'option "watch" pour surveiller ces dossiers
+      watch: ["src/assets/**/*", "src/lang/**/*", "src/templates/**/*", "src/system.json"],
     }),
     sass({
       output: "dist/Data/systems/polaris/polaris.css",
