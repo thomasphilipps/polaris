@@ -9,13 +9,12 @@ export default class Pol3Skill extends Pol3ItemDataModel {
       firstAttribute: new fields.StringField({ initial: "" }),
       secondAttribute: new fields.StringField({ initial: "" }),
       category: new fields.StringField({ initial: "" }),
-      option: new fields.SchemaField({
+      tags: new fields.SchemaField({
         isDifficult: new fields.BooleanField({ initial: false }),
         isReserved: new fields.BooleanField({ initial: false }),
         limitsOtherSkills: new fields.BooleanField({ initial: false }),
         hasNaturalProgression: new fields.BooleanField({ initial: false }),
         hasPrerequisites: new fields.BooleanField({ initial: false }),
-        isBaseSkill: new fields.BooleanField({ initial: false }),
       }),
       mastery: new fields.NumberField({ initial: 0, integer: true }),
       globalValue: new fields.NumberField({ initial: 0 }),

@@ -26,8 +26,13 @@
 
   "TYPES": {
     "Item": {
-      "weapon": "Arme",
-      "skill": "Compétence"
+      "skill": "Compétence",
+      "weapon": "Arme"
     }
+  },
+
+  "BOOKS" : {
+    "BaseBook1": "Livre de base 1",
+    "BaseBook2": "Livre de base 2"
   }
 }
