@@ -9,9 +9,9 @@ export default class Pol3Item extends Item {
     const actorData = this.actor ? this.actor.system : {};
 
     switch (this.type) {
-      case 'skill':
+      case "skill":
         this._prepareSkillData(itemData, actorData);
-        this._prepareTags(itemData, CONFIG.POL3.SKILL.properties)
+        this._prepareTags(itemData, CONFIG.POL3.SKILL.properties);
         break;
     }
     return super.prepareBaseData();
@@ -23,20 +23,25 @@ export default class Pol3Item extends Item {
    * @param actorData
    */
   _prepareSkillData(itemData, actorData) {
-    itemData.isBasicSkill = !(itemData.tags.has("isReserved") || itemData.tags.has("hasPrerequisites"));
+    itemData.isBasicSkill = !(
+      itemData.tags.has("isReserved") || itemData.tags.has("hasPrerequisites")
+    );
     if (this.hasActor) {
       itemData.baseLevel = this.#computeAttributeBaseLevel(itemData, actorData);
       itemData.globalLevel = itemData.baseLevel + itemData.mastery;
     }
-    (itemData.tags.isDifficult || itemData.tags.isReserved) ? itemData.globalLevel -= 3 : null;
+    itemData.globalLevel =
+      itemData.tags.has("isDifficult") || itemData.tags.has("isReserved")
+        ? itemData.globalLevel - 3
+        : itemData.globalLevel;
   }
 
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
-      .map(tag => itemData.tags.has(tag) ? `| ${properties[tag].symbol} ` : '')
-      .join('');
-    tagString = tagString ? tagString + '|' : tagString;
-    itemData.tagString = tagString
+      .map((tag) => (itemData.tags.has(tag) ? `| ${properties[tag].symbol} ` : ""))
+      .join("");
+    tagString = tagString ? tagString + "|" : tagString;
+    itemData.tagString = tagString;
   }
 
   /**
@@ -48,9 +53,20 @@ export default class Pol3Item extends Item {
   #computeAttributeBaseLevel(itemData, actorData) {
     const actorFirstAttribute = actorData.attribute[itemData.firstAttribute];
     const actorSecondAttribute = actorData.attribute[itemData.secondAttribute];
-    const firstAttributeTotalValue = actorFirstAttribute.value + actorFirstAttribute.geneticModifier + actorFirstAttribute.otherModifier + actorFirstAttribute.competencePointsModifier;
-    const secondAttributeTotalValue = actorSecondAttribute.value + actorSecondAttribute.geneticModifier + actorSecondAttribute.otherModifier + actorSecondAttribute.competencePointsModifier;
-    return this.#computeAttributeNaturalAptitude(firstAttributeTotalValue) + this.#computeAttributeNaturalAptitude(secondAttributeTotalValue);
+    const firstAttributeTotalValue =
+      actorFirstAttribute.value +
+      actorFirstAttribute.geneticModifier +
+      actorFirstAttribute.otherModifier +
+      actorFirstAttribute.competencePointsModifier;
+    const secondAttributeTotalValue =
+      actorSecondAttribute.value +
+      actorSecondAttribute.geneticModifier +
+      actorSecondAttribute.otherModifier +
+      actorSecondAttribute.competencePointsModifier;
+    return (
+      this.#computeAttributeNaturalAptitude(firstAttributeTotalValue) +
+      this.#computeAttributeNaturalAptitude(secondAttributeTotalValue)
+    );
   }
 
   /**
