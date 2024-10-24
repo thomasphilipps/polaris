@@ -4,7 +4,7 @@
         {{#if isEditable}}
             {{formInput item.schema.fields.name value=source.name placeholder="Item Name"}}
         {{else}}
-            {{source.name}}
+            {{item.system.specializedName}}
         {{/if}}
     </h1>
     <div class="book-reference">

@@ -12,6 +12,7 @@ export default class Pol3Item extends Item {
       case "skill":
         this._prepareSkillData(itemData, actorData);
         this._prepareTags(itemData, CONFIG.POL3.SKILL.properties);
+        this._prepareSpecializationName(itemData)
         break;
     }
     return super.prepareBaseData();
@@ -29,13 +30,27 @@ export default class Pol3Item extends Item {
     if (this.hasActor) {
       itemData.baseLevel = this.#computeAttributeBaseLevel(itemData, actorData);
       itemData.globalLevel = itemData.baseLevel + itemData.mastery;
+      itemData.globalLevel =
+        itemData.tags.has("isDifficult") || itemData.tags.has("isReserved")
+          ? itemData.globalLevel - 3
+          : itemData.globalLevel;
     }
-    itemData.globalLevel =
-      itemData.tags.has("isDifficult") || itemData.tags.has("isReserved")
-        ? itemData.globalLevel - 3
-        : itemData.globalLevel;
   }
 
+  /**
+   * Sets the Items's displayed name for the Observer
+   * @param itemData
+   */
+  // TODO: handle displayed name on the app menubar and in the Item sidebar
+  _prepareSpecializationName(itemData) {
+    itemData.specializedName = itemData.specialization ? `${this.name} [${itemData.specialization}]` : this.name
+  }
+
+  /**
+   * Displays hints for the Item's properties
+   * @param itemData
+   * @param properties from config file
+   */
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
       .map((tag) => (itemData.tags.has(tag) ? `| ${properties[tag].symbol} ` : ""))
