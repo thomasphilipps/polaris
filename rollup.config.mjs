@@ -1,6 +1,5 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import copyWatch from "rollup-plugin-copy-watch"; // Utilisation de copy-watch pour surveiller les fichiers
 import sass from "rollup-plugin-sass";
 import terser from "@rollup/plugin-terser";
 import copy from "rollup-plugin-copy-watch";
@@ -17,16 +16,14 @@ export default {
     commonjs(),
     terser(), // Minification pour un fichier plus compact
     copy({
-      watch: ["src/assets/", "src/lang/", "src/templates/", "src/system.json"],
+      watch: ["src/assets/", "src/lang/", "src/templates/", "src/system.json", "src/polaris.css"],
       targets: [
         { src: ["src/assets/*", "!src/**/*~"], dest: "dist/Data/systems/polaris/assets" },
         { src: ["src/lang/*", "!src/**/*~"], dest: "dist/Data/systems/polaris/lang" },
         { src: ["src/templates/*", "!src/**/*~"], dest: "dist/Data/systems/polaris/templates" },
         { src: ["src/system.json", "!src/**/*~"], dest: "dist/Data/systems/polaris" },
+        { src: ["src/polaris.css", "!src/**/*~"], dest: "dist/Data/systems/polaris" },
       ],
-    }),
-    sass({
-      output: "dist/Data/systems/polaris/polaris.css",
     }),
   ],
 };
