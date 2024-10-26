@@ -4,6 +4,8 @@ import sass from "rollup-plugin-sass";
 import terser from "@rollup/plugin-terser";
 import copy from "rollup-plugin-copy-watch";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export default {
   input: "src/polaris.mjs",
   output: {
@@ -14,7 +16,7 @@ export default {
   plugins: [
     resolve(),
     commonjs(),
-    terser(), // Minification pour un fichier plus compact
+    isProduction && terser(), // Minification pour un fichier plus compact
     copy({
       watch: ["src/assets/", "src/lang/", "src/templates/", "src/system.json", "src/polaris.css"],
       targets: [
