@@ -1,7 +1,8 @@
 import * as models from "./module/models/item/_module.mjs";
 import * as documents from "./module/documents/_module.mjs";
 import * as applications from "./module/apps/_module.mjs";
-import {POL3} from "./module/config/config.mjs";
+import * as hooks from "./module/config/hooks.mjs";
+import { POL3 } from "./module/config/config.mjs";
 
 Hooks.once("init", () => {
   console.log("Polaris | Initializing Polaris config");
@@ -11,6 +12,7 @@ Hooks.once("init", () => {
     applications,
     models,
     documents,
+    hooks,
   };
 
   CONFIG.Item.documentClass = documents.Pol3Item;
@@ -19,7 +21,7 @@ Hooks.once("init", () => {
     weapon: models.Pol3Weapon,
   };
 
-  CONFIG.POL3 = POL3
+  CONFIG.POL3 = POL3;
 
   Items.unregisterSheet("core", ItemSheet);
 
@@ -34,4 +36,8 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "POL3.SHEETS.Weapon",
   });
+});
+
+Hooks.on("preCreateItem", (item, data, options, userId) => {
+  hooks.onPreCreateItem(item, data, options, userId);
 });
