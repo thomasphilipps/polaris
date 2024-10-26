@@ -12,7 +12,7 @@ export default class Pol3Item extends Item {
       case "skill":
         this._prepareSkillData(itemData, actorData);
         this._prepareTags(itemData, CONFIG.POL3.SKILL.properties);
-        this._prepareSpecializationName(itemData)
+        this._prepareSpecializationName(itemData);
         break;
     }
     return super.prepareBaseData();
@@ -27,6 +27,7 @@ export default class Pol3Item extends Item {
     itemData.isBasicSkill = !(
       itemData.tags.has("isReserved") || itemData.tags.has("hasPrerequisites")
     );
+
     if (this.hasActor) {
       itemData.baseLevel = this.#computeAttributeBaseLevel(itemData, actorData);
       itemData.globalLevel = itemData.baseLevel + itemData.mastery;
@@ -43,7 +44,9 @@ export default class Pol3Item extends Item {
    */
   // TODO: handle displayed name on the app menubar and in the Item sidebar
   _prepareSpecializationName(itemData) {
-    itemData.specializedName = itemData.specialization ? `${this.name} [${itemData.specialization}]` : this.name
+    itemData.specializedName = itemData.specialization
+      ? `${this.name} [${itemData.specialization}]`
+      : this.name;
   }
 
   /**

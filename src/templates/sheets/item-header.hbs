@@ -1,21 +1,33 @@
 <header class="sheet-header">
-    <img src="{{source.img}}" data-edit="img" title="{{source.name}}" height="64" width="64" alt="{{source.name}}"/>
-    <h1>
+  <div class="flexcol">
+    <div class="flexrow">
+      <img
+        src="{{source.img}}"
+        data-edit="img"
+        title="{{source.name}}"
+        height="64"
+        width="64"
+        alt="{{source.name}}"
+      />
+      <h1>
         {{#if isEditable}}
-            {{formInput item.schema.fields.name value=source.name placeholder="Item Name"}}
+          {{formInput item.schema.fields.name value=source.name placeholder="Item Name"}}
         {{else}}
-            {{item.system.specializedName}}
+          {{item.system.specializedName}}
         {{/if}}
-    </h1>
-    <div class="book-reference">
-        <p>
-            {{#if isEditable}}
-                {{formInput fields.reference value=source.system.reference placeholder="reference"}}
-            {{else}}
-                {{source.system.reference}}
-            {{/if}}
-        </p>
+      </h1>
     </div>
-    <hr>
-    {{{item.system.tagString}}}
+    <div class="flexrow">
+      <div class="book-reference">
+        {{#if isEditable}}
+          {{formInput fields.reference value=source.system.reference placeholder="reference"}}
+        {{else}}
+          {{source.system.reference}}
+        {{/if}}
+      </div>
+      <div class="item-properties">
+        {{{item.system.tagString}}}
+      </div>
+    </div>
+  </div>
 </header>

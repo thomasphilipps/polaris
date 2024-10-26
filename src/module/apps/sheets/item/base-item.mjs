@@ -1,13 +1,13 @@
-const {api, sheets} = foundry.applications;
+const { api, sheets } = foundry.applications;
 const hasProperty = foundry.utils.hasProperty;
 
 export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sheets.ItemSheetV2) {
   static DEFAULT_OPTIONS = {
-    classes: ['polaris', 'sheet', 'item'],
-    tag: 'form',
+    classes: ["polaris", "sheet", "item"],
+    tag: "form",
     position: {
-      width: 520,
-      height: 'auto',
+      width: 560,
+      height: "auto",
     },
     form: {
       submitOnChange: true,
@@ -19,31 +19,86 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
 
   static PARTS = {
     header: {
-      id: 'header',
-      template: 'systems/polaris/templates/item-header.hbs',
+      id: "header",
+      template: "systems/polaris/templates/sheets/item-header.hbs",
+    },
+    tabs: {
+      id: "tabs",
+      template: "templates/generic/tab-navigation.hbs",
+    },
+    description: {
+      id: "description",
+      template: "systems/polaris/templates/sheets/partials/item-description.hbs",
     },
     config: {
-      id: 'config',
-      template: undefined // Populated with _initializeItemSheet
-    }
+      id: "config",
+      template: undefined, // Populated with _initializeItemSheet
+    },
+  };
+
+  static TABS = {
+    sheet: [
+      {
+        id: "description",
+        group: "sheet",
+        icon: "fa-solid fa-file-alt",
+        label: "POL3.SHEETS.TABS.Description",
+        active: true,
+      },
+      {
+        id: "config",
+        group: "sheet",
+        icon: "fa-solid fa-cogs",
+        label: "POL3.SHEETS.TABS.Configuration",
+      },
+    ],
+  };
+  tabGroups = {
+    sheet: "description",
   };
 
   async _prepareContext(options) {
+    const tabGroups = this._getTabs();
     return {
       item: this.document,
       source: this.document.toObject(),
+      tabGroups,
+      tabs: tabGroups.sheet,
+      tabsPartial: this.constructor.PARTS.tabs.template,
       fields: this.document.system.schema.fields,
-      isPhysical: hasProperty(this.document.system, 'techLevel'),
+      isPhysical: hasProperty(this.document.system, "techLevel"),
       isEditable: this.isEditable,
-      fieldDisabled: this.isEditable ? '' : 'disabled',
+      fieldDisabled: this.isEditable ? "" : "disabled",
     };
   }
 
   static _initializeItemSheet() {
     const item = this.DEFAULT_OPTIONS.item;
     this.PARTS = foundry.utils.deepClone(this.PARTS);
+    this.TABS = foundry.utils.deepClone(this.TABS);
 
     this.DEFAULT_OPTIONS.classes = [this.DEFAULT_OPTIONS.item.type];
     this.PARTS.config.template = `systems/polaris/templates/sheets/partials/${item.type}-config.hbs`;
+  }
+
+  /**
+   * Configure the tabs used by this sheet.
+   * @returns {Record<string, Record<string, ApplicationTab>>}
+   * @protected
+   */
+  _getTabs() {
+    const tabs = {};
+    for (const [groupId, config] of Object.entries(this.constructor.TABS)) {
+      const group = {};
+      for (const t of config) {
+        const active = this.tabGroups[t.group] === t.id;
+        group[t.id] = Object.assign({ active, cssClass: active ? "active" : "" }, t);
+      }
+      tabs[groupId] = group;
+    }
+
+    /* // Hide the config tab from non-GMs
+    if (!game.user.isGM) delete tabs.sheet.config; */
+    return tabs;
   }
 }

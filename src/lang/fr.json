@@ -26,7 +26,11 @@
     },
     "SHEETS": {
       "Skill": "Compétence",
-      "Weapon": "Arme"
+      "Weapon": "Arme",
+      "TABS": {
+        "Configuration": "Configuration",
+        "Description": "Description"
+      }
     },
     "SKILL": {
       "SHEET": {
