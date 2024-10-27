@@ -55,20 +55,21 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
   };
   tabGroups = {
     sheet: "description",
+    description: "public",
   };
 
   async _prepareContext(options) {
     const tabGroups = this._getTabs();
     return {
       item: this.document,
+      isEditable: this.isEditable,
+      fieldDisabled: this.isEditable ? "" : "disabled",
       source: this.document.toObject(),
+      fields: this.document.system.schema.fields,
       tabGroups,
       tabs: tabGroups.sheet,
       tabsPartial: this.constructor.PARTS.tabs.template,
-      fields: this.document.system.schema.fields,
       isPhysical: hasProperty(this.document.system, "techLevel"),
-      isEditable: this.isEditable,
-      fieldDisabled: this.isEditable ? "" : "disabled",
     };
   }
 
@@ -79,6 +80,15 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
 
     this.DEFAULT_OPTIONS.classes = [this.DEFAULT_OPTIONS.item.type];
     this.PARTS.config.template = `systems/polaris/templates/sheets/partials/${item.type}-config.hbs`;
+
+    if (item.hasGMDescription) {
+      this.PARTS.description.template =
+        "systems/polaris/templates/sheets/partials/item-description-advanced.hbs";
+      this.TABS.description = [
+        { id: "public", group: "description", label: "POL3.SHEETS.TABS.Description" },
+        { id: "secret", group: "description", label: "POL3.SHEETS.TABS.GMDescription" },
+      ];
+    }
   }
 
   /**

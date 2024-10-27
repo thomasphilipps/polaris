@@ -29,7 +29,8 @@
       "Weapon": "Arme",
       "TABS": {
         "Configuration": "Configuration",
-        "Description": "Description"
+        "Description": "Description",
+        "GMDescription": "Notes GM"
       }
     },
     "SKILL": {

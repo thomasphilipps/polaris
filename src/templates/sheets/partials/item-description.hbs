@@ -3,5 +3,9 @@
   data-tab="{{tabs.description.id}}"
   data-group="{{tabs.description.group}}"
 >
-  Description
+  {{#if isEditable}}
+    {{formInput fields.description value=source.system.description height=300}}
+  {{else}}
+    <article class="scrollable">{{{source.system.description}}}</article>
+  {{/if}}
 </section>
