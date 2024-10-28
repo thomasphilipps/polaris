@@ -24,7 +24,7 @@ export default class Pol3SkillSheet extends Pol3BaseItemSheet {
 
   #tagsWidget(field, groupConfig, inputConfig) {
     inputConfig.name = field.fieldPath;
-    inputConfig.options = Object.entries(CONFIG.POL3.SKILL.properties).map(([k, v]) => ({
+    inputConfig.options = Object.entries(CONFIG.POL3.SKILL.PROPERTIES).map(([k, v]) => ({
       value: k,
       label: v.label,
     }));

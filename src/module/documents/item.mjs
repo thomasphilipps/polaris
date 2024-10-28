@@ -11,7 +11,7 @@ export default class Pol3Item extends Item {
     switch (this.type) {
       case "skill":
         this._prepareSkillData(itemData, actorData);
-        this._prepareTags(itemData, CONFIG.POL3.SKILL.properties);
+        this._prepareTags(itemData, CONFIG.POL3.SKILL.PROPERTIES);
         this._prepareSpecializationName(itemData);
         break;
     }
