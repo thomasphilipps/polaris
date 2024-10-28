@@ -4,8 +4,8 @@
   data-group="{{tabs.description.group}}"
 >
   {{#if isEditable}}
-    {{formInput fields.description value=source.system.description height=300}}
+    {{formInput fields.description.fields.public value=source.system.description.public height=300}}
   {{else}}
-    <article class="scrollable">{{{source.system.description}}}</article>
+    <article class="scrollable">{{{source.system.description.public}}}</article>
   {{/if}}
 </section>

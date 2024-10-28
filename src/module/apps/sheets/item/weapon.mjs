@@ -5,6 +5,16 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
   static DEFAULT_OPTIONS = {
     item: {
       type: "weapon",
+      //hasGMDescription: true,
     },
   };
+
+  static {
+    this._initializeItemSheet();
+  }
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    return context;
+  }
 }
