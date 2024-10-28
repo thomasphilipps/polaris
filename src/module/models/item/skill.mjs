@@ -1,11 +1,11 @@
-import { Pol3ItemDataModel, specialNameOption } from "./base-item.mjs";
-import { POL3 } from "../../config/config.mjs";
+import {Pol3ItemDataModel, specialNameOption} from "./base-item.mjs";
+import {POL3} from "../../config/config.mjs";
 
 export default class Pol3Skill extends Pol3ItemDataModel {
   static ITEM_ATTRIBUTES = POL3.ATTRIBUTES;
   static DEFAULT_ATTRIBUTE = "FOR";
-  static ITEM_PROPERTIES = POL3.SKILL.properties;
-  static ITEM_CATEGORIES = POL3.SKILL.categories;
+  static ITEM_PROPERTIES = POL3.SKILL.PROPERTY;
+  static ITEM_ = POL3.SKILL.CATEGORY;
   static DEFAULT_CATEGORY = "physicalAptitude";
 
   static defineSchema() {
@@ -32,7 +32,7 @@ export default class Pol3Skill extends Pol3ItemDataModel {
         initial: this.DEFAULT_CATEGORY,
       }),
       tags: new fields.SetField(
-        new fields.StringField({ required: true, choices: this.ITEM_PROPERTIES })
+        new fields.StringField({required: true, choices: this.ITEM_PROPERTIES})
       ),
 
       //mastery: new fields.NumberField({initial: 0, integer: true}),
