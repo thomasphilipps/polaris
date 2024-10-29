@@ -1,14 +1,16 @@
-import * as ATTRIBUTES from "./attributes.mjs";
+import {ATTRIBUTE} from "./attributes.mjs";
 import * as SKILL from "./skills.mjs";
+import * as WEAPON from "./weapons.mjs";
 
 export const POL3 = {
+  ATTRIBUTE,
   SKILL,
-  ATTRIBUTES: ATTRIBUTES.ATTRIBUTES
+  WEAPON,
 };
 
-POL3.booksList = {
-  ldb1: "POL3.BOOKS.BaseBook1",
-  ldb2: "POL3.BOOKS.BaseBook2",
+POL3.BOOK = {
+  RulesBook1: {label: "POL3.BOOKS.BaseBook1"},
+  RulesBook2: {label: "POL3.BOOKS.BaseBook2"},
 };
 
 

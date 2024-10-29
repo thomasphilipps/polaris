@@ -2,7 +2,7 @@ import {Pol3ItemDataModel, specialNameOption} from "./base-item.mjs";
 import {POL3} from "../../config/config.mjs";
 
 export default class Pol3Skill extends Pol3ItemDataModel {
-  static ITEM_ATTRIBUTES = POL3.ATTRIBUTES;
+  static ITEM_ATTRIBUTES = POL3.ATTRIBUTE;
   static DEFAULT_ATTRIBUTE = "FOR";
   static ITEM_PROPERTIES = POL3.SKILL.PROPERTY;
   static ITEM_ = POL3.SKILL.CATEGORY;

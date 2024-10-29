@@ -1,4 +1,4 @@
-export const ATTRIBUTES = {
+export const ATTRIBUTE = {
   FOR: {
     label: "POL3.ATTRIBUTE.Strength",
     abbr: "POL3.ATTRIBUTE.StrengthAbbr",
