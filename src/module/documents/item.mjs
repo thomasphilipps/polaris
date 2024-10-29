@@ -28,6 +28,9 @@ export default class Pol3Item extends Item {
       itemData.tags.has("isReserved") || itemData.tags.has("hasPrerequisites")
     );
 
+
+    itemData.infoString = `${itemData.firstAttribute} / ${itemData.secondAttribute}`;
+
     if (this.hasActor) {
       itemData.baseLevel = this.#computeAttributeBaseLevel(itemData, actorData);
       itemData.globalLevel = itemData.baseLevel + itemData.mastery;

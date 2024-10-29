@@ -1,4 +1,4 @@
-const { api, sheets } = foundry.applications;
+const {api, sheets} = foundry.applications;
 const hasProperty = foundry.utils.hasProperty;
 
 export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sheets.ItemSheetV2) {
@@ -85,8 +85,8 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
       this.PARTS.description.template =
         "systems/polaris/templates/sheets/partials/item-description-advanced.hbs";
       this.TABS.description = [
-        { id: "public", group: "description", label: "POL3.SHEETS.TABS.Description" },
-        { id: "secret", group: "description", label: "POL3.SHEETS.TABS.GMDescription" },
+        {id: "public", group: "description", label: "POL3.SHEETS.TABS.Description"},
+        {id: "secret", group: "description", label: "POL3.SHEETS.TABS.GMDescription"},
       ];
     }
   }
@@ -102,7 +102,7 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
       const group = {};
       for (const t of config) {
         const active = this.tabGroups[t.group] === t.id;
-        group[t.id] = Object.assign({ active, cssClass: active ? "active" : "" }, t);
+        group[t.id] = Object.assign({active, cssClass: active ? "active" : ""}, t);
       }
       tabs[groupId] = group;
     }

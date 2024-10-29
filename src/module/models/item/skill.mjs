@@ -5,7 +5,7 @@ export default class Pol3Skill extends Pol3ItemDataModel {
   static ITEM_ATTRIBUTES = POL3.ATTRIBUTE;
   static DEFAULT_ATTRIBUTE = "FOR";
   static ITEM_PROPERTIES = POL3.SKILL.PROPERTY;
-  static ITEM_ = POL3.SKILL.CATEGORY;
+  static ITEM_CATEGORIES = POL3.SKILL.CATEGORY;
   static DEFAULT_CATEGORY = "physicalAptitude";
 
   static defineSchema() {
