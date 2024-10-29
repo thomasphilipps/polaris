@@ -61,6 +61,25 @@
         "Prerequisites": "Pré requis Nécessaire"
       }
     },
+    "WEAPON": {
+      "Category": {
+        "Ranged": "Arme à distance",
+        "Melee": "Arme de contact",
+        "CreatureAttack": "Attaque (créature)"
+      },
+      "Range": {
+        "Close": "Bout portant",
+        "CloseAbbr": "BP",
+        "Short": "Courte portée",
+        "ShortAbbr": "CP",
+        "Medium": "Portée moyenne",
+        "MediumAbbr": "MP",
+        "Long": "Longue portée",
+        "LongAbbr": "LP",
+        "Extreme": "Portée extrême",
+        "ExtremeAbbr": "EX"
+      }
+    },
     "BOOKS": {
       "BaseBook1": "Livre de base 1",
       "BaseBook2": "Livre de base 2"
