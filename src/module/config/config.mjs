@@ -9,8 +9,6 @@ export const POL3 = {
 };
 
 POL3.BOOK = {
-  RulesBook1: {label: "POL3.BOOKS.BaseBook1"},
-  RulesBook2: {label: "POL3.BOOKS.BaseBook2"},
+  coreRulebook1: {label: "POL3.BOOKS.CoreRulebook1"},
+  coreRulebook2: {label: "POL3.BOOKS.CoreRulebook2"},
 };
-
-

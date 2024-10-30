@@ -8,6 +8,9 @@ export default class Pol3Item extends Item {
     const itemData = this.system;
     const actorData = this.actor ? this.actor.system : {};
 
+    //Sets the reference string
+    this._setBookReferenceString(itemData)
+
     switch (this.type) {
       case "skill":
         this._prepareSkillData(itemData, actorData);
@@ -63,6 +66,19 @@ export default class Pol3Item extends Item {
       .join("");
     tagString = tagString ? tagString + "|" : tagString;
     itemData.tagString = tagString;
+  }
+
+  /**
+   * Sets the Item's book reference string for non-GM users
+   * @param itemData
+   */
+  _setBookReferenceString(itemData) {
+    const bookRef = itemData.reference.book;
+    const pageRef = itemData.reference.page;
+
+    itemData.referenceString = bookRef
+      ? `${game.i18n.localize(CONFIG.POL3.BOOK[bookRef].label)}${pageRef ? ` p.${pageRef}` : ''}`
+      : '';
   }
 
   /**

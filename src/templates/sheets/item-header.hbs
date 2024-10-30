@@ -17,21 +17,30 @@
         {{/if}}
       </h1>
     </div>
-    <div class="flexrow">
-      <div class="book-reference">
-        {{#if isEditable}}
-          {{formInput fields.reference value=source.system.reference placeholder="reference"}}
-        {{else}}
-          {{source.system.reference}}
-        {{/if}}
+    {{#if isEditable}}
+      <div class="reference-field">
+        <fieldset>
+          <legend>{{localize "POL3.SHEETS.REFERENCE.Label"}}</legend>
+          {{formField fields.reference.fields.book value=source.system.reference.book
+                      localize=true}}
+          {{formField fields.reference.fields.page value=source.system.reference.page
+                      localize=true}}
+        </fieldset>
       </div>
-      <div class="item-info">
-        {{{item.system.infoString}}}
+    {{else}}
+      <div class="flexrow">
+        <div class="book-reference">
+          {{item.system.referenceString}}
+        </div>
+        <div class="item-info">
+          {{{item.system.infoString}}}
+        </div>
+        <div class="flexrow item-properties">
+          {{{item.system.tagString}}}
+        </div>
       </div>
-      <div class="flexrow item-properties">
-        {{{item.system.tagString}}}
-      </div>
-    </div>
+    {{/if}}
+
   </div>
-  c
+
 </header>

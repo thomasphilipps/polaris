@@ -31,6 +31,11 @@
         "Configuration": "Configuration",
         "Description": "Description",
         "GMDescription": "Notes GM"
+      },
+      "REFERENCE": {
+        "Label": "Référence",
+        "Book": "Livre",
+        "Page": "Page"
       }
     },
     "SKILL": {
@@ -81,8 +86,8 @@
       }
     },
     "BOOKS": {
-      "BaseBook1": "Livre de base 1",
-      "BaseBook2": "Livre de base 2"
+      "CoreRulebook1": "Livre de base 1",
+      "CoreRulebook2": "Livre de base 2"
     }
   },
   "TYPES": {

@@ -1,4 +1,5 @@
 const fields = foundry.data.fields;
+import {POL3} from "../../config/config.mjs";
 
 export function itemGlobalFields() {
   return {
@@ -26,13 +27,26 @@ export function specialNameOption() {
 }
 
 export class Pol3ItemDataModel extends foundry.abstract.TypeDataModel {
+  static ITEM_BOOK_REFERENCES = POL3.BOOK;
+  static DEFAULT_BOOK_REFERENCE = "coreRulebook1"
+
   static defineSchema() {
+
     return {
       description: new fields.SchemaField({
         public: new fields.HTMLField(),
         secret: new fields.HTMLField(),
       }),
-      reference: new fields.StringField({initial: ""}),
+      reference: new fields.SchemaField({
+        book: new fields.StringField({
+          label: "POL3.SHEETS.REFERENCE.Book",
+          blank: true,
+          choices: this.ITEM_BOOK_REFERENCES,
+        }),
+        page: new fields.NumberField({
+          label: "POL3.SHEETS.REFERENCE.Page",
+        })
+      })
     };
   }
 }
