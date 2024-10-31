@@ -9,10 +9,10 @@ export default class Pol3Item extends Item {
     const actorData = this.actor ? this.actor.system : {};
 
     //Sets the reference string
-    this._setBookReferenceString(itemData)
+    this._setBookReferenceString(itemData);
 
     switch (this.type) {
-      case "skill":
+      case 'skill':
         this._prepareSkillData(itemData, actorData);
         this._prepareTags(itemData, CONFIG.POL3.SKILL.PROPERTY);
         this._prepareSpecializationName(itemData);
@@ -28,9 +28,8 @@ export default class Pol3Item extends Item {
    */
   _prepareSkillData(itemData, actorData) {
     itemData.isBasicSkill = !(
-      itemData.tags.has("isReserved") || itemData.tags.has("hasPrerequisites")
+      itemData.tags.has('isReserved') || itemData.tags.has('hasPrerequisites')
     );
-
 
     itemData.infoString = `${itemData.firstAttribute} / ${itemData.secondAttribute}`;
 
@@ -38,7 +37,7 @@ export default class Pol3Item extends Item {
       itemData.baseLevel = this.#computeAttributeBaseLevel(itemData, actorData);
       itemData.globalLevel = itemData.baseLevel + itemData.mastery;
       itemData.globalLevel =
-        itemData.tags.has("isDifficult") || itemData.tags.has("isReserved")
+        itemData.tags.has('isDifficult') || itemData.tags.has('isReserved')
           ? itemData.globalLevel - 3
           : itemData.globalLevel;
     }
@@ -62,9 +61,9 @@ export default class Pol3Item extends Item {
    */
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
-      .map((tag) => (itemData.tags.has(tag) ? `| ${properties[tag].symbol} ` : ""))
-      .join("");
-    tagString = tagString ? tagString + "|" : tagString;
+      .map(tag => (itemData.tags.has(tag) ? `| ${properties[tag].symbol} ` : ''))
+      .join('');
+    tagString = tagString ? tagString + '|' : tagString;
     itemData.tagString = tagString;
   }
 
@@ -75,9 +74,10 @@ export default class Pol3Item extends Item {
   _setBookReferenceString(itemData) {
     const bookRef = itemData.reference.book;
     const pageRef = itemData.reference.page;
+    const pageReference = pageRef ? ` p.${pageRef}` : '';
 
     itemData.referenceString = bookRef
-      ? `${game.i18n.localize(CONFIG.POL3.BOOK[bookRef].label)}${pageRef ? ` p.${pageRef}` : ''}`
+      ? `${game.i18n.localize(CONFIG.POL3.BOOK[bookRef].label)}${pageReference}`
       : '';
   }
 
@@ -115,7 +115,7 @@ export default class Pol3Item extends Item {
     const attributeScoreLimits = [25, 22, 19, 16, 13, 10, 8, 6, 5, 4];
     let baseNaturalAptitude = -4;
 
-    let index = attributeScoreLimits.findIndex((limit) => attributeTotalValue >= limit);
+    let index = attributeScoreLimits.findIndex(limit => attributeTotalValue >= limit);
     if (index !== -1) {
       baseNaturalAptitude = 6 - index;
     }
