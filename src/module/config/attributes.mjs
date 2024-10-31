@@ -7,6 +7,10 @@ export const ATTRIBUTE = {
     label: "POL3.ATTRIBUTE.Constitution",
     abbr: "POL3.ATTRIBUTE.ConstitutionAbbr",
   },
+  COO: {
+    label: "POL3.ATTRIBUTE.Coordination",
+    abbr: "POL3.ATTRIBUTE.CoordinationAbbr",
+  },
   ADA: {
     label: "POL3.ATTRIBUTE.Adaptation",
     abbr: "POL3.ATTRIBUTE.AdaptationAbbr",

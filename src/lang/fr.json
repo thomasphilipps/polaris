@@ -7,6 +7,8 @@
       "StrengthAbbr": "FOR",
       "Constitution": "CONstitution",
       "ConstitutionAbbr": "CON",
+      "Coordination": "COOrdination",
+      "CoordinationAbbr": "COO",
       "Adaptation": "ADAptation",
       "AdaptationAbbr": "ADA",
       "Perception": "PERception",
