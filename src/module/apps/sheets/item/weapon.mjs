@@ -5,7 +5,7 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
   static DEFAULT_OPTIONS = {
     item: {
       type: "weapon",
-      //hasGMDescription: true,
+      hasGMDescription: true,
     },
   };
 
@@ -17,4 +17,10 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
     const context = await super._prepareContext(options);
     return context;
   }
+
+  /*  #getWeaponAssociatedSkills(skillCategory) {
+      let skillArray = game.items.filter(item => {
+        item.type === "skill" && item.system.category === skillCategory;
+      })
+    }*/
 }
