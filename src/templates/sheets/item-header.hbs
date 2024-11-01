@@ -13,7 +13,12 @@
         {{#if isEditable}}
           {{formInput item.schema.fields.name value=source.name placeholder='Item Name'}}
         {{else}}
-          {{item.system.specializedName}}
+          {{#if (item.system.sepcializedName)}}
+            {{item.system.specializedName}}
+          {{else}}
+            {{item.name}}
+          {{/if}}
+
         {{/if}}
       </h1>
     </div>

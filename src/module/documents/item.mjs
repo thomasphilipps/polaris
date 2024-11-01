@@ -17,6 +17,8 @@ export default class Pol3Item extends Item {
         this._prepareTags(itemData, CONFIG.POL3.SKILL.PROPERTY);
         this._prepareSpecializationName(itemData);
         break;
+      case 'weapon':
+        this._prepareTags(itemData, CONFIG.POL3.WEAPON.BURST);
     }
     return super.prepareBaseData();
   }

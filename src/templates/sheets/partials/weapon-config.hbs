@@ -3,5 +3,11 @@
   data-tab="{{tabs.config.id}}"
   data-group="{{tabs.config.group}}"
 >
-  weapon config
+  <fieldset {{fieldDisabled}}>
+    {{formField fields.category value=source.system.category localize=true}}
+  </fieldset>
+  <fieldset {{fieldDisabled}}>
+    <legend>{{localize "POL3.WEAPON.SHEET.BurstMode"}}</legend>
+    {{formField fields.tags value=source.system.tags localize=true widget=tagsWidget}}
+  </fieldset>
 </section>

@@ -1,10 +1,10 @@
-import Pol3BaseItemSheet from "./base-item.mjs";
+import Pol3BaseItemSheet from './base-item.mjs';
 
 export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
   /** @inheritDoc */
   static DEFAULT_OPTIONS = {
     item: {
-      type: "weapon",
+      type: 'weapon',
       hasGMDescription: true,
     },
   };
@@ -15,6 +15,10 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
+    Object.assign(context, {
+      tagsWidget: (field, groupConfig, inputConfig) =>
+        this._tagsWidget(field, groupConfig, inputConfig, { propertyConfig: CONFIG.POL3.WEAPON.BURST }),
+    });
     return context;
   }
 

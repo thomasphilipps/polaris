@@ -5,6 +5,9 @@ export const CATEGORY = {
   melee: {
     label: 'POL3.WEAPON.Category.Melee',
   },
+  /*explosive: {
+    label: 'POL13.WEAPON.Category.Explosive',
+  },*/
   creatureAttack: {
     label: 'POL3.WEAPON.Category.CreatureAttack',
   },
@@ -36,11 +39,14 @@ export const RANGE = {
 export const BURST = {
   single: {
     label: 'POL3.WEAPON.Burst.SingleShot',
+    symbol: 'CC',
   },
   short: {
     label: 'POL3.WEAPON.Burst.ShortBurst',
+    symbol: 'RC',
   },
   long: {
     label: 'POL3.WEAPON.Burst.LongBurst',
+    symbol: 'RL',
   },
 };
