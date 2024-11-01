@@ -1,6 +1,6 @@
-import {ATTRIBUTE} from "./attributes.mjs";
-import * as SKILL from "./skills.mjs";
-import * as WEAPON from "./weapons.mjs";
+import { ATTRIBUTE } from './attributes.mjs';
+import * as SKILL from './item/skills.mjs';
+import * as WEAPON from './item/weapons.mjs';
 
 export const POL3 = {
   ATTRIBUTE,
@@ -9,6 +9,6 @@ export const POL3 = {
 };
 
 POL3.BOOK = {
-  coreRulebook1: {label: "POL3.BOOKS.CoreRulebook1"},
-  coreRulebook2: {label: "POL3.BOOKS.CoreRulebook2"},
+  coreRulebook1: { label: 'POL3.BOOKS.CoreRulebook1' },
+  coreRulebook2: { label: 'POL3.BOOKS.CoreRulebook2' },
 };
