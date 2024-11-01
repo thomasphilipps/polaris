@@ -20,7 +20,7 @@ export function specialNameOption() {
   return {
     specialization: new fields.StringField({
       initial: '',
-      label: 'POL3.SKILL.SHEET.Specialization',
+      label: 'POL3.SHEETS.Specialization',
     }),
   };
 }

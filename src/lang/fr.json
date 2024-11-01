@@ -27,6 +27,9 @@
       "BuildAbbr": "GAB"
     },
     "SHEETS": {
+      "Specialization": "Spécialisation",
+      "Category": "Catégorie",
+      "Properties": "Propriétés",
       "Skill": "Compétence",
       "Weapon": "Arme",
       "TABS": {
@@ -42,10 +45,7 @@
     },
     "SKILL": {
       "SHEET": {
-        "AssociatedAttributes": "Attributs associés",
-        "Properties": "Propriétés",
-        "Category": "Catégorie",
-        "Specialization": "Spécialisation"
+        "AssociatedAttributes": "Attributs associés"
       },
       "Category": {
         "PhysicalAptitude": "Aptitudes physiques",
@@ -69,10 +69,18 @@
       }
     },
     "WEAPON": {
+      "SHEET": {
+        "BurstMode": "Modes de tir"
+      },
       "Category": {
         "Ranged": "Arme à distance",
         "Melee": "Arme de contact",
         "CreatureAttack": "Attaque (créature)"
+      },
+      "Burst": {
+        "SingleShot": "Coup par coup",
+        "ShortBurst": "Rafale courte",
+        "LongBurst": "Rafale longue"
       },
       "Range": {
         "Close": "Bout portant",
