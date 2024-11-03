@@ -28,13 +28,13 @@ Hooks.once('init', () => {
   DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3SkillSheet, {
     types: ['skill'],
     makeDefault: true,
-    label: 'POL3.SHEETS.Skill',
+    label: 'POL3.SHEETS.GENERAL.Skill',
   });
 
   DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3WeaponSheet, {
     types: ['weapon'],
     makeDefault: true,
-    label: 'POL3.SHEETS.Weapon',
+    label: 'POL3.SHEETS.GENERAL.Weapon',
   });
 });
 

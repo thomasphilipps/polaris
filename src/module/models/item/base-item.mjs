@@ -4,7 +4,6 @@ import { POL3 } from '../../config/config.mjs';
 export function itemGlobalFields() {
   return {
     quantity: new fields.NumberField({ initial: 0 }),
-    category: new fields.StringField({ initial: '' }),
     price: new fields.NumberField({ initial: 0 }),
     weight: new fields.NumberField({ initial: 0 }),
     availability: new fields.NumberField({ initial: 0 }),
@@ -20,7 +19,7 @@ export function specialNameOption() {
   return {
     specialization: new fields.StringField({
       initial: '',
-      label: 'POL3.SHEETS.Specialization',
+      label: 'POL3.SHEETS.GENERAL.Specialization',
     }),
   };
 }

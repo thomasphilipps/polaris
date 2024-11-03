@@ -26,7 +26,7 @@ export default class Pol3Skill extends Pol3ItemDataModel {
         initial: this.DEFAULT_ATTRIBUTE,
       }),
       category: new fields.StringField({
-        label: 'POL3.SHEETS.Category',
+        label: 'POL3.SHEETS.GENERAL.Category',
         required: true,
         choices: this.ITEM_CATEGORIES,
         initial: this.DEFAULT_CATEGORY,
