@@ -3,15 +3,24 @@ import { POL3 } from '../../config/config.mjs';
 
 export function itemGlobalFields() {
   return {
-    quantity: new fields.NumberField({ initial: 0 }),
-    price: new fields.NumberField({ initial: 0 }),
-    weight: new fields.NumberField({ initial: 0 }),
-    availability: new fields.NumberField({ initial: 0 }),
-    blackMarketAvailability: new fields.NumberField({ initial: 0 }),
-    techLevel: new fields.NumberField({ initial: 2 }),
-    manufacturer: new fields.StringField({ initial: '' }),
-    integrity: new fields.NumberField({ initial: 0 }),
-    isEquipped: new fields.BooleanField({ initial: false }),
+    quantity: new fields.NumberField({ initial: 0, label: 'POL3.SHEETS.DETAILS.Quantity' }),
+    price: new fields.NumberField({ initial: 0, label: 'POL3.SHEETS.DETAILS.Price' }),
+    weight: new fields.NumberField({ initial: 0, label: 'POL3.SHEETS.DETAILS.Weight' }),
+    availability: new fields.NumberField({ initial: 0, label: 'POL3.SHEETS.DETAILS.Availability' }),
+    blackMarketAvailability: new fields.NumberField({
+      initial: 0,
+      label: 'POL3.SHEETS.DETAILS.BlackMarketAvailability',
+    }),
+    techLevel: new fields.NumberField({ initial: 2, label: 'POL3.SHEETS.DETAILS.TechLevel' }),
+    manufacturer: new fields.StringField({
+      initial: '',
+      label: 'POL3.SHEETS.DETAILS.Manufacturer',
+    }),
+    integrity: new fields.NumberField({ initial: 0, label: 'POL3.SHEETS.DETAILS.Integrity' }),
+    isEquipped: new fields.BooleanField({
+      initial: false,
+      label: 'POL3.SHEETS.DETAILS.IsEquipped',
+    }),
   };
 }
 

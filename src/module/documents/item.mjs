@@ -19,6 +19,7 @@ export default class Pol3Item extends Item {
         break;
       case 'weapon':
         this._prepareTags(itemData, CONFIG.POL3.WEAPON.BURST);
+        this._prepareWeaponData(itemData, actorData);
     }
     return super.prepareBaseData();
   }
@@ -123,5 +124,9 @@ export default class Pol3Item extends Item {
     }
 
     return baseNaturalAptitude;
+  }
+
+  _prepareWeaponData(itemData, actorData) {
+    itemData.isRanged = itemData.category === 'ranged';
   }
 }

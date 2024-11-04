@@ -6,6 +6,7 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
     item: {
       type: 'weapon',
       hasGMDescription: true,
+      templates: ['system/polaris/templates/sheets/partials/item-details.hbs'],
     },
   };
 

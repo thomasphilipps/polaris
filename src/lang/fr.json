@@ -27,11 +27,14 @@
       "BuildAbbr": "GAB"
     },
     "SHEETS": {
-      "Specialization": "Spécialisation",
-      "Category": "Catégorie",
-      "Properties": "Propriétés",
-      "Skill": "Compétence",
-      "Weapon": "Arme",
+      "GENERAL": {
+        "Specialization": "Spécialisation",
+        "Category": "Catégorie",
+        "Properties": "Propriétés",
+        "Skill": "Compétence",
+        "Weapon": "Arme",
+        "Details": "Détails"
+      },
       "TABS": {
         "Configuration": "Configuration",
         "Description": "Description",
@@ -41,6 +44,17 @@
         "Label": "Référence",
         "Book": "Livre",
         "Page": "Page"
+      },
+      "DETAILS": {
+        "Price": "Coût",
+        "Quantity": "Quantité",
+        "Weight": "Poids",
+        "Availability": "Disponibilité",
+        "BlackMarketAvailability": "Dispo marché noir",
+        "TechLevel": "Niveau technologique",
+        "Manufacturer": "Fabricant",
+        "Integrity": "Intégrité",
+        "IsEquipped": "Équipé"
       }
     },
     "SKILL": {
@@ -70,7 +84,14 @@
     },
     "WEAPON": {
       "SHEET": {
-        "BurstMode": "Modes de tir"
+        "BurstMode": "Modes de tir",
+        "LinkedSkill": "Compétence associée",
+        "BaseDamage": "Dégâts",
+        "ChocDamage": "Dégâts de choc",
+        "MinimalStrength": "Force minimale",
+        "Penetration": "Pénétration",
+        "InitiativeModifier": "Modificateur d'initiative",
+        "Allonge": "Allonge"
       },
       "Category": {
         "Ranged": "Arme à distance",

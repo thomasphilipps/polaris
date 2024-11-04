@@ -3,8 +3,9 @@ import * as documents from './module/documents/_module.mjs';
 import * as applications from './module/apps/_module.mjs';
 import * as hooks from './module/config/hooks.mjs';
 import { POL3 } from './module/config/config.mjs';
+import { preloadHandlebarsTemplates } from './module/config/templates.mjs';
 
-Hooks.once('init', () => {
+Hooks.once('init', async function() {
   console.log('Polaris | Initializing Polaris config');
   globalThis.polaris = game.system;
 
@@ -36,6 +37,8 @@ Hooks.once('init', () => {
     makeDefault: true,
     label: 'POL3.SHEETS.GENERAL.Weapon',
   });
+
+  await preloadHandlebarsTemplates();
 });
 
 Hooks.on('preCreateItem', (item, data, options, userId) => {
