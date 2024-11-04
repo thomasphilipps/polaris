@@ -1,0 +1,20 @@
+name: Combat (contact)
+sorting: a
+folder: null
+type: Item
+_id: sdAd8pv03ZTXrLQe
+description: ''
+sort: 0
+color: '#ed2727'
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730296515711
+  modifiedTime: 1730296602767
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!folders!sdAd8pv03ZTXrLQe'
+

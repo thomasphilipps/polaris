@@ -1,0 +1,35 @@
+name: Armes lourdes (contact)
+type: skill
+img: systems/polaris/assets/icons/closeCombat.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    book: coreRulebook1
+    page: 185
+  specialization: ''
+  firstAttribute: FOR
+  secondAttribute: FOR
+  category: closeCombat
+  tags:
+    - isDifficult
+effects: []
+folder: sdAd8pv03ZTXrLQe
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730295924827
+  modifiedTime: 1730296519400
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_id: WeGpTsOW4oxdivCg
+sort: 100000
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+_key: '!items!WeGpTsOW4oxdivCg'
+

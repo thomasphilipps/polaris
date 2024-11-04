@@ -1,0 +1,35 @@
+folder: OICydXnwlFLJ86nz
+name: Armes de trait
+type: skill
+_id: xPi9hKBPvZM2eGYB
+img: systems/polaris/assets/icons/rangedCombat.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    page: 185
+    book: coreRulebook1
+  specialization: ''
+  firstAttribute: COO
+  secondAttribute: PER
+  category: rangedCombat
+  tags:
+    - isDifficult
+effects: []
+sort: 0
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730296779590
+  modifiedTime: 1730296806829
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!items!xPi9hKBPvZM2eGYB'
+
