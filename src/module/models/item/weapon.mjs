@@ -7,7 +7,8 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
   static WEAPON_BURSTS = POL3.WEAPON.BURST;
   static ITEM_CATEGORIES = POL3.WEAPON.CATEGORY;
   static DEFAULT_CATEGORY = 'ranged';
-
+  static WEAPON_RANGED_SUBCATEGORY = POL3.WEAPON.SUBCATEGORY.ranged;
+  static DEFAULT_RANGED_SUBCATEGORY = 'draft';
 
   static defineSchema() {
     const fields = foundry.data.fields;
@@ -16,7 +17,19 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
       ...itemGlobalFields(),
       linkedSkill: new fields.StringField({
         required: true,
-        label: 'POL3.WEAPON.SHEET.LinkedSkill',
+        label: 'POL3.SHEETS.GENERAL.LinkedSkill',
+      }),
+      category: new fields.StringField({
+        label: 'POL3.SHEETS.GENERAL.Category',
+        required: true,
+        choices: this.ITEM_CATEGORIES,
+        initial: this.DEFAULT_CATEGORY,
+      }),
+      subcategory: new fields.StringField({
+        label: 'POL3.SHEETS.GENERAL.Subcategory',
+        required: true,
+        choices: this.WEAPON_RANGED_SUBCATEGORY,
+        initial: this.DEFAULT_RANGED_SUBCATEGORY,
       }),
       baseDamage: new fields.StringField({
         required: true,
@@ -25,24 +38,25 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         label: 'POL3.WEAPON.SHEET.BaseDamage',
       }),
       chocDamage: new fields.StringField({ blank: true, label: 'POL3.WEAPON.SHEET.ChocDamage' }),
-      minimalStrength: new fields.NumberField({
-        blank: true,
-        label: 'POL3.WEAPON.SHEET.MinimalStrength',
-      }),
       penetration: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Penetration' }),
-      initiativeModifier: new fields.NumberField({
-        blank: true,
-        label: 'POL3.WEAPON.SHEET.InitiativeModifier',
+      allonge: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Allonge' }),
+      hitDistance: new fields.SchemaField({
+        close: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Close' }),
+        short: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Short' }),
+        medium: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Medium' }),
+        long: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Long' }),
+        extreme: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Extreme' }),
       }),
       tags: new fields.SetField(
         new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS }),
       ),
-      allonge: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Allonge' }),
-      category: new fields.StringField({
-        label: 'POL3.SHEETS.GENERAL.Category',
-        required: true,
-        choices: this.ITEM_CATEGORIES,
-        initial: this.DEFAULT_CATEGORY,
+      minimalStrength: new fields.NumberField({
+        blank: true,
+        label: 'POL3.WEAPON.SHEET.MinimalStrength',
+      }),
+      initiativeModifier: new fields.NumberField({
+        blank: true,
+        label: 'POL3.WEAPON.SHEET.InitiativeModifier',
       }),
     };
   }

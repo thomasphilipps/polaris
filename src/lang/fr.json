@@ -33,7 +33,10 @@
         "Properties": "Propriétés",
         "Skill": "Compétence",
         "Weapon": "Arme",
-        "Details": "Détails"
+        "Details": "Détails",
+        "Characteristics": "Caractéristiques",
+        "LinkedSkill": "Compétence associée",
+        "Subcategory": "Famille"
       },
       "TABS": {
         "Configuration": "Configuration",
@@ -85,13 +88,13 @@
     "WEAPON": {
       "SHEET": {
         "BurstMode": "Modes de tir",
-        "LinkedSkill": "Compétence associée",
         "BaseDamage": "Dégâts",
         "ChocDamage": "Dégâts de choc",
         "MinimalStrength": "Force minimale",
         "Penetration": "Pénétration",
         "InitiativeModifier": "Modificateur d'initiative",
-        "Allonge": "Allonge"
+        "Allonge": "Allonge",
+        "Range": "Portée"
       },
       "Category": {
         "Ranged": "Arme à distance",
@@ -102,6 +105,13 @@
         "SingleShot": "Coup par coup",
         "ShortBurst": "Rafale courte",
         "LongBurst": "Rafale longue"
+      },
+      "Subcategory": {
+        "Draft": "Arme de trait",
+        "Throwing": "Arme de jet",
+        "Handgun": "Arme de poing",
+        "Rifle": "Fusil",
+        "Sniper": "Arme de précision"
       },
       "Range": {
         "Close": "Bout portant",

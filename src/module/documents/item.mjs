@@ -128,5 +128,6 @@ export default class Pol3Item extends Item {
 
   _prepareWeaponData(itemData, actorData) {
     itemData.isRanged = itemData.category === 'ranged';
+    itemData.isMelee = itemData.category === 'melee';
   }
 }

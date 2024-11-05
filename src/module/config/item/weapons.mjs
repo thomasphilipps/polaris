@@ -13,6 +13,26 @@ export const CATEGORY = {
   },
 };
 
+export const SUBCATEGORY = {
+  ranged: {
+    draft: {
+      label: 'POL3.WEAPON.Subcategory.Draft',
+    },
+    throwing: {
+      label: 'POL3.WEAPON.Subcategory.Throwing',
+    },
+    handgun: {
+      label: 'POL3.WEAPON.Subcategory.Handgun',
+    },
+    rifle: {
+      label: 'POL3.WEAPON.Subcategory.Rifle',
+    },
+    sniper: {
+      label: 'POL3.WEAPON.Subcategory.Sniper',
+    },
+  },
+};
+
 export const RANGE = {
   close: {
     label: 'POL3.WEAPON.Range.Close',
