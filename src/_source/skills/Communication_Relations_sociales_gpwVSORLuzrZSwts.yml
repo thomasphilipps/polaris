@@ -1,0 +1,20 @@
+name: Communication/Relations sociales
+sorting: a
+folder: null
+type: Item
+_id: gpwVSORLuzrZSwts
+description: ''
+sort: 0
+color: '#7ed321'
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730850645621
+  modifiedTime: 1730850705573
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!folders!gpwVSORLuzrZSwts'
+

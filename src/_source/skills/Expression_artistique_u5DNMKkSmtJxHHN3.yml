@@ -1,0 +1,36 @@
+folder: gpwVSORLuzrZSwts
+name: Expression artistique
+type: skill
+_id: u5DNMKkSmtJxHHN3
+img: systems/polaris/assets/icons/social.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    page: 190
+    book: coreRulebook1
+  specialization: ''
+  firstAttribute: COO
+  secondAttribute: PER
+  category: social
+  tags:
+    - isReserved
+  mastery: 0
+effects: []
+sort: 0
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730851041119
+  modifiedTime: 1730851111440
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!items!u5DNMKkSmtJxHHN3'
+

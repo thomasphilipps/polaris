@@ -1,8 +1,8 @@
-folder: bNbZmWj08BeSXpAF
-name: Acrobatie/Équilibre
+folder: gpwVSORLuzrZSwts
+name: Analyse empathique
 type: skill
-_id: oikOeygHNwOxd12G
-img: systems/polaris/assets/icons/physicalAptitude.png
+_id: BX56qvrUIHPpngFE
+img: systems/polaris/assets/icons/social.png
 system:
   description:
     public: ''
@@ -11,26 +11,26 @@ system:
     page: 183
     book: coreRulebook1
   specialization: ''
-  firstAttribute: COO
-  secondAttribute: COO
-  category: physicalAptitude
+  firstAttribute: ADA
+  secondAttribute: VOL
+  category: social
   tags:
-    - limitsOtherSkills
+    - isDifficult
   mastery: 0
-effects: [ ]
+effects: []
 sort: 0
 ownership:
   default: 0
   LPR9EurxvkIFgTTd: 3
-flags: { }
+flags: {}
 _stats:
   compendiumSource: null
   duplicateSource: null
   coreVersion: '12.331'
   systemId: polaris
   systemVersion: 2.0.0
-  createdTime: 1730585599587
-  modifiedTime: 1730585639080
+  createdTime: 1730850652898
+  modifiedTime: 1730850808592
   lastModifiedBy: LPR9EurxvkIFgTTd
-_key: '!items!oikOeygHNwOxd12G'
+_key: '!items!BX56qvrUIHPpngFE'
 
