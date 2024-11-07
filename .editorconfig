@@ -1,0 +1,25 @@
+# .editorconfig
+root = true
+
+[*]
+# Style d'indentation : espace
+indent_style = space
+
+# Taille de tabulation (2 espaces)
+indent_size = 2
+tab_width = 2
+
+# Longueur maximale des lignes (colonne 100)
+max_line_length = 100
+
+# Fin de ligne : Linux (lf)
+end_of_line = lf
+
+# Encodage des fichiers
+charset = utf-8
+
+# Suppression des espaces en fin de ligne
+trim_trailing_whitespace = true
+
+# Ajout d'une ligne vide en fin de fichier
+insert_final_newline = true

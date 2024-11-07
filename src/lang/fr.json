@@ -1,0 +1,140 @@
+{
+  "POL3": {
+    "ATTRIBUTE": {
+      "FirstAttribute": "Attribut 1",
+      "SecondAttribute": "Attribut 2",
+      "Strength": "FORce",
+      "StrengthAbbr": "FOR",
+      "Constitution": "CONstitution",
+      "ConstitutionAbbr": "CON",
+      "Coordination": "COOrdination",
+      "CoordinationAbbr": "COO",
+      "Adaptation": "ADAptation",
+      "AdaptationAbbr": "ADA",
+      "Perception": "PERception",
+      "PerceptionAbbr": "PER",
+      "Intelligence": "INTelligence",
+      "IntelligenceAbbr": "INT",
+      "Willpower": "VOLonté",
+      "WillpowerAbbr": "VOL",
+      "Presence": "PREsence",
+      "PresenceAbbr": "PRE",
+      "Reaction": "REAction",
+      "ReactionAbbr": "REA",
+      "Luck": "CHAnce",
+      "LuckAbbr": "CHA",
+      "Build": "GABarit",
+      "BuildAbbr": "GAB"
+    },
+    "SHEETS": {
+      "GENERAL": {
+        "Specialization": "Spécialisation",
+        "Category": "Catégorie",
+        "Properties": "Propriétés",
+        "Skill": "Compétence",
+        "Weapon": "Arme",
+        "Details": "Détails",
+        "Characteristics": "Caractéristiques",
+        "LinkedSkill": "Compétence associée",
+        "Subcategory": "Famille"
+      },
+      "TABS": {
+        "Configuration": "Configuration",
+        "Description": "Description",
+        "GMDescription": "Notes GM"
+      },
+      "REFERENCE": {
+        "Label": "Référence",
+        "Book": "Livre",
+        "Page": "Page"
+      },
+      "DETAILS": {
+        "Price": "Coût",
+        "Quantity": "Quantité",
+        "Weight": "Poids",
+        "Availability": "Disponibilité",
+        "BlackMarketAvailability": "Dispo marché noir",
+        "TechLevel": "Niveau technologique",
+        "Manufacturer": "Fabricant",
+        "Integrity": "Intégrité",
+        "IsEquipped": "Équipé"
+      }
+    },
+    "SKILL": {
+      "SHEET": {
+        "AssociatedAttributes": "Attributs associés"
+      },
+      "Category": {
+        "PhysicalAptitude": "Aptitudes physiques",
+        "CloseCombat": "Combat (contact)",
+        "RangedCombat": "Combat (tir)",
+        "Social": "Communication/Relations sociales",
+        "SpecialSkill": "Compétences spéciales",
+        "Knowledge": "Connaissances",
+        "Stealth": "Furtivité/Subterfuge",
+        "Language": "Langues/Langages",
+        "Pilot": "Pilotage",
+        "Survival": "Survie/Extérieur",
+        "Technique": "Techniques"
+      },
+      "Property": {
+        "Difficult": "Difficile",
+        "Reserved": "Réservée",
+        "LimitsOtherSkills": "Limitative",
+        "NaturalProgression": "Progression Naturelle",
+        "Prerequisites": "Pré requis Nécessaire"
+      }
+    },
+    "WEAPON": {
+      "SHEET": {
+        "BurstMode": "Modes de tir",
+        "BaseDamage": "Dégâts",
+        "ChocDamage": "Dégâts de choc",
+        "MinimalStrength": "Force minimale",
+        "Penetration": "Pénétration",
+        "InitiativeModifier": "Modificateur d'initiative",
+        "Allonge": "Allonge",
+        "Range": "Portée"
+      },
+      "Category": {
+        "Ranged": "Arme à distance",
+        "Melee": "Arme de contact",
+        "CreatureAttack": "Attaque (créature)"
+      },
+      "Burst": {
+        "SingleShot": "Coup par coup",
+        "ShortBurst": "Rafale courte",
+        "LongBurst": "Rafale longue"
+      },
+      "Subcategory": {
+        "Draft": "Arme de trait",
+        "Throwing": "Arme de jet",
+        "Handgun": "Arme de poing",
+        "Rifle": "Fusil",
+        "Sniper": "Arme de précision"
+      },
+      "Range": {
+        "Close": "Bout portant",
+        "CloseAbbr": "BP",
+        "Short": "Courte portée",
+        "ShortAbbr": "CP",
+        "Medium": "Portée moyenne",
+        "MediumAbbr": "MP",
+        "Long": "Longue portée",
+        "LongAbbr": "LP",
+        "Extreme": "Portée extrême",
+        "ExtremeAbbr": "EX"
+      }
+    },
+    "BOOKS": {
+      "CoreRulebook1": "Livre de base 1",
+      "CoreRulebook2": "Livre de base 2"
+    }
+  },
+  "TYPES": {
+    "Item": {
+      "skill": "Compétence",
+      "weapon": "Arme"
+    }
+  }
+}
