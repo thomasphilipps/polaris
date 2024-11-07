@@ -1,11 +1,12 @@
-import * as models from "./module/models/item/_module.mjs";
-import * as documents from "./module/documents/_module.mjs";
-import * as applications from "./module/apps/_module.mjs";
-import * as hooks from "./module/config/hooks.mjs";
-import {POL3} from "./module/config/config.mjs";
+import * as models from './module/models/item/_module.mjs';
+import * as documents from './module/documents/_module.mjs';
+import * as applications from './module/apps/_module.mjs';
+import * as hooks from './module/config/hooks.mjs';
+import { POL3 } from './module/config/config.mjs';
+import { preloadHandlebarsTemplates } from './module/config/templates.mjs';
 
-Hooks.once("init", () => {
-  console.log("Polaris | Initializing Polaris config");
+Hooks.once('init', async function() {
+  console.log('Polaris | Initializing Polaris config');
   globalThis.polaris = game.system;
 
   game.system.api = {
@@ -23,24 +24,26 @@ Hooks.once("init", () => {
 
   CONFIG.POL3 = POL3;
 
-  Items.unregisterSheet("core", ItemSheet);
+  Items.unregisterSheet('core', ItemSheet);
 
-  DocumentSheetConfig.registerSheet(Item, "polaris", applications.Pol3SkillSheet, {
-    types: ["skill"],
+  DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3SkillSheet, {
+    types: ['skill'],
     makeDefault: true,
-    label: "POL3.SHEETS.Skill",
+    label: 'POL3.SHEETS.GENERAL.Skill',
   });
 
-  DocumentSheetConfig.registerSheet(Item, "polaris", applications.Pol3WeaponSheet, {
-    types: ["weapon"],
+  DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3WeaponSheet, {
+    types: ['weapon'],
     makeDefault: true,
-    label: "POL3.SHEETS.Weapon",
+    label: 'POL3.SHEETS.GENERAL.Weapon',
   });
+
+  await preloadHandlebarsTemplates();
 });
 
-Hooks.on("preCreateItem", (item, data, options, userId) => {
+Hooks.on('preCreateItem', (item, data, options, userId) => {
   hooks.onPreCreateItem(item, data, options, userId);
 });
-Hooks.on("preUpdateItem", (item, updateData, options, userId) => {
+Hooks.on('preUpdateItem', (item, updateData, options, userId) => {
   hooks.onPreUpdateItem(item, updateData, options, userId);
-})
+});

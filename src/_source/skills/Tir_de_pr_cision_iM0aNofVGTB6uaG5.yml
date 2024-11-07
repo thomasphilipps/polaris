@@ -1,0 +1,36 @@
+folder: OICydXnwlFLJ86nz
+name: Tir de précision
+type: skill
+_id: iM0aNofVGTB6uaG5
+img: systems/polaris/assets/icons/rangedCombat.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    page: 198
+    book: coreRulebook1
+  specialization: ''
+  firstAttribute: PER
+  secondAttribute: VOL
+  category: rangedCombat
+  tags:
+    - isDifficult
+    - limitsOtherSkills
+effects: []
+sort: 0
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730297073804
+  modifiedTime: 1730297093159
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!items!iM0aNofVGTB6uaG5'
+

@@ -7,6 +7,8 @@
       "StrengthAbbr": "FOR",
       "Constitution": "CONstitution",
       "ConstitutionAbbr": "CON",
+      "Coordination": "COOrdination",
+      "CoordinationAbbr": "COO",
       "Adaptation": "ADAptation",
       "AdaptationAbbr": "ADA",
       "Perception": "PERception",
@@ -25,20 +27,42 @@
       "BuildAbbr": "GAB"
     },
     "SHEETS": {
-      "Skill": "Compétence",
-      "Weapon": "Arme",
+      "GENERAL": {
+        "Specialization": "Spécialisation",
+        "Category": "Catégorie",
+        "Properties": "Propriétés",
+        "Skill": "Compétence",
+        "Weapon": "Arme",
+        "Details": "Détails",
+        "Characteristics": "Caractéristiques",
+        "LinkedSkill": "Compétence associée",
+        "Subcategory": "Famille"
+      },
       "TABS": {
         "Configuration": "Configuration",
         "Description": "Description",
         "GMDescription": "Notes GM"
+      },
+      "REFERENCE": {
+        "Label": "Référence",
+        "Book": "Livre",
+        "Page": "Page"
+      },
+      "DETAILS": {
+        "Price": "Coût",
+        "Quantity": "Quantité",
+        "Weight": "Poids",
+        "Availability": "Disponibilité",
+        "BlackMarketAvailability": "Dispo marché noir",
+        "TechLevel": "Niveau technologique",
+        "Manufacturer": "Fabricant",
+        "Integrity": "Intégrité",
+        "IsEquipped": "Équipé"
       }
     },
     "SKILL": {
       "SHEET": {
-        "AssociatedAttributes": "Attributs associés",
-        "Properties": "Propriétés",
-        "Category": "Catégorie",
-        "Specialization": "Spécialisation"
+        "AssociatedAttributes": "Attributs associés"
       },
       "Category": {
         "PhysicalAptitude": "Aptitudes physiques",
@@ -61,9 +85,50 @@
         "Prerequisites": "Pré requis Nécessaire"
       }
     },
+    "WEAPON": {
+      "SHEET": {
+        "BurstMode": "Modes de tir",
+        "BaseDamage": "Dégâts",
+        "ChocDamage": "Dégâts de choc",
+        "MinimalStrength": "Force minimale",
+        "Penetration": "Pénétration",
+        "InitiativeModifier": "Modificateur d'initiative",
+        "Allonge": "Allonge",
+        "Range": "Portée"
+      },
+      "Category": {
+        "Ranged": "Arme à distance",
+        "Melee": "Arme de contact",
+        "CreatureAttack": "Attaque (créature)"
+      },
+      "Burst": {
+        "SingleShot": "Coup par coup",
+        "ShortBurst": "Rafale courte",
+        "LongBurst": "Rafale longue"
+      },
+      "Subcategory": {
+        "Draft": "Arme de trait",
+        "Throwing": "Arme de jet",
+        "Handgun": "Arme de poing",
+        "Rifle": "Fusil",
+        "Sniper": "Arme de précision"
+      },
+      "Range": {
+        "Close": "Bout portant",
+        "CloseAbbr": "BP",
+        "Short": "Courte portée",
+        "ShortAbbr": "CP",
+        "Medium": "Portée moyenne",
+        "MediumAbbr": "MP",
+        "Long": "Longue portée",
+        "LongAbbr": "LP",
+        "Extreme": "Portée extrême",
+        "ExtremeAbbr": "EX"
+      }
+    },
     "BOOKS": {
-      "BaseBook1": "Livre de base 1",
-      "BaseBook2": "Livre de base 2"
+      "CoreRulebook1": "Livre de base 1",
+      "CoreRulebook2": "Livre de base 2"
     }
   },
   "TYPES": {

@@ -5,8 +5,7 @@
   "version": "2.0.0",
   "compatibility": {
     "minimum": 12,
-    "verified": 12,
-    "maximum": 12
+    "verified": 12
   },
   "url": "https://github.com/thomasphilipps/polaris/",
   "manifest": "",
@@ -17,8 +16,21 @@
       "discord": "loahn_68"
     }
   ],
-  "esmodules": ["polaris.mjs"],
-  "styles": ["polaris.css"],
+  "esmodules": [
+    "polaris.mjs"
+  ],
+  "styles": [
+    "polaris.css"
+  ],
+  "packs": [
+    {
+      "name": "skills",
+      "label": "Compétences",
+      "path": "packs/skills",
+      "type": "Item"
+    }
+  ],
+  "packFolders": [],
   "documentTypes": {
     "Item": {
       "weapon": {},

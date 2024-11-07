@@ -1,33 +1,57 @@
-<header class="sheet-header">
-  <div class="flexcol">
-    <div class="flexrow">
+<header class='sheet-header'>
+  <div class='flexcol'>
+    <div class='flexrow'>
       <img
-        src="{{source.img}}"
-        data-edit="img"
-        title="{{source.name}}"
-        height="64"
-        width="64"
-        alt="{{source.name}}"
+        src='{{source.img}}'
+        data-edit='img'
+        title='{{source.name}}'
+        height='64'
+        width='64'
+        alt='{{source.name}}'
       />
       <h1>
         {{#if isEditable}}
-          {{formInput item.schema.fields.name value=source.name placeholder="Item Name"}}
+          {{formInput item.schema.fields.name value=source.name placeholder='Item Name'}}
         {{else}}
-          {{item.system.specializedName}}
+          {{#if (item.system.sepcializedName)}}
+            {{item.system.specializedName}}
+          {{else}}
+            {{item.name}}
+          {{/if}}
+
         {{/if}}
       </h1>
     </div>
-    <div class="flexrow">
-      <div class="book-reference">
-        {{#if isEditable}}
-          {{formInput fields.reference value=source.system.reference placeholder="reference"}}
-        {{else}}
-          {{source.system.reference}}
-        {{/if}}
+    {{#if isEditable}}
+      <div class='reference-field'>
+        <fieldset>
+          <legend>{{localize 'POL3.SHEETS.REFERENCE.Label'}}</legend>
+          {{formField
+            fields.reference.fields.book
+            value=source.system.reference.book
+            localize=true
+          }}
+          {{formField
+            fields.reference.fields.page
+            value=source.system.reference.page
+            localize=true
+          }}
+        </fieldset>
       </div>
-      <div class="item-properties">
-        {{{item.system.tagString}}}
+    {{else}}
+      <div class='flexrow'>
+        <div class='book-reference'>
+          {{item.system.referenceString}}
+        </div>
+        <div class='item-info'>
+          {{{item.system.infoString}}}
+        </div>
+        <div class='flexrow item-properties'>
+          {{{item.system.tagString}}}
+        </div>
       </div>
-    </div>
+    {{/if}}
+
   </div>
+
 </header>

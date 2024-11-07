@@ -1,0 +1,35 @@
+name: Arts martiaux
+type: skill
+_id: L96HP1xYccvkJ3Of
+img: systems/polaris/assets/icons/closeCombat.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    page: 186
+    book: coreRulebook1
+  specialization: ''
+  firstAttribute: COO
+  secondAttribute: ADA
+  category: closeCombat
+  tags:
+    - limitsOtherSkills
+effects: []
+folder: sdAd8pv03ZTXrLQe
+sort: 200000
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730295970307
+  modifiedTime: 1730296524243
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!items!L96HP1xYccvkJ3Of'
+

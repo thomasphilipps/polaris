@@ -1,10 +1,10 @@
-import Pol3BaseItemSheet from "./base-item.mjs";
+import Pol3BaseItemSheet from './base-item.mjs';
 
 export default class Pol3SkillSheet extends Pol3BaseItemSheet {
   /** @inheritDoc */
   static DEFAULT_OPTIONS = {
     item: {
-      type: "skill",
+      type: 'skill',
       hasGMDescription: true,
     },
   };
@@ -17,18 +17,12 @@ export default class Pol3SkillSheet extends Pol3BaseItemSheet {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     Object.assign(context, {
-      tagsWidget: this.#tagsWidget.bind(this),
+      tagsWidget: (field, groupConfig, inputConfig) =>
+        this._tagsWidget(field, groupConfig, inputConfig, {
+          propertyConfig: CONFIG.POL3.SKILL.PROPERTY,
+        }),
     });
     return context;
   }
 
-  #tagsWidget(field, groupConfig, inputConfig) {
-    inputConfig.name = field.fieldPath;
-    inputConfig.options = Object.entries(CONFIG.POL3.SKILL.properties).map(([k, v]) => ({
-      value: k,
-      label: v.label,
-    }));
-    inputConfig.type = "checkboxes";
-    return foundry.applications.fields.createMultiSelectInput(inputConfig);
-  }
 }

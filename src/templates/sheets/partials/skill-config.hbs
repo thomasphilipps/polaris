@@ -15,11 +15,19 @@
   </fieldset>
   <fieldset {{fieldDisabled}}>
     <legend>{{localize "POL3.SKILL.SHEET.AssociatedAttributes"}}</legend>
-    {{formField fields.firstAttribute value=source.system.firstAttribute localize=true}}
-    {{formField fields.secondAttribute value=source.system.secondAttribute localize=true}}
+    {{formField
+      fields.firstAttribute
+      value=source.system.firstAttribute
+      localize=true
+    }}
+    {{formField
+      fields.secondAttribute
+      value=source.system.secondAttribute
+      localize=true
+    }}
   </fieldset>
   <fieldset {{fieldDisabled}}>
-    <legend>{{localize "POL3.SKILL.SHEET.Properties"}}</legend>
+    <legend>{{localize "POL3.SHEETS.GENERAL.Properties"}}</legend>
     {{formField fields.tags value=source.system.tags localize=true widget=tagsWidget}}
   </fieldset>
 </section>
