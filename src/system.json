@@ -35,6 +35,9 @@
     "Item": {
       "weapon": {},
       "skill": {}
+    },
+    "Actor": {
+      "hero": {}
     }
   },
   "languages": [

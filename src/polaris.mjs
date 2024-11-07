@@ -1,11 +1,11 @@
-import * as models from './module/models/item/_module.mjs';
+import * as models from './module/models/_module.mjs';
 import * as documents from './module/documents/_module.mjs';
 import * as applications from './module/apps/_module.mjs';
 import * as hooks from './module/config/hooks.mjs';
-import { POL3 } from './module/config/config.mjs';
-import { preloadHandlebarsTemplates } from './module/config/templates.mjs';
+import {POL3} from './module/config/config.mjs';
+import {preloadHandlebarsTemplates} from './module/config/templates.mjs';
 
-Hooks.once('init', async function() {
+Hooks.once('init', async function () {
   console.log('Polaris | Initializing Polaris config');
   globalThis.polaris = game.system;
 
@@ -20,6 +20,10 @@ Hooks.once('init', async function() {
   CONFIG.Item.dataModels = {
     skill: models.Pol3Skill,
     weapon: models.Pol3Weapon,
+  };
+
+  CONFIG.Actor.dataModels = {
+    hero: models.Pol3Hero
   };
 
   CONFIG.POL3 = POL3;
