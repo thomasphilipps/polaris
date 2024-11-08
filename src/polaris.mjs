@@ -2,10 +2,10 @@ import * as models from './module/models/_module.mjs';
 import * as documents from './module/documents/_module.mjs';
 import * as applications from './module/apps/_module.mjs';
 import * as hooks from './module/config/hooks.mjs';
-import {POL3} from './module/config/config.mjs';
-import {preloadHandlebarsTemplates} from './module/config/templates.mjs';
+import { POL3 } from './module/config/config.mjs';
+import { preloadHandlebarsTemplates } from './module/config/templates.mjs';
 
-Hooks.once('init', async function () {
+Hooks.once('init', async function() {
   console.log('Polaris | Initializing Polaris config');
   globalThis.polaris = game.system;
 
@@ -22,11 +22,21 @@ Hooks.once('init', async function () {
     weapon: models.Pol3Weapon,
   };
 
+  CONFIG.Actor.documentClass = documents.Pol3Actor;
+
   CONFIG.Actor.dataModels = {
-    hero: models.Pol3Hero
+    hero: models.Pol3Hero,
   };
 
   CONFIG.POL3 = POL3;
+
+  Actors.unregisterSheet('core', ActorSheet);
+
+  DocumentSheetConfig.registerSheet(Actor, 'polaris', applications.Pol3HeroSheet, {
+    types: ['hero'],
+    makeDefault: true,
+    label: 'POL3.SHEETS.GENERAL.Hero',
+  });
 
   Items.unregisterSheet('core', ItemSheet);
 

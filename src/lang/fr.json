@@ -36,7 +36,8 @@
         "Details": "Détails",
         "Characteristics": "Caractéristiques",
         "LinkedSkill": "Compétence associée",
-        "Subcategory": "Famille"
+        "Subcategory": "Famille",
+        "Hero": "Personnage joueur"
       },
       "TABS": {
         "Configuration": "Configuration",
@@ -58,6 +59,33 @@
         "Manufacturer": "Fabricant",
         "Integrity": "Intégrité",
         "IsEquipped": "Équipé"
+      }
+    },
+    "ACTOR": {
+      "DESCRIPTION": {
+        "History": "Historique",
+        "Size": "Taille",
+        "Weight": "Poids",
+        "Skin": "Peau",
+        "Build": "Corpulence",
+        "Hair": "Cheveux",
+        "Eyes": "Yeux",
+        "Handedness": "Latéralité",
+        "DistinguishingMarks": "Signes particuliers",
+        "GeneticType": "Type génétique",
+        "Age": "Âge",
+        "Sex": "Sexe",
+        "Fertile": "Fécond",
+        "GeographicOrigin": "Origine géographique",
+        "SocialOrigin": "Origine sociale",
+        "BasicTraining": "Formation de base",
+        "Studies": "Études supérieures"
+      },
+      "GENETICTYPE": {
+        "Human": "Humain",
+        "NaturalHybrid": "Hybride naturel",
+        "TechnoHybrid": "Techno-hybride",
+        "GeneticHybrid": "Hybride génétique"
       }
     },
     "SKILL": {
@@ -135,6 +163,9 @@
     "Item": {
       "skill": "Compétence",
       "weapon": "Arme"
+    },
+    "Actor": {
+      "hero": "Personnage joueur"
     }
   }
 }
