@@ -20,7 +20,7 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
   static PARTS = {
     header: {
       id: 'header',
-      template: 'systems/polaris/templates/sheets/item-header.hbs',
+      template: 'systems/polaris/templates/sheets/items/item-header.hbs',
     },
     tabs: {
       id: 'tabs',
@@ -28,7 +28,7 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
     },
     description: {
       id: 'description',
-      template: 'systems/polaris/templates/sheets/partials/item-description.hbs',
+      template: 'systems/polaris/templates/sheets/items/partials/item-description.hbs',
     },
     config: {
       id: 'config',
