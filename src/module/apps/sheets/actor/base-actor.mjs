@@ -32,16 +32,15 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       isEditable: this.isEditable,
       fieldDisabled: this.isEditable ? '' : 'disabled',
       source: this.document.toObject(),
-
       fields: this.document.system.schema.fields,
       config: CONFIG.POL3,
     };
   }
 
   static _initializeActorSheet() {
-    //const actor = this.DEFAULT_OPTIONS.actor;
+    const actor = this.DEFAULT_OPTIONS.actor;
     this.PARTS = foundry.utils.deepClone(this.PARTS);
-    this.DEFAULT_OPTIONS.classes = [this.DEFAULT_OPTIONS.actor.type];
+    this.DEFAULT_OPTIONS.classes = [actor.type];
   }
 
 }
