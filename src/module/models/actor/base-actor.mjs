@@ -39,6 +39,7 @@ export class Pol3ActorDataModel extends foundry.abstract.TypeDataModel {
       description: new fields.SchemaField({
         public: new fields.HTMLField(),
         secret: new fields.HTMLField(),
+        gmNotes: new fields.HTMLField({ gmOnly: true }),
       }),
       actorScale: new fields.StringField(),
       attributes: new fields.SchemaField(Object.values(POL3.ATTRIBUTE).reduce((obj, attribute) => {

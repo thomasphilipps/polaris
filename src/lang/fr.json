@@ -3,6 +3,7 @@
     "ATTRIBUTE": {
       "Label": "Attribut",
       "LabelPlural": "Attributs",
+      "SecondaryAttributes": "Attributs secondaires",
       "FirstAttribute": "Attribut 1",
       "SecondAttribute": "Attribut 2",
       "Strength": "FORce",

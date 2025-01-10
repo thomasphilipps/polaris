@@ -42,7 +42,7 @@ export class Pol3ItemDataModel extends foundry.abstract.TypeDataModel {
     return {
       description: new fields.SchemaField({
         public: new fields.HTMLField(),
-        secret: new fields.HTMLField(),
+        secret: new fields.HTMLField({ gmOnly: true }),
       }),
       reference: new fields.SchemaField({
         book: new fields.StringField({
