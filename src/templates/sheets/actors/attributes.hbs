@@ -1,0 +1,21 @@
+<section class="sheet-section attributes flexcol">
+  <h3>{{localize "POL3.ATTRIBUTE.LabelPlural"}}</h3>
+  <div>
+    <ul class="attribute-list">
+      {{#each attributeScores as |attribute|}}
+        <li class="attribute flexrow" data-attribute-id="{{attribute.id}}">
+          <h4 class="label">{{localize attribute.abbr}}</h4>
+          <span class="input value">{{attribute.value}}</span>
+          {{#if isOwner}}
+            <a class="button icon fa-solid fa-gears" data-action="configureAttribute"
+               data-tooltip="Configure"></a>
+            <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
+               data-tooltip="Test {{localize attribute.label}}"></a>
+          {{/if}}
+
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+
+</section>

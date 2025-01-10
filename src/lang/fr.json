@@ -1,6 +1,8 @@
 {
   "POL3": {
     "ATTRIBUTE": {
+      "Label": "Attribut",
+      "LabelPlural": "Attributs",
       "FirstAttribute": "Attribut 1",
       "SecondAttribute": "Attribut 2",
       "Strength": "FORce",

@@ -1,4 +1,4 @@
-import Pol3BaseActorSheet from './base-actor.mjs';
+import Pol3BaseActorSheet from './base-actor-sheet.mjs';
 
 export default class Pol3HeroSheet extends Pol3BaseActorSheet {
   static DEFAULT_OPTIONS = {

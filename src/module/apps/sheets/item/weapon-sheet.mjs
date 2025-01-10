@@ -1,4 +1,4 @@
-import Pol3BaseItemSheet from './base-item.mjs';
+import Pol3BaseItemSheet from './base-item-sheet.mjs';
 
 export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
   /** @inheritDoc */
