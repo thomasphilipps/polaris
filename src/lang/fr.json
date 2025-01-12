@@ -22,12 +22,25 @@
       "WillpowerAbbr": "VOL",
       "Presence": "PREsence",
       "PresenceAbbr": "PRE",
-      "Reaction": "REAction",
-      "ReactionAbbr": "REA",
       "Luck": "CHAnce",
       "LuckAbbr": "CHA",
       "Build": "GABarit",
-      "BuildAbbr": "GAB"
+      "BuildAbbr": "GAB",
+      "StunThreshold": "Seuil de choc",
+      "UnconsciousnessThreshold": "Seuil d'inconscience",
+      "CloseCombatModifier": "Modificateur de dommages (contact)",
+      "Reaction": "Réaction",
+      "DamageResistance": "Résistance aux dommages",
+      "DrugResistance": "Résistance aux drogues",
+      "IllnessResistance": "Résistance aux maladies, poisons et radiations",
+      "Breath": "Souffle",
+      "Speed": "Déplacements",
+      "GroundSpeed": "Au sol",
+      "SwimSpeed": "Dans l'eau",
+      "Slow": "Allure lente",
+      "Mean": "Allure moyenne",
+      "Fast": "Allure rapide",
+      "Sprint": "Allure maximale"
     },
     "SHEETS": {
       "GENERAL": {

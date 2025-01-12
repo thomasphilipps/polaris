@@ -1,4 +1,4 @@
-import { POL3 } from '../config/config.mjs';
+import {POL3} from '../config/config.mjs';
 
 export default class Pol3Actor extends Actor {
   /**
@@ -11,18 +11,19 @@ export default class Pol3Actor extends Actor {
    * whenever the actor's data is updated.
    */
   prepareDerivedData() {
-    const { system } = this;
+    const {system} = this;
+    const {attributes} = system;
 
     // Calculate total value and natural aptitude for each attribute
-    Object.values(system.attributes).forEach((attribute) => {
+    Object.values(attributes).forEach((attribute) => {
       attribute.total = this.#calculateAttributeTotalValue(attribute);
       attribute.naturalAptitude = this.#calculateNaturalAptitude(attribute.total);
     });
 
     // Prepare other derived data
     this._prepareLuck(system);
-    this._prepareSecondaryAttributes(system);
-    this._prepareActorDisplacement(system);
+    this._prepareSecondaryAttributes(system, attributes);
+    this._prepareActorDisplacement(system, attributes);
   }
 
   /**
@@ -42,7 +43,7 @@ export default class Pol3Actor extends Actor {
                                 }) {
     return [base, geneticModifier, competencePointsModifier, otherModifier].reduce(
       (sum, val) => sum + val,
-      0,
+      0
     );
   }
 
@@ -58,72 +59,109 @@ export default class Pol3Actor extends Actor {
   }
 
   /**
-   * Prepare various secondary attributes such as reaction, initiative, thresholds, etc.
+   * Prepare various secondary attributes by delegating each
+   * calculation to smaller methods.
+   *
    * @param {Object} system - The system data object of the actor.
+   * @param {Object} attributes - The destructured attributes object from system.
    */
-  _prepareSecondaryAttributes(system) {
-    const { attributes } = system;
+  _prepareSecondaryAttributes(system, attributes) {
+    this._prepareReactionAndInitiative(system, attributes);
+    this._prepareThresholds(system, attributes);
+    this._prepareCloseCombatModifier(system, attributes);
+    this._prepareDamageResistance(system, attributes);
+    this._prepareIllnessResistance(system, attributes);
+    this._prepareDrugResistance(system, attributes);
+  }
 
-    // Calculate intermediate values
+  /**
+   * Calculate and assign reaction & initiative.
+   */
+  _prepareReactionAndInitiative(system, attributes) {
     const reactionValue = Math.round((attributes.PER.total + attributes.VOL.total) / 2);
+
+    this._setSystemAttribute(system, 'reaction', reactionValue);
+    // baseInitiative is identical to reaction in your example
+    this._setSystemAttribute(system, 'baseInitiative', reactionValue);
+  }
+
+  /**
+   * Calculate and assign thresholds (stun, unconsciousness, breath).
+   */
+  _prepareThresholds(system, attributes) {
     const stunThresholdValue = Math.round(
-      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3,
+      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3
     );
-    const unconsciousnessThresholdValue = stunThresholdValue + 10;
+    const unconsciounessThresholdValue = stunThresholdValue + 10;
     const breathValue = Math.round((attributes.CON.total + attributes.VOL.total) / 2);
 
-    // Assign them to system with the desired structure
-    this._setSystemAttribute(system, 'reaction', reactionValue);
-    this._setSystemAttribute(system, 'baseInitiative', reactionValue);
     this._setSystemAttribute(system, 'stunThreshold', stunThresholdValue);
-    this._setSystemAttribute(system, 'unconsciousnessThreshold', unconsciousnessThresholdValue);
+    this._setSystemAttribute(system, 'unconsciousnessThreshold', unconsciounessThresholdValue);
     this._setSystemAttribute(system, 'breath', breathValue);
+  }
 
-    // Resistance helper function
-    const calculateResistance = (temp, valueArray, resultArray, upperBonus) => {
-      const index = valueArray.findIndex((value) => temp >= value);
-      return index !== -1 ? resultArray[index] - upperBonus : 6;
-    };
-
-    // Close combat modifier
+  /**
+   * Calculate and assign the close combat modifier.
+   */
+  _prepareCloseCombatModifier(system, attributes) {
     const forTemp = attributes.FOR.total;
-    const valueArray = [22, 20, 18, 16, 14, 12, 9, 7, 5, 3];
-    const closeCombatResultArray = [5, 5, 4, 3, 2, 1, 0, -1, -2, -4];
+    const valueArray = POL3.TABLEARRAY.valueArray;
+    const closeCombatResultArray = POL3.TABLEARRAY.resultArray.map((num) => -num);
     const upperBonusFor = Math.max(0, Math.floor((forTemp - 20) / 2));
     const index = valueArray.findIndex((value) => forTemp >= value);
+
     const closeCombatModifierValue =
       index !== -1 ? closeCombatResultArray[index] + upperBonusFor : -6;
 
     this._setSystemAttribute(system, 'closeCombatModifier', closeCombatModifierValue);
+  }
 
-    // Damage resistance
+  /**
+   * Calculate and assign damage resistance.
+   */
+  _prepareDamageResistance(system, attributes) {
     const tempFC = attributes.FOR.total + attributes.CON.total;
     const damageResistanceValue =
       tempFC >= 10 ? Math.floor((45 - tempFC) / 4) - 6 : tempFC >= 6 ? 4 : 6;
 
     this._setSystemAttribute(system, 'damageResistance', damageResistanceValue);
+  }
 
-    // Illness resistance
-    const illnessResultArray = [-5, -5, -4, -3, -2, -1, 0, 1, 2, 4];
+  /**
+   * Calculate and assign illness resistance.
+   */
+  _prepareIllnessResistance(system, attributes) {
     const conTemp = attributes.CON.total;
+    const valueArray = POL3.TABLEARRAY.valueArray;
+    const illnessResultArray = POL3.TABLEARRAY.resultArray;
     const upperBonusCon = Math.max(0, Math.floor((conTemp - 20) / 2));
-    const illnessResistanceValue = calculateResistance(
+
+    // Use our private method instead of an inline helper
+    const illnessResistanceValue = this.#calculateResistance(
       conTemp,
       valueArray,
       illnessResultArray,
-      upperBonusCon,
+      upperBonusCon
     );
 
     this._setSystemAttribute(system, 'illnessResistance', illnessResistanceValue);
+  }
 
-    // Drug resistance
+  /**
+   * Calculate and assign drug resistance.
+   */
+  _prepareDrugResistance(system, attributes) {
     const volconTemp = Math.round((attributes.CON.total + attributes.VOL.total) / 2);
+    const valueArray = POL3.TABLEARRAY.valueArray;
+    const illnessResultArray = POL3.TABLEARRAY.resultArray;
     const upperBonusVolCon = Math.max(0, Math.floor((volconTemp - 20) / 2));
-    const drugResistanceValue = calculateResistance(
+
+    // Same private helper
+    const drugResistanceValue = this.#calculateResistance(
       volconTemp,
       valueArray,
       illnessResultArray,
-      upperBonusVolCon,
+      upperBonusVolCon
     );
 
     this._setSystemAttribute(system, 'drugResistance', drugResistanceValue);
@@ -132,10 +170,11 @@ export default class Pol3Actor extends Actor {
   /**
    * Prepare the actor's displacement (movement) based on genetic type and coordination.
    * @param {Object} system - The system data object of the actor.
+   * @param {Object} attributes - The destructured attributes object from system.
    */
-  _prepareActorDisplacement(system) {
-    const { geneticType } = system.physicalDescription;
-    const coordination = system.attributes.COO.total;
+  _prepareActorDisplacement(system, attributes) {
+    const {geneticType} = system.physicalDescription;
+    const coordination = attributes.COO.total;
 
     // Calculate base speed
     const meanSpeed = 4 + Math.ceil(coordination / 5) * 2;
@@ -146,16 +185,17 @@ export default class Pol3Actor extends Actor {
     };
 
     // Ground speed is always set
-    system.groundSpeed = { ...speeds };
+    this._setSystemAttribute(system, 'groundSpeed', speeds);
 
+    let swimSpeedValue;
     // Swimming speed depends on genetic type
     switch (geneticType) {
       case 'naturalHybrid':
       case 'geneticHybrid':
-        system.swimSpeed = { ...speeds };
+        swimSpeedValue = {...speeds};
         break;
       case 'technoHybrid':
-        system.swimSpeed = {
+        swimSpeedValue = {
           mean: meanSpeed - 2,
           slow: (meanSpeed - 2) / 2,
           fast: (meanSpeed - 2) * 2,
@@ -163,13 +203,15 @@ export default class Pol3Actor extends Actor {
         break;
       case 'human':
         const adjustedMean = Math.ceil((meanSpeed - 4) / 2);
-        system.swimSpeed = {
+        swimSpeedValue = {
           mean: adjustedMean,
           slow: Math.ceil(adjustedMean / 2),
           fast: adjustedMean * 2,
         };
         break;
     }
+
+    this._setSystemAttribute(system, 'swimSpeed', swimSpeedValue);
   }
 
   /**
@@ -191,7 +233,7 @@ export default class Pol3Actor extends Actor {
    * }
    * @param {Object} system - The system data object of the actor.
    * @param {string} key - The key to set on the system object.
-   * @param {number} value - The numerical value to store.
+   * @param {number | Object} value - The numerical value to store.
    */
   _setSystemAttribute(system, key, value) {
     system[key] = {
@@ -199,6 +241,19 @@ export default class Pol3Actor extends Actor {
       value,
       label: `POL3.ATTRIBUTE.${this._capitalize(key)}`,
     };
+  }
+
+  /**
+   * A private helper to calculate any kind of standard resistance.
+   * @param {number} temp - The main attribute value used in the calculation.
+   * @param {number[]} valueArray - The array of thresholds to check against.
+   * @param {number[]} resultArray - The array of corresponding results.
+   * @param {number} upperBonus - Any additional bonus to subtract from the final result.
+   * @returns {number} The calculated resistance.
+   */
+  #calculateResistance(temp, valueArray, resultArray, upperBonus) {
+    const idx = valueArray.findIndex((v) => temp >= v);
+    return idx !== -1 ? resultArray[idx] - upperBonus : 6;
   }
 
   /**

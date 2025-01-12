@@ -1,6 +1,6 @@
-import { POL3 } from '../../../config/config.mjs';
+import {POL3} from '../../../config/config.mjs';
 
-const { api, sheets } = foundry.applications;
+const {api, sheets} = foundry.applications;
 
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
 
@@ -13,7 +13,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     },
     actions: {
       configureAttribute: Pol3BaseActorSheet.#onConfigureAttribute,
-      testAttribute: Pol3BaseActorSheet.#onTestAttibute,
+      testAttribute: Pol3BaseActorSheet.#onTestAttribute,
     },
     form: {
       submitOnChange: true,
@@ -37,12 +37,12 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
 
 
   async _prepareContext(options) {
-
     return {
       attributeScores: this.#prepareAttributes(),
+      secondaryAttributeScores: this.#prepareSecondaryAttributes(),
+      speed: this.#prepareSpeeds(),
       actor: this.document,
       isEditable: this.isEditable,
-      isOwner: this.actor.isOwner,
       fieldDisabled: this.isEditable ? '' : 'disabled',
       source: this.document.toObject(),
       fields: this.document.system.schema.fields,
@@ -68,6 +68,28 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     return attributes;
   }
 
+  #prepareSecondaryAttributes() {
+    const data = this.actor.system;
+    return {
+      stunThreshold: data.stunThreshold,
+      unconsciousnessThreshold: data.unconsciousnessThreshold,
+      closeCombatModifier: data.closeCombatModifier,
+      reaction: data.reaction,
+      damageResistance: data.damageResistance,
+      drugResistance: data.drugResistance,
+      illnessResistance: data.illnessResistance,
+      breath: data.breath,
+    };
+  }
+
+  #prepareSpeeds() {
+    const data = this.actor.system;
+    return {
+      groundSpeed: data.groundSpeed,
+      swimSpeed: data.swimSpeed,
+    };
+  }
+
   /**
    * Actions
    */
@@ -77,7 +99,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     console.log('Polaris | Configure ', attributeId);
   };
 
-  static #onTestAttibute(event) {
+  static #onTestAttribute(event) {
     const attributeId = event.target.closest('.attribute').dataset.attributeId;
     console.log('Polaris | Roll ', attributeId);
   }

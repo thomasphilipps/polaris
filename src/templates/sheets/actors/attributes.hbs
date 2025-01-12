@@ -4,15 +4,12 @@
     <ul class="attribute-list">
       {{#each attributeScores as |attribute|}}
         <li class="attribute flexrow" data-attribute-id="{{attribute.id}}">
-          <h4 class="label">{{localize attribute.abbr}}</h4>
+          <div class="label">{{localize attribute.abbr}}</div>
           <span class="input value">{{attribute.value}}</span>
-          {{#if isOwner}}
-            <a class="button icon fa-solid fa-gears" data-action="configureAttribute"
-               data-tooltip="Configure"></a>
-            <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-               data-tooltip="Test {{localize attribute.label}}"></a>
-          {{/if}}
-
+          <a class="button icon fa-solid fa-gears" data-action="configureAttribute"
+             data-tooltip="Configure"></a>
+          <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
+             data-tooltip="Test {{localize attribute.label}}"></a>
         </li>
       {{/each}}
     </ul>
@@ -20,9 +17,22 @@
 
   <h3>{{localize "POL3.ATTRIBUTE.SecondaryAttributes"}}</h3>
   <div>
-    <ul class="attribute-list">
-      <li class="attribuute flexrow" data-attribute-id="{{secondaryAttribute.id}}"></li>
+    <ul class="secondary-attribute-list">
+      {{#each secondaryAttributeScores as |secAttribute|}}
+        <li class="attribute flexrow" data-attribute-id="{{secAttribute.id}}">
+          <div class="label">{{localize secAttribute.label}}</div>
+          <span class="input value">{{secAttribute.value}}</span>
+          <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
+             data-tooltip="Test {{localize secAttribute.label}}"></a>
+        </li>
+      {{/each}}
     </ul>
   </div>
 
+  <h3>{{localize "POL3.ATTRIBUTE.Speed"}}</h3>
+  <div>
+    <ul class="speed-attributes">
+      li.attribute.flexrow
+    </ul>
+  </div>
 </section>
