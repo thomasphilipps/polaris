@@ -8,6 +8,11 @@ export default class Pol3HeroSheet extends Pol3BaseActorSheet {
   };
 
   static {
-    this._initializeActorSheet();
+    this._initializeActorSheetClass();
+  }
+
+  async _prepareContext() {
+    return await super._prepareContext();
+
   }
 }

@@ -64,8 +64,8 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
       item: this.document,
       isEditable: this.isEditable,
       fieldDisabled: this.isEditable ? '' : 'disabled',
-      source: this.document.toObject(),
       fields: this.document.system.schema.fields,
+      source: this.document.toObject(),
       tabGroups,
       tabs: tabGroups.sheet,
       tabsPartial: this.constructor.PARTS.tabs.template,
@@ -106,7 +106,6 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
       }
       tabs[groupId] = group;
     }
-
     /* // Hide the config tab from non-GMs
     if (!game.user.isGM) delete tabs.sheet.config; */
     return tabs;

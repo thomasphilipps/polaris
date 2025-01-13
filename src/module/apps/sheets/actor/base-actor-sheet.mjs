@@ -1,6 +1,6 @@
-import {POL3} from '../../../config/config.mjs';
+import { POL3 } from '../../../config/config.mjs';
 
-const {api, sheets} = foundry.applications;
+const { api, sheets } = foundry.applications;
 
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
 
@@ -25,35 +25,82 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
 
   /** @override */
   static PARTS = {
+    tabs: {
+      id: 'tabs',
+      template: 'systems/polaris/templates/sheets/actors/tabs.hbs',
+    },
+    body: {
+      id: 'body',
+      template: 'systems/polaris/templates/sheets/actors/actor-body.hbs',
+    },
     header: {
       id: 'header',
       template: 'systems/polaris/templates/sheets/actors/actor-header.hbs',
     },
     attributes: {
       id: 'attributes',
-      template: 'systems/polaris/templates/sheets/actors/attributes.hbs',
+      template: 'systems/polaris/templates/sheets/actors/actor-attributes.hbs',
     },
+    skills: {
+      id: 'skills',
+      template: 'systems/polaris/templates/sheets/actors/actor-skills.hbs',
+    },
+  };
+
+  static TABS = {
+    sheet: [
+      { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural', active: true },
+      { id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural' },
+    ],
+  };
+
+  /** @override */
+  tabGroups = {
+    sheet: 'attributes',
   };
 
 
   async _prepareContext(options) {
+    const tabGroups = this._getTabs();
     return {
+      actor: this.document,
       attributeScores: this.#prepareAttributes(),
+      config: CONFIG.POL3,
+      fieldDisabled: this.isEditable ? '' : 'disabled',
+      fields: this.document.system.schema.fields,
+      isEditable: this.isEditable,
       secondaryAttributeScores: this.#prepareSecondaryAttributes(),
       speed: this.#prepareSpeeds(),
-      actor: this.document,
-      isEditable: this.isEditable,
-      fieldDisabled: this.isEditable ? '' : 'disabled',
       source: this.document.toObject(),
-      fields: this.document.system.schema.fields,
-      config: CONFIG.POL3,
+      tabGroups,
+      tabs: tabGroups.sheet,
     };
   }
 
-  static _initializeActorSheet() {
+  static _initializeActorSheetClass() {
     const actor = this.DEFAULT_OPTIONS.actor;
     this.PARTS = foundry.utils.deepClone(this.PARTS);
+    this.TABS = foundry.utils.deepClone(this.TABS);
     this.DEFAULT_OPTIONS.classes = [actor.type];
+  }
+
+  /**
+   * Configure the tabs used by this sheet.
+   * @returns {Record<string, Record<string, ApplicationTab>>}
+   * @protected
+   */
+  _getTabs() {
+    const tabs = {};
+    for (const [groupId, config] of Object.entries(this.constructor.TABS)) {
+      const group = {};
+      for (const t of config) {
+        const active = this.tabGroups[t.group] === t.id;
+        group[t.id] = Object.assign({ active, cssClass: active ? 'active' : '' }, t);
+      }
+      tabs[groupId] = group;
+    }
+    console.log('Polaris | Tabs', tabs);
+    return tabs;
   }
 
 
