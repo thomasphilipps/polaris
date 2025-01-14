@@ -40,7 +40,8 @@
       "Slow": "Allure lente",
       "Mean": "Allure moyenne",
       "Fast": "Allure rapide",
-      "Sprint": "Allure maximale"
+      "Sprint": "Allure maximale",
+      "Initiative": "Initiative"
     },
     "SHEETS": {
       "GENERAL": {
@@ -59,7 +60,8 @@
       "TABS": {
         "Configuration": "Configuration",
         "Description": "Description",
-        "GMDescription": "Notes GM"
+        "GMDescription": "Notes GM",
+        "Equipment": "Équipement"
       },
       "REFERENCE": {
         "Label": "Référence",

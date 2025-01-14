@@ -1,6 +1,6 @@
-import { POL3 } from '../../../config/config.mjs';
+import {POL3} from '../../../config/config.mjs';
 
-const { api, sheets } = foundry.applications;
+const {api, sheets} = foundry.applications;
 
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
 
@@ -29,13 +29,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       id: 'tabs',
       template: 'systems/polaris/templates/sheets/actors/tabs.hbs',
     },
-    body: {
-      id: 'body',
-      template: 'systems/polaris/templates/sheets/actors/actor-body.hbs',
-    },
     header: {
       id: 'header',
       template: 'systems/polaris/templates/sheets/actors/actor-header.hbs',
+    },
+    body: {
+      id: 'body',
+      template: 'systems/polaris/templates/sheets/actors/actor-body.hbs',
+      scrollable: ['.sheet-body']
     },
     attributes: {
       id: 'attributes',
@@ -45,12 +46,22 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       id: 'skills',
       template: 'systems/polaris/templates/sheets/actors/actor-skills.hbs',
     },
+    equipment: {
+      id: 'equipment',
+      template: 'systems/polaris/templates/sheets/actors/actor-equipment.hbs',
+    },
+    description: {
+      id: 'description',
+      template: undefined // Populated in _initializeActorSheetClass
+    }
   };
 
   static TABS = {
     sheet: [
-      { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural', active: true },
-      { id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural' },
+      {id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural', active: true},
+      {id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural'},
+      {id: 'equipment', group: 'sheet', label: 'POL3.SHEETS.TABS.Equipment'},
+      {id: 'description', group: 'sheet', label: 'POL3.SHEETS.TABS.Description'},
     ],
   };
 
@@ -70,6 +81,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       fields: this.document.system.schema.fields,
       isEditable: this.isEditable,
       secondaryAttributeScores: this.#prepareSecondaryAttributes(),
+      variableAttributeScores: this.#prepareVariableAttributes(),
       speed: this.#prepareSpeeds(),
       source: this.document.toObject(),
       tabGroups,
@@ -82,6 +94,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     this.PARTS = foundry.utils.deepClone(this.PARTS);
     this.TABS = foundry.utils.deepClone(this.TABS);
     this.DEFAULT_OPTIONS.classes = [actor.type];
+    this.PARTS.description.template = `systems/polaris/templates/sheets/actors/${actor.type}-description.hbs`;
   }
 
   /**
@@ -95,11 +108,10 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       const group = {};
       for (const t of config) {
         const active = this.tabGroups[t.group] === t.id;
-        group[t.id] = Object.assign({ active, cssClass: active ? 'active' : '' }, t);
+        group[t.id] = Object.assign({active, cssClass: active ? 'active' : ''}, t);
       }
       tabs[groupId] = group;
     }
-    console.log('Polaris | Tabs', tabs);
     return tabs;
   }
 
@@ -113,6 +125,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     });
     attributes.sort((a, b) => a.order - b.order);
     return attributes;
+  }
+
+  #prepareVariableAttributes() {
+    const data = this.actor.system;
+    return {
+      baseLuck: data.baseLuck,
+      baseInitiative: data.baseInitiative,
+    };
   }
 
   #prepareSecondaryAttributes() {
@@ -131,6 +151,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
 
   #prepareSpeeds() {
     const data = this.actor.system;
+    console.log('Polaris | Speed', data.groundSpeed);
     return {
       groundSpeed: data.groundSpeed,
       swimSpeed: data.swimSpeed,
