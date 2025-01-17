@@ -11,8 +11,13 @@ export default class Pol3HeroSheet extends Pol3BaseActorSheet {
     this._initializeActorSheetClass();
   }
 
-  async _prepareContext() {
-    return await super._prepareContext();
-
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const { fields: f } = context;
+    Object.assign(context, {
+      physicalDescription: f.physicalDescription.fields,
+    });
+    return context;
   }
+
 }

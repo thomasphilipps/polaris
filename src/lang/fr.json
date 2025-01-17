@@ -77,11 +77,13 @@
         "TechLevel": "Niveau technologique",
         "Manufacturer": "Fabricant",
         "Integrity": "Intégrité",
-        "IsEquipped": "Équipé"
+        "IsEquipped": "Équipé",
+        "Traits": "Traits"
       }
     },
     "ACTOR": {
       "DESCRIPTION": {
+        "PhysicalDescription": "Description physique",
         "History": "Historique",
         "Size": "Taille",
         "Weight": "Poids",
@@ -100,11 +102,20 @@
         "BasicTraining": "Formation de base",
         "Studies": "Études supérieures"
       },
-      "GENETICTYPE": {
+      "GENETIC_TYPE": {
         "Human": "Humain",
         "NaturalHybrid": "Hybride naturel",
         "TechnoHybrid": "Techno-hybride",
         "GeneticHybrid": "Hybride génétique"
+      },
+      "SEX": {
+        "Male": "Homme",
+        "Female": "Femme"
+      },
+      "HANDEDNESS": {
+        "RightHanded": "Droitier",
+        "LeftHanded": "Gaucher",
+        "Ambidextrous": "Ambidextre"
       }
     },
     "SKILL": {

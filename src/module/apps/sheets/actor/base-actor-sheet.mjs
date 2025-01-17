@@ -1,6 +1,6 @@
-import {POL3} from '../../../config/config.mjs';
+import { POL3 } from '../../../config/config.mjs';
 
-const {api, sheets} = foundry.applications;
+const { api, sheets } = foundry.applications;
 
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
 
@@ -36,7 +36,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     body: {
       id: 'body',
       template: 'systems/polaris/templates/sheets/actors/actor-body.hbs',
-      scrollable: ['.sheet-body']
+      scrollable: ['.sheet-body'],
     },
     attributes: {
       id: 'attributes',
@@ -52,16 +52,16 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     },
     description: {
       id: 'description',
-      template: undefined // Populated in _initializeActorSheetClass
-    }
+      template: undefined, // Populated in _initializeActorSheetClass
+    },
   };
 
   static TABS = {
     sheet: [
-      {id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural', active: true},
-      {id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural'},
-      {id: 'equipment', group: 'sheet', label: 'POL3.SHEETS.TABS.Equipment'},
-      {id: 'description', group: 'sheet', label: 'POL3.SHEETS.TABS.Description'},
+      { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural', active: true },
+      { id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural' },
+      { id: 'equipment', group: 'sheet', label: 'POL3.SHEETS.TABS.Equipment' },
+      { id: 'description', group: 'sheet', label: 'POL3.SHEETS.TABS.Description' },
     ],
   };
 
@@ -108,7 +108,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       const group = {};
       for (const t of config) {
         const active = this.tabGroups[t.group] === t.id;
-        group[t.id] = Object.assign({active, cssClass: active ? 'active' : ''}, t);
+        group[t.id] = Object.assign({ active, cssClass: active ? 'active' : '' }, t);
       }
       tabs[groupId] = group;
     }
@@ -151,7 +151,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
 
   #prepareSpeeds() {
     const data = this.actor.system;
-    console.log('Polaris | Speed', data.groundSpeed);
     return {
       groundSpeed: data.groundSpeed,
       swimSpeed: data.swimSpeed,
@@ -168,7 +167,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   };
 
   static #onTestAttribute(event) {
+    const data = this.actor.system;
     const attributeId = event.target.closest('.attribute').dataset.attributeId;
+
+
+    const attributeValue = this.actor.rollAction(attributeId, 'attribute');
+
+
     console.log('Polaris | Roll ', attributeId);
+    console.log('Polaris | RollValue ', attributeValue);
   }
 }

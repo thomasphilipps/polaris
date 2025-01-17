@@ -1,4 +1,4 @@
-import {POL3} from '../config/config.mjs';
+import { POL3 } from '../config/config.mjs';
 
 export default class Pol3Actor extends Actor {
   /**
@@ -11,8 +11,8 @@ export default class Pol3Actor extends Actor {
    * whenever the actor's data is updated.
    */
   prepareDerivedData() {
-    const {system} = this;
-    const {attributes} = system;
+    const { system } = this;
+    const { attributes } = system;
 
     // Calculate total value and natural aptitude for each attribute
     Object.values(attributes).forEach((attribute) => {
@@ -43,7 +43,7 @@ export default class Pol3Actor extends Actor {
                                 }) {
     return [base, geneticModifier, competencePointsModifier, otherModifier].reduce(
       (sum, val) => sum + val,
-      0
+      0,
     );
   }
 
@@ -90,7 +90,7 @@ export default class Pol3Actor extends Actor {
    */
   _prepareThresholds(system, attributes) {
     const stunThresholdValue = Math.round(
-      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3
+      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3,
     );
     const unconsciounessThresholdValue = stunThresholdValue + 10;
     const breathValue = Math.round((attributes.CON.total + attributes.VOL.total) / 2);
@@ -141,7 +141,7 @@ export default class Pol3Actor extends Actor {
       conTemp,
       valueArray,
       illnessResultArray,
-      upperBonusCon
+      upperBonusCon,
     );
 
     this._setSystemAttribute(system, 'illnessResistance', illnessResistanceValue);
@@ -161,7 +161,7 @@ export default class Pol3Actor extends Actor {
       volconTemp,
       valueArray,
       illnessResultArray,
-      upperBonusVolCon
+      upperBonusVolCon,
     );
 
     this._setSystemAttribute(system, 'drugResistance', drugResistanceValue);
@@ -173,7 +173,7 @@ export default class Pol3Actor extends Actor {
    * @param {Object} attributes - The destructured attributes object from system.
    */
   _prepareActorDisplacement(system, attributes) {
-    const {geneticType} = system.physicalDescription;
+    const { geneticType } = system.physicalDescription;
     const coordination = attributes.COO.total;
 
     // Calculate base speed
@@ -192,7 +192,7 @@ export default class Pol3Actor extends Actor {
     switch (geneticType) {
       case 'naturalHybrid':
       case 'geneticHybrid':
-        swimSpeedValue = {...speeds};
+        swimSpeedValue = { ...speeds };
         break;
       case 'technoHybrid':
         swimSpeedValue = {
@@ -254,6 +254,25 @@ export default class Pol3Actor extends Actor {
   #calculateResistance(temp, valueArray, resultArray, upperBonus) {
     const idx = valueArray.findIndex((v) => temp >= v);
     return idx !== -1 ? resultArray[idx] - upperBonus : 6;
+  }
+
+  rollAction(actionId, actionType) {
+    const data = this.system;
+
+    switch (actionType) {
+      case 'attribute':
+        return this.#rollAttribute(actionId, data);
+      case 'skill':
+        console.log('Polaris | Skill');
+        break;
+    }
+  }
+
+  #rollAttribute(actionId, data) {
+    // Test if attributeId is an attribute or another value
+    const regex = /^[A-Z]{3}$/;
+    const isPrimaryAttribute = regex.test(actionId);
+    return isPrimaryAttribute ? data.attributes[actionId].total : data[actionId].value;
   }
 
   /**

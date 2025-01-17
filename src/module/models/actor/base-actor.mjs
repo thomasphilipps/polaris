@@ -3,7 +3,11 @@ import { POL3 } from '../../config/config.mjs';
 
 export function heroFields() {
   const ACTOR_GENETIC_TYPES = POL3.GENETICTYPE;
+  const ACTOR_SEX = POL3.SEX;
+  const ACTOR_HANDEDNESS = POL3.HANDEDNESS;
   const DEFAULT_GENETIC_TYPE = 'human';
+  const DEFAULT_SEX = 'male';
+  const DEFAULT_HANDEDNESS = 'rightHanded';
   return {
     physicalDescription: new fields.SchemaField({
       history: new fields.HTMLField({ label: 'POL3.ACTOR.DESCRIPTION.History' }),
@@ -13,7 +17,12 @@ export function heroFields() {
       build: new fields.StringField({ label: 'POL3.ACTOR.DESCRIPTION.Build' }),
       hair: new fields.StringField({ label: 'POL3.ACTOR.DESCRIPTION.Hair' }),
       eyes: new fields.StringField({ label: 'POL3.ACTOR.DESCRIPTION.Eyes' }),
-      handedness: new fields.StringField({ label: 'POL3.ACTOR.DESCRIPTION.Handedness' }),
+      handedness: new fields.StringField({
+        label: 'POL3.ACTOR.DESCRIPTION.Handedness',
+        required: true,
+        choices: ACTOR_HANDEDNESS,
+        initial: DEFAULT_HANDEDNESS,
+      }),
       distinguishingMarks: new fields.HTMLField({ label: 'POL3.ACTOR.DESCRIPTION.DistinguishingMarks' }),
       geneticType: new fields.StringField({
         label: 'POL3.ACTOR.DESCRIPTION.GeneticType',
@@ -22,7 +31,12 @@ export function heroFields() {
         initial: DEFAULT_GENETIC_TYPE,
       }),
       age: new fields.NumberField({ label: 'POL3.ACTOR.DESCRIPTION.Age' }),
-      sex: new fields.StringField({ label: 'POL3.ACTOR.DESCRIPTION.Sex' }),
+      sex: new fields.StringField({
+        label: 'POL3.ACTOR.DESCRIPTION.Sex',
+        required: true,
+        choices: ACTOR_SEX,
+        initial: DEFAULT_SEX,
+      }),
       fertile: new fields.BooleanField({ initial: false, label: 'POL3.ACTOR.DESCRIPTION.Fertile' }),
       geographicOrigin: new fields.StringField({ label: 'POL3.ACTOR.DESCRIPTION.GeographicOrigin' }),
       socialOrigin: new fields.StringField({ label: 'POL3.ACTOR.DESCRIPTION.SocialOrigin' }),
