@@ -84,6 +84,7 @@
     "ACTOR": {
       "DESCRIPTION": {
         "PhysicalDescription": "Description physique",
+        "PrivateNotes": "Notes privées",
         "History": "Historique",
         "Size": "Taille",
         "Weight": "Poids",

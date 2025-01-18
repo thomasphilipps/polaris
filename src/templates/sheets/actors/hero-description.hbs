@@ -11,7 +11,7 @@
       {{formField physicalDescription.age value=source.system.physicalDescription.age
                   localize=true}}
       {{formField physicalDescription.sex value=source.system.physicalDescription.sex
-                  localize=true }}
+                  localize=true}}
       {{formField physicalDescription.fertile value=source.system.physicalDescription.fertile
                   localize=true}}
       {{formField physicalDescription.geographicOrigin
@@ -26,10 +26,10 @@
       {{formField physicalDescription.studies value=source.system.physicalDescription.studies
                   localize=true}}
     </fieldset>
-    <fieldset class="hero-details">
+    <fieldset class="hero-details" {{fieldDisabled}}>
       <legend>{{localize "POL3.ACTOR.DESCRIPTION.PhysicalDescription"}}</legend>
       {{formField physicalDescription.size value=source.system.physicalDescription.size
-                  localize=true }}
+                  localize=true}}
       {{formField physicalDescription.weight value=source.system.physicalDescription.weight
                   localize=true}}
       {{formField physicalDescription.skin value=source.system.physicalDescription.skin
@@ -45,7 +45,13 @@
     </fieldset>
   </div>
   <div>
-    {{formInput fields.description.fields.public value=source.system.description.public height=300
-                enriched=description.public toggled=true}}
+    <h4 class="actor-history">{{localize "POL3.ACTOR.DESCRIPTION.History"}}</h4>
+    {{#if isEditable}}
+      {{formInput fields.description.fields.public value=source.system.description.public height=300
+                  enriched=description.public toggled=true}}
+    {{else}}
+      {{{description.public}}}
+    {{/if}}
   </div>
+
 </section>
