@@ -10,6 +10,7 @@ dist/
 # IDE files
 .vscode/
 .idea/
+.run/
 
 # OS files
 .DS_Store

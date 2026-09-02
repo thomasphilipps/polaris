@@ -16,8 +16,8 @@ export default class Pol3Actor extends Actor {
 
     // Calculate total value and natural aptitude for each attribute
     Object.values(attributes).forEach((attribute) => {
-      attribute.total = this.#calculateAttributeTotalValue(attribute);
-      attribute.naturalAptitude = this.#calculateNaturalAptitude(attribute.total);
+      attribute.total = this._calculateAttributeTotalValue(attribute);
+      attribute.naturalAptitude = this._calculateNaturalAptitude(attribute.total);
     });
 
     // Prepare other derived data
@@ -35,7 +35,7 @@ export default class Pol3Actor extends Actor {
    * @param {number} param0.otherModifier - Other arbitrary modifiers.
    * @returns {number} The summed total of the attribute.
    */
-  #calculateAttributeTotalValue({
+  _calculateAttributeTotalValue({
                                   base,
                                   geneticModifier,
                                   competencePointsModifier,
@@ -52,7 +52,7 @@ export default class Pol3Actor extends Actor {
    * @param {number} total - The total attribute value.
    * @returns {number} The natural aptitude.
    */
-  #calculateNaturalAptitude(total) {
+  _calculateNaturalAptitude(total) {
     const valueArray = [25, 22, 19, 16, 13, 10, 8, 6, 5, 4];
     const index = valueArray.findIndex((value) => total >= value);
     return index !== -1 ? 6 - index : -4;
@@ -137,7 +137,7 @@ export default class Pol3Actor extends Actor {
     const upperBonusCon = Math.max(0, Math.floor((conTemp - 20) / 2));
 
     // Use our private method instead of an inline helper
-    const illnessResistanceValue = this.#calculateResistance(
+    const illnessResistanceValue = this._calculateResistance(
       conTemp,
       valueArray,
       illnessResultArray,
@@ -157,7 +157,7 @@ export default class Pol3Actor extends Actor {
     const upperBonusVolCon = Math.max(0, Math.floor((volconTemp - 20) / 2));
 
     // Same private helper
-    const drugResistanceValue = this.#calculateResistance(
+    const drugResistanceValue = this._calculateResistance(
       volconTemp,
       valueArray,
       illnessResultArray,
@@ -251,7 +251,7 @@ export default class Pol3Actor extends Actor {
    * @param {number} upperBonus - Any additional bonus to subtract from the final result.
    * @returns {number} The calculated resistance.
    */
-  #calculateResistance(temp, valueArray, resultArray, upperBonus) {
+  _calculateResistance(temp, valueArray, resultArray, upperBonus) {
     const idx = valueArray.findIndex((v) => temp >= v);
     return idx !== -1 ? resultArray[idx] - upperBonus : 6;
   }

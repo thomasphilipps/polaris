@@ -1,11 +1,12 @@
-import {POL3} from '../../../config/config.mjs';
+import { POL3 } from '../../../config/config.mjs';
 
-const {api, sheets} = foundry.applications;
+const { api, sheets } = foundry.applications;
 
 /**
  * Pol3BaseActorSheet class that extends Foundry's ActorSheetV2 with Polaris-specific logic.
  */
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
+
 
   /**
    * Default options for this sheet, including CSS classes, sheet dimensions, and sheet actions.
@@ -70,7 +71,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     notes: {
       id: 'notes',
       template: 'systems/polaris/templates/sheets/actors/actor-gmNotes.hbs',
-    }
+    },
   };
 
   /**
@@ -78,11 +79,11 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
    */
   static TABS = {
     sheet: [
-      {id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural'},
-      {id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural'},
-      {id: 'equipment', group: 'sheet', label: 'POL3.SHEETS.TABS.Equipment'},
-      {id: 'description', group: 'sheet', label: 'POL3.SHEETS.TABS.Description'},
-      {id: 'notes', group: 'sheet', label: 'POL3.SHEETS.TABS.GMDescription'},
+      { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural' },
+      { id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural' },
+      { id: 'equipment', group: 'sheet', label: 'POL3.SHEETS.TABS.Equipment' },
+      { id: 'description', group: 'sheet', label: 'POL3.SHEETS.TABS.Description' },
+      { id: 'notes', group: 'sheet', label: 'POL3.SHEETS.TABS.GMDescription' },
     ],
   };
 
@@ -199,12 +200,12 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
    */
   async #prepareDescription() {
     const description = this.document.system.description;
-    const context = {relativeTo: this.document, secrets: this.document.isOwner};
+    const context = { relativeTo: this.document, secrets: this.document.isOwner };
 
     return {
-      GMNotes: await TextEditor.enrichHTML(description.GMNotes, context),
-      public: await TextEditor.enrichHTML(description.public, context),
-      secret: await TextEditor.enrichHTML(description.secret, context),
+      GMNotes: await foundry.applications.ux.TextEditor.implementation.enrichHTML(description.GMNotes, context),
+      public: await foundry.applications.ux.TextEditor.implementation.enrichHTML(description.public, context),
+      secret: await foundry.applications.ux.TextEditor.implementation.enrichHTML(description.secret, context),
     };
   }
 
@@ -295,5 +296,76 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     // e.g., const actor = someGlobalReference.actors?.get(actorId);
     // const attributeValue = actor.rollAction(attributeId, 'attribute');
     // console.log('Roll result:', attributeValue);
+  }
+
+  /** @override */
+  _onRender(_context, _options) {
+    new foundry.applications.ux.DragDrop.implementation({
+      dragSelector: '.draggable',
+      dropSelector: null,
+      callbacks: {
+        dragstart: this._onDragStart.bind(this),
+        dragover: this._onDragOver.bind(this),
+        drop: this._onDrop.bind(this),
+      },
+    }).bind(this.element);
+  }
+
+  async _onDragStart(event) {
+  }
+
+  async _onDragOver(event) {
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * An event that occurs when data is dropped into a drop target.
+   * @param {DragEvent} event
+   * @returns {Promise<void>}
+   * @protected
+   */
+  async _onDrop(event) {
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
+    const actor = this.actor;
+    const allowed = Hooks.call('dropActorSheetData', actor, this, data);
+    if (allowed === false) return;
+
+    // Dropped Documents
+    const documentClass = getDocumentClass(data.type);
+    if (documentClass) {
+      const document = await documentClass.fromDropData(data);
+      await this._onDropDocument(event, document);
+    }
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Handle a dropped document on the ActorSheet
+   * @param {DragEvent} event         The initiating drop event
+   * @param {Document} document       The resolved Document class
+   * @returns {Promise<void>}
+   * @protected
+   */
+  async _onDropDocument(event, document) {
+    switch (document.documentName) {
+      case 'ActiveEffect':
+        return this._onDropActiveEffect(event, /** @type ActiveEffect */ document);
+      case 'Actor':
+        return this._onDropActor(event, /** @type Actor */ document);
+      case 'Item':
+        return this._onDropItem(event, /** @type Item */ document);
+      case 'Folder':
+        return this._onDropFolder(event, /** @type Folder */ document);
+    }
+  }
+
+  async _onDropItem(event, item) {
+    if (!this.actor.isOwner) return;
+    //if (this.actor.uuid === item.parent?.uuid) return this._onSortItem(event, item);
+    const keepId = !this.actor.items.has(item.id);
+    console.log('Polaris | Drop Item:', item);
+    await Item.create(item.toObject(), { parent: this.actor, keepId });
   }
 }

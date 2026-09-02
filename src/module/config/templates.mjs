@@ -4,6 +4,6 @@ export async function preloadHandlebarsTemplates() {
   ];
   console.log('Polaris | templates: ', templatePaths);
 
-  return loadTemplates(templatePaths);
+  return foundry.applications.handlebars.loadTemplates(templatePaths);
 }
 

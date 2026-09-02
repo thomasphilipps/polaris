@@ -30,23 +30,23 @@ Hooks.once('init', async function() {
 
   CONFIG.POL3 = POL3;
 
-  Actors.unregisterSheet('core', ActorSheet);
+  foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
 
-  DocumentSheetConfig.registerSheet(Actor, 'polaris', applications.Pol3HeroSheet, {
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, 'polaris', applications.Pol3HeroSheet, {
     types: ['hero'],
     makeDefault: true,
     label: 'POL3.SHEETS.GENERAL.Hero',
   });
 
-  Items.unregisterSheet('core', ItemSheet);
+  foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
 
-  DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3SkillSheet, {
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3SkillSheet, {
     types: ['skill'],
     makeDefault: true,
     label: 'POL3.SHEETS.GENERAL.Skill',
   });
 
-  DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3WeaponSheet, {
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3WeaponSheet, {
     types: ['weapon'],
     makeDefault: true,
     label: 'POL3.SHEETS.GENERAL.Weapon',

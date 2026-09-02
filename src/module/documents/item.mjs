@@ -37,7 +37,7 @@ export default class Pol3Item extends Item {
     itemData.infoString = `${itemData.firstAttribute} / ${itemData.secondAttribute}`;
 
     if (this.hasActor) {
-      itemData.baseLevel = this.#computeAttributeBaseLevel(itemData, actorData);
+      itemData.baseLevel = this._computeAttributeBaseLevel(itemData, actorData);
       itemData.globalLevel = itemData.baseLevel + itemData.mastery;
       itemData.globalLevel =
         itemData.tags.has('isDifficult') || itemData.tags.has('isReserved')
@@ -90,22 +90,22 @@ export default class Pol3Item extends Item {
    * @param actorData
    * @returns {number}
    */
-  #computeAttributeBaseLevel(itemData, actorData) {
-    const actorFirstAttribute = actorData.attribute[itemData.firstAttribute];
-    const actorSecondAttribute = actorData.attribute[itemData.secondAttribute];
+  _computeAttributeBaseLevel(itemData, actorData) {
+    const actorFirstAttribute = actorData.attributes[itemData.firstAttribute];
+    const actorSecondAttribute = actorData.attributes[itemData.secondAttribute];
     const firstAttributeTotalValue =
-      actorFirstAttribute.value +
+      actorFirstAttribute.base +
       actorFirstAttribute.geneticModifier +
       actorFirstAttribute.otherModifier +
       actorFirstAttribute.competencePointsModifier;
     const secondAttributeTotalValue =
-      actorSecondAttribute.value +
+      actorSecondAttribute.base +
       actorSecondAttribute.geneticModifier +
       actorSecondAttribute.otherModifier +
       actorSecondAttribute.competencePointsModifier;
     return (
-      this.#computeAttributeNaturalAptitude(firstAttributeTotalValue) +
-      this.#computeAttributeNaturalAptitude(secondAttributeTotalValue)
+      this._computeAttributeNaturalAptitude(firstAttributeTotalValue) +
+      this._computeAttributeNaturalAptitude(secondAttributeTotalValue)
     );
   }
 
@@ -114,7 +114,7 @@ export default class Pol3Item extends Item {
    * @param {number} attributeTotalValue
    * @returns {number}
    */
-  #computeAttributeNaturalAptitude(attributeTotalValue) {
+  _computeAttributeNaturalAptitude(attributeTotalValue) {
     const attributeScoreLimits = [25, 22, 19, 16, 13, 10, 8, 6, 5, 4];
     let baseNaturalAptitude = -4;
 
