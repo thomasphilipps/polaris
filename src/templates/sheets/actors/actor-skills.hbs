@@ -3,6 +3,10 @@
   data-tab="{{tabs.skills.id}}"
   data-group="{{tabs.skills.group}}">
   <ol>
-    
+    {{#each items.skill as |skill|}}
+      <li data-skill-id="{{skill._id}}">
+        {{skill.name}}
+      </li>
+    {{/each}}
   </ol>
 </section>

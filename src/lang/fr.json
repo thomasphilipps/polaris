@@ -1,5 +1,9 @@
 {
   "POL3": {
+    "WARNING": {
+      "NotOwner": "Vous n'êtes pas propriétaire de cet item",
+      "SkillAlreadyExists": "Cette compétence existe déjà"
+    },
     "ATTRIBUTE": {
       "Label": "Attribut",
       "LabelPlural": "Attributs",

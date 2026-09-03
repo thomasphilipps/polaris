@@ -138,6 +138,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       description: await this.#prepareDescription(),
       speed: this.#prepareSpeeds(),
       source: this.document.toObject(),
+      items: this.#prepareItems(),
       tabGroups,
       tabs: tabGroups.sheet,
     };
@@ -221,6 +222,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       return attr;
     });
     attributes.sort((a, b) => a.order - b.order);
+    console.log('Polaris | Actor Attributes:', attributes);
     return attributes;
   }
 
@@ -264,6 +266,22 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       groundSpeed: data.groundSpeed,
       swimSpeed: data.swimSpeed,
     };
+  }
+
+  /**
+   * Prepare a list of items organized by type.
+   * @returns {object}
+   */
+  #prepareItems() {
+    const items = {};
+    this.actor.items.forEach(item => {
+      if (!items[item.type]) {
+        items[item.type] = [];
+      }
+      items[item.type].push(item);
+    });
+    console.log('Polaris | Actor Items:', items);
+    return items;
   }
 
   /**
@@ -362,7 +380,16 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   }
 
   async _onDropItem(event, item) {
-    if (!this.actor.isOwner) return;
+    if (!this.actor.isOwner) {
+      ui.notifications.warn(game.i18n.localize('POL3.WARNIING.NotOwner'));
+      return false;
+    }
+
+    if ((item.type === 'skill') && this.actor.items.has(item.id)) {
+      ui.notifications.warn(game.i18n.localize('POL3.WARNING.SkillAlreadyExists'));
+      return false;
+    }
+
     //if (this.actor.uuid === item.parent?.uuid) return this._onSortItem(event, item);
     const keepId = !this.actor.items.has(item.id);
     console.log('Polaris | Drop Item:', item);
