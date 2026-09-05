@@ -22,6 +22,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     actions: {
       configureAttribute: Pol3BaseActorSheet.#onConfigureAttribute,
       testAttribute: Pol3BaseActorSheet.#onTestAttribute,
+      deleteItem: Pol3BaseActorSheet.#onDeleteItem,
+      rollItem: Pol3BaseActorSheet.#onRollItem,
     },
     form: {
       submitOnChange: true,
@@ -274,14 +276,50 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
    */
   #prepareItems() {
     const items = {};
-    this.actor.items.forEach(item => {
-      if (!items[item.type]) {
-        items[item.type] = [];
-      }
-      items[item.type].push(item);
-    });
-    console.log('Polaris | Actor Items:', items);
+    items.skills = this._prepareSkills();
+    console.log('Polaris | Actor Skills:', items.skills);
     return items;
+  }
+
+  /**
+   * Prepare skills
+   * @returns {{label: string, skillList: *}[]}
+   * @private
+   */
+  _prepareSkills() {
+    const skillsMap = new Map();
+
+    this.actor.items.filter(i => i.type === 'skill').forEach(skill => {
+      const category = skill.system.category ?? '';
+      const skillName = skill.system.skill ?? '';
+
+      if (!skillsMap.has(category)) {
+        skillsMap.set(category, new Map());
+      }
+      const categoryMap = skillsMap.get(category);
+
+      if (!categoryMap.has(skillName)) {
+        categoryMap.set(skillName, []);
+      }
+      categoryMap.get(skillName).push(skill);
+    });
+
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+    const sortedSkills = [...skillsMap.entries()]
+      .map(([category, skillNamesMap]) => {
+        const skillList = [...skillNamesMap.entries()]
+          .sort(([a], [b]) => a.localeCompare(b))
+          .flatMap(([, items]) =>
+            items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+          );
+
+        const label = game.i18n.localize(`POL3.SKILL.Category.${capitalize(category)}`);
+
+        return { label, skillList };
+      })
+      .sort((a, b) => a.label.localeCompare(b.label));
+    return sortedSkills;
   }
 
   /**
@@ -314,6 +352,26 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     // e.g., const actor = someGlobalReference.actors?.get(actorId);
     // const attributeValue = actor.rollAction(attributeId, 'attribute');
     // console.log('Roll result:', attributeValue);
+  }
+
+  /**
+   * Handler for deleting an Item
+   * @param event
+   * @private
+   */
+  static #onDeleteItem(event) {
+    const itemId = event.target.closest('.item').dataset.itemId;
+    console.log('Polaris | Delete item:', itemId);
+  }
+
+  /**
+   * Handler for rolling an Item
+   * @param event
+   * @private
+   */
+  static #onRollItem(event) {
+    const itemId = event.target.closest('.item').dataset.itemId;
+    console.log('Polaris | Roll item:', itemId);
   }
 
   /** @override */
@@ -389,10 +447,10 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       ui.notifications.warn(game.i18n.localize('POL3.WARNING.SkillAlreadyExists'));
       return false;
     }
-
+//TODO : set a flag to retrieve original object later
     //if (this.actor.uuid === item.parent?.uuid) return this._onSortItem(event, item);
     const keepId = !this.actor.items.has(item.id);
     console.log('Polaris | Drop Item:', item);
-    await Item.create(item.toObject(), { parent: this.actor, keepId });
+    await Item.create(item, { parent: this.actor, keepId });
   }
 }

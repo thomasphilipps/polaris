@@ -11,6 +11,8 @@ export default class Pol3Item extends Item {
     //Sets the reference string
     this._setBookReferenceString(itemData);
 
+
+
     switch (this.type) {
       case 'skill':
         this._prepareSkillData(itemData, actorData);
@@ -34,7 +36,7 @@ export default class Pol3Item extends Item {
       itemData.tags.has('isReserved') || itemData.tags.has('hasPrerequisites')
     );
 
-    itemData.infoString = `${itemData.firstAttribute} / ${itemData.secondAttribute}`;
+    itemData.infoString = `${itemData.firstAttribute}/${itemData.secondAttribute}`;
 
     if (this.hasActor) {
       itemData.baseLevel = this._computeAttributeBaseLevel(itemData, actorData);
