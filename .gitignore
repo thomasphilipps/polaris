@@ -21,3 +21,6 @@ gulpfile.js
 
 # FoundryVTT
 packs/
+
+# Rollup
+rollup.config.mjs

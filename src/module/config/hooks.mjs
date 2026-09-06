@@ -1,4 +1,8 @@
 export function onPreCreateItem(item, data, options, userId) {
+  // Adding useful informations when dropping an item on an Actor's sheet
+  if (item.parent instanceof Actor) {
+    item.updateSource({"flags.polaris.parentItemId" : item.id})
+  }
   switch (item.type) {
     case "skill":
       const initialSkillImage = `systems/polaris/assets/icons/${item.system.category}.png`

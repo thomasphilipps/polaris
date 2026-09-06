@@ -79,11 +79,11 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
     this.TABS = foundry.utils.deepClone(this.TABS);
 
     this.DEFAULT_OPTIONS.classes = [this.DEFAULT_OPTIONS.item.type];
-    this.PARTS.config.template = `systems/polaris/templates/sheets/partials/${item.type}-config.hbs`;
+    this.PARTS.config.template = `systems/polaris/templates/sheets/items/partials/${item.type}-config.hbs`;
 
     if (item.hasGMDescription) {
       this.PARTS.description.template =
-        'systems/polaris/templates/sheets/partials/item-description-advanced.hbs';
+        'systems/polaris/templates/sheets/items/partials/item-description-advanced.hbs';
       this.TABS.description = [
         { id: 'public', group: 'description', label: 'POL3.SHEETS.TABS.Description' },
         { id: 'secret', group: 'description', label: 'POL3.SHEETS.TABS.GMDescription' },

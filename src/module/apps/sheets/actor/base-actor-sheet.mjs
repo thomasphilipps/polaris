@@ -224,7 +224,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       return attr;
     });
     attributes.sort((a, b) => a.order - b.order);
-    console.log('Polaris | Actor Attributes:', attributes);
     return attributes;
   }
 
@@ -277,7 +276,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   #prepareItems() {
     const items = {};
     items.skills = this._prepareSkills();
-    console.log('Polaris | Actor Skills:', items.skills);
     return items;
   }
 
@@ -330,8 +328,9 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
    */
   static #onConfigureAttribute(event) {
     const attributeId = event.target.closest('.attribute').dataset.attributeId;
-    console.log('Polaris | Configure attribute:', attributeId);
     // Implement your configuration logic here
+
+    console.log('Polaris | Configure attribute: ', attributeId )
   }
 
   /**
