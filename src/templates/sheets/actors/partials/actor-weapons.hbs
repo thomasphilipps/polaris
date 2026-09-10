@@ -1,3 +1,12 @@
 <section>
-  Weapons
+  {{#each items.weapons as |category|}}
+    {{category.label}}
+    <ul>
+      {{#each category.weaponList as |weapon|}}
+        <li class="item flexrow" data-item-id="{{weapon.id}}">
+          <div class="label flex1">{{weapon.name}}</div>
+        </li>
+      {{/each}}
+    </ul>
+  {{/each}}
 </section>

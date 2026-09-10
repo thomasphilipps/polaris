@@ -276,7 +276,48 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   #prepareItems() {
     const items = {};
     items.skills = this._prepareSkills();
+    items.weapons = this._prepareWeapons();
     return items;
+  }
+
+  /**
+   * Prepare weapons
+   *
+   */
+  _prepareWeapons() {
+    const weaponsMap = new Map();
+    this.actor.items.filter(i => i.type === 'weapon').forEach(weapon => {
+      const category = weapon.system.category ?? '';
+      const weaponName = weapon.system.weapon ?? '';
+
+      if(!weaponsMap.has(category)) {
+        weaponsMap.set(category, new Map());
+      }
+      const categoryMap = weaponsMap.get(category)
+
+      if (!categoryMap.has(weaponName)) {
+        categoryMap.set(weaponName,[])
+      }
+      categoryMap.get(weaponName).push(weapon)
+    })
+
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+    const sortedWeapons = [...weaponsMap.entries()]
+      .map(([category, weaponsNamesMap]) => {
+        const weaponList = [...weaponsNamesMap.entries()]
+          .sort(([a], [b]) => a.localeCompare(b))
+          .flatMap(([, items]) =>
+            items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+          );
+
+        const label = game.i18n.localize(`POL3.WEAPON.Category.${capitalize(category)}`);
+
+        return { label, weaponList };
+      })
+      .sort((a, b) => a.label.localeCompare(b.label));
+
+    return sortedWeapons
   }
 
   /**
