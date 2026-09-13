@@ -6,7 +6,8 @@
   <div>
     <ul class="attribute-list">
       {{#each attributeScores as |attribute|}}
-        <li class="attribute flexrow" data-attribute-id="{{attribute.id}}">
+        <li class="attribute flexrow" data-attribute-id="{{attribute.id}}"
+            data-attribute-name="{{localize attribute.abbr}}">
           <div class="label">{{localize attribute.abbr}}</div>
           <span class="input value">{{attribute.value}}</span>
           <div class="action-button flexrow">

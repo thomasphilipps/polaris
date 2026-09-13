@@ -7,11 +7,6 @@ const { api, sheets } = foundry.applications;
  */
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
 
-
-  /**
-   * Default options for this sheet, including CSS classes, sheet dimensions, and sheet actions.
-   * @type {object}
-   */
   static DEFAULT_OPTIONS = {
     classes: ['polaris', 'sheet', 'actor'],
     tag: 'form',
@@ -24,6 +19,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       testAttribute: Pol3BaseActorSheet.#onTestAttribute,
       deleteItem: Pol3BaseActorSheet.#onDeleteItem,
       rollItem: Pol3BaseActorSheet.#onRollItem,
+      toggleEquipped: Pol3BaseActorSheet.#onToggleEquipped,
     },
     form: {
       submitOnChange: true,
@@ -33,13 +29,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     },
   };
 
-  /**
-   * PARTS define which partials/templates compose the sheet.
-   * Each property can declare:
-   *  - an id
-   *  - a path to a Handlebars template
-   *  - any relevant config options (e.g., scrollable elements)
-   */
   static PARTS = {
     tabs: {
       id: 'tabs',
@@ -68,7 +57,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     },
     description: {
       id: 'description',
-      template: undefined, // This is set in _initializeActorSheetClass based on actor type
+      template: undefined, // Set in _initializeActorSheetClass based on actor type
     },
     notes: {
       id: 'notes',
@@ -76,9 +65,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     },
   };
 
-  /**
-   * TABS define which tabs are visible on the sheet, grouped by a key (e.g., 'sheet').
-   */
   static TABS = {
     sheet: [
       { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural' },
@@ -89,42 +75,29 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     ],
   };
 
-  /**
-   * By default, which tab should be active?
-   * If the actor is "limited," we show only 'description'.
-   */
   tabGroups = {
     sheet: this.document.limited ? 'description' : 'attributes',
   };
 
-  /**
-   * Override Foundry's render options to control which PARTS appear in the sheet.
-   * @param {object} options
-   */
+  /* -------------------------------------------- */
+  /*  Rendering                                    */
+
+  /* -------------------------------------------- */
+
   _configureRenderOptions(options) {
-    // Call the parent class's method first
     super._configureRenderOptions(options);
 
-    // Base sheet parts: tabs, header, body, description
     options.parts = ['tabs', 'header', 'body', 'description'];
 
-    // If actor is not limited, insert extra parts before 'description'
     if (!this.document.limited) {
-      // Insert attributes, skills, equipment before index 3 (i.e., just before 'description')
       options.parts.splice(3, 0, 'attributes', 'skills', 'equipment');
     }
 
-    // If the user is a GM, add 'notes' at the end
     if (game.user.isGM) {
       options.parts.push('notes');
     }
   }
 
-  /**
-   * Prepare context data for the sheet's Handlebars templates.
-   * @param {object} options
-   * @returns {Promise<object>}
-   */
   async _prepareContext(options) {
     const tabGroups = this._getTabs();
 
@@ -146,27 +119,15 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     };
   }
 
-  /**
-   * Initialize actor-specific sheet data (e.g., dynamically set template paths).
-   * This is called before the sheet is initially rendered.
-   */
   static _initializeActorSheetClass() {
-    // Clone PARTS and TABS to avoid mutating them globally
     this.PARTS = foundry.utils.deepClone(this.PARTS);
     this.TABS = foundry.utils.deepClone(this.TABS);
 
-    // Dynamically apply a custom CSS class and template path based on actor type
     const actor = this.DEFAULT_OPTIONS.actor;
     this.DEFAULT_OPTIONS.classes = [actor.type];
     this.PARTS.description.template = `systems/polaris/templates/sheets/actors/${actor.type}-description.hbs`;
   }
 
-  /**
-   * Construct a record of all tabs and whether they're active.
-   * Filters out GM-only tabs if current user is not GM, or tabs not relevant if actor is limited.
-   * @returns {Record<string, Record<string, ApplicationTab>>}
-   * @protected
-   */
   _getTabs() {
     const tabs = {};
     const isGM = game.user.isGM;
@@ -175,21 +136,11 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       const group = {};
 
       for (const t of config) {
-        // Skip GM-only tabs if user is not GM
         if (t.id === 'notes' && !isGM) continue;
-
-        // If actor is limited, only show the 'description' tab
         if (this.document.limited && t.id !== 'description') continue;
 
-        // Determine if this tab should be active
         const active = this.tabGroups[t.group] === t.id;
-
-        // Spread original config and add custom properties for rendering
-        group[t.id] = {
-          ...t,
-          active,
-          cssClass: active ? 'active' : '',
-        };
+        group[t.id] = { ...t, active, cssClass: active ? 'active' : '' };
       }
       tabs[groupId] = group;
     }
@@ -197,222 +148,204 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     return tabs;
   }
 
-  /**
-   * Prepare HTML for different kinds of descriptions.
-   * @returns {Promise<{GMNotes: string, public: string, secret: string}>}
-   */
+  /* -------------------------------------------- */
+  /*  Context preparation                          */
+
+  /* -------------------------------------------- */
+
   async #prepareDescription() {
     const description = this.document.system.description;
     const context = { relativeTo: this.document, secrets: this.document.isOwner };
+    const enrich = (text) => foundry.applications.ux.TextEditor.implementation.enrichHTML(text, context);
 
-    return {
-      GMNotes: await foundry.applications.ux.TextEditor.implementation.enrichHTML(description.GMNotes, context),
-      public: await foundry.applications.ux.TextEditor.implementation.enrichHTML(description.public, context),
-      secret: await foundry.applications.ux.TextEditor.implementation.enrichHTML(description.secret, context),
-    };
+    const [GMNotes, publicText, secret] = await Promise.all([
+      enrich(description.GMNotes),
+      enrich(description.public),
+      enrich(description.secret),
+    ]);
+
+    return { GMNotes, public: publicText, secret };
   }
 
-  /**
-   * Prepare a list of attribute objects to be rendered, including the current total value.
-   * @returns {Array<object>}
-   */
   #prepareAttributes() {
     const data = this.actor.system.attributes;
-    const attributes = Object.values(POL3.ATTRIBUTE).map(config => {
-      const attr = foundry.utils.deepClone(config);
-      attr.value = data[attr.id].total;
-      return attr;
-    });
-    attributes.sort((a, b) => a.order - b.order);
-    return attributes;
+    return Object.values(POL3.ATTRIBUTE)
+      .map(config => ({ ...config, value: data[config.id].total }))
+      .sort((a, b) => a.order - b.order);
   }
 
-  /**
-   * Prepare variable attributes such as luck, initiative, etc.
-   * @returns {object}
-   */
   #prepareVariableAttributes() {
-    const data = this.actor.system;
-    return {
-      baseLuck: data.baseLuck,
-      baseInitiative: data.baseInitiative,
-    };
+    const { baseLuck, baseInitiative } = this.actor.system;
+    return { baseLuck, baseInitiative };
   }
 
-  /**
-   * Prepare secondary attributes, such as thresholds and resistances.
-   * @returns {object}
-   */
   #prepareSecondaryAttributes() {
-    const data = this.actor.system;
+    const {
+      stunThreshold, unconsciousnessThreshold, closeCombatModifier,
+      reaction, damageResistance, drugResistance, illnessResistance, breath,
+    } = this.actor.system;
     return {
-      stunThreshold: data.stunThreshold,
-      unconsciousnessThreshold: data.unconsciousnessThreshold,
-      closeCombatModifier: data.closeCombatModifier,
-      reaction: data.reaction,
-      damageResistance: data.damageResistance,
-      drugResistance: data.drugResistance,
-      illnessResistance: data.illnessResistance,
-      breath: data.breath,
+      stunThreshold, unconsciousnessThreshold, closeCombatModifier,
+      reaction, damageResistance, drugResistance, illnessResistance, breath,
     };
   }
 
-  /**
-   * Prepare speed values (e.g., ground, swim).
-   * @returns {object}
-   */
   #prepareSpeeds() {
-    const data = this.actor.system;
+    const { groundSpeed, swimSpeed } = this.actor.system;
+    return { groundSpeed, swimSpeed };
+  }
+
+  #prepareItems() {
     return {
-      groundSpeed: data.groundSpeed,
-      swimSpeed: data.swimSpeed,
+      skills: this._prepareSkills(),
+      weapons: this._prepareWeapons(),
     };
   }
 
   /**
-   * Prepare a list of items organized by type.
-   * @returns {object}
+   * Group an actor's embedded items of a given type by category, then by name,
+   * sorted alphabetically at every level.
+   * @param {string} itemType    - The item type to filter (e.g. 'skill', 'weapon')
+   * @param {string} i18nPrefix  - The i18n key prefix for category labels
+   * @returns {{label: string, itemList: Item[]}[]}
    */
-  #prepareItems() {
-    const items = {};
-    items.skills = this._prepareSkills();
-    items.weapons = this._prepareWeapons();
-    return items;
-  }
-
-  /**
-   * Prepare weapons
-   *
-   */
-  _prepareWeapons() {
-    const weaponsMap = new Map();
-    this.actor.items.filter(i => i.type === 'weapon').forEach(weapon => {
-      const category = weapon.system.category ?? '';
-      const weaponName = weapon.system.weapon ?? '';
-
-      if(!weaponsMap.has(category)) {
-        weaponsMap.set(category, new Map());
-      }
-      const categoryMap = weaponsMap.get(category)
-
-      if (!categoryMap.has(weaponName)) {
-        categoryMap.set(weaponName,[])
-      }
-      categoryMap.get(weaponName).push(weapon)
-    })
+  #prepareItemsByCategory(itemType, i18nPrefix) {
+    const byCategory = Map.groupBy(
+      this.actor.items.filter(i => i.type === itemType),
+      item => item.system.category ?? '',
+    );
 
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-    const sortedWeapons = [...weaponsMap.entries()]
-      .map(([category, weaponsNamesMap]) => {
-        const weaponList = [...weaponsNamesMap.entries()]
-          .sort(([a], [b]) => a.localeCompare(b))
-          .flatMap(([, items]) =>
-            items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
-          );
-
-        const label = game.i18n.localize(`POL3.WEAPON.Category.${capitalize(category)}`);
-
-        return { label, weaponList };
-      })
+    return [...byCategory.entries()]
+      .map(([category, items]) => ({
+        label: game.i18n.localize(`${i18nPrefix}.${capitalize(category)}`),
+        itemList: [...items].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
+      }))
       .sort((a, b) => a.label.localeCompare(b.label));
-
-    return sortedWeapons
   }
 
-  /**
-   * Prepare skills
-   * @returns {{label: string, skillList: *}[]}
-   * @private
-   */
   _prepareSkills() {
-    const skillsMap = new Map();
-
-    this.actor.items.filter(i => i.type === 'skill').forEach(skill => {
-      const category = skill.system.category ?? '';
-      const skillName = skill.system.skill ?? '';
-
-      if (!skillsMap.has(category)) {
-        skillsMap.set(category, new Map());
-      }
-      const categoryMap = skillsMap.get(category);
-
-      if (!categoryMap.has(skillName)) {
-        categoryMap.set(skillName, []);
-      }
-      categoryMap.get(skillName).push(skill);
-    });
-
-    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-
-    const sortedSkills = [...skillsMap.entries()]
-      .map(([category, skillNamesMap]) => {
-        const skillList = [...skillNamesMap.entries()]
-          .sort(([a], [b]) => a.localeCompare(b))
-          .flatMap(([, items]) =>
-            items.sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
-          );
-
-        const label = game.i18n.localize(`POL3.SKILL.Category.${capitalize(category)}`);
-
-        return { label, skillList };
-      })
-      .sort((a, b) => a.label.localeCompare(b.label));
-    return sortedSkills;
+    return this.#prepareItemsByCategory('skill', 'POL3.SKILL.Category')
+      .map(({ label, itemList }) => ({ label, skillList: itemList }));
   }
 
-  /**
-   * Handler for configuring an attribute.
-   * This could open a dialog or pop-up to modify attribute details.
-   * @param {MouseEvent} event
-   * @private
-   */
-  static #onConfigureAttribute(event) {
-    const attributeId = event.target.closest('.attribute').dataset.attributeId;
-    // Implement your configuration logic here
+  _prepareWeapons() {
+    return this.#prepareItemsByCategory('weapon', 'POL3.WEAPON.Category')
+      .map(({ label, itemList }) => ({ label, weaponList: itemList }));
+  }
 
-    console.log('Polaris | Configure attribute: ', attributeId )
+  /* -------------------------------------------- */
+  /*  Action handlers                              */
+
+  /* -------------------------------------------- */
+
+  /**
+   * Resolve the dataset of the closest ancestor matching a selector.
+   * @param {HTMLElement} target
+   * @param {string} selector
+   * @returns {DOMStringMap|null}
+   */
+  static #datasetOf(target, selector) {
+    return target.closest(selector)?.dataset ?? null;
+  }
+
+  static async #onConfigureAttribute(event, target) {
+    const { attributeId } = Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
+    const attribute = attributeId ? this.actor.system.attributes[attributeId] : null;
+    if (!attribute) return;
+
+    const saveLabel = game.i18n.localize('POL3.DIALOG.SaveButton');
+    const label = game.i18n.localize(POL3.ATTRIBUTE[attributeId]?.label);
+    const title = game.i18n.format('POL3.ATTRIBUTE.ConfigureAttribute', { attributeName: label });
+
+    const attributeConfigs = await foundry.applications.api.DialogV2.input({
+      window: { title, icon: 'fas fa-edit' },
+      content: await foundry.applications.handlebars.renderTemplate(
+        'systems/polaris/templates/dialogs/attribute-dialog.hbs',
+        { attribute },
+      ),
+      ok: { label: saveLabel, icon: 'fas fa-save' },
+    });
+    if (!attributeConfigs) return;
+
+    await this.actor.update({
+      [`system.attributes.${attributeId}.base`]: attributeConfigs.base ?? attribute.base,
+      [`system.attributes.${attributeId}.geneticModifier`]: attributeConfigs.geneticModifier ?? 0,
+      [`system.attributes.${attributeId}.competencePointsModifier`]: attributeConfigs.competencePoints ?? 0,
+    });
   }
 
   /**
    * Handler for rolling an attribute test.
-   * This typically triggers a Foundry roll with relevant data.
-   * @param {MouseEvent} event
-   * @private
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
    */
-  static #onTestAttribute(event) {
-    // "this" in static methods is the class, so we need a different way to access actor
-    // Usually you’d do a check like: const sheet = event.currentTarget.closest('.some-sheet-class')?.someSheetInstance;
-    // But since this is purely static, you might consider rewriting this logic in the instance.
-    // The snippet below is illustrative.
-    const attributeId = event.target.closest('.attribute').dataset.attributeId;
-    console.log('Polaris | Roll attribute:', attributeId);
+  static #onTestAttribute(event, target) {
+    const {
+      attributeId,
+      attributeName,
+    } = Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
+    if (!attributeId) return;
 
-    // If you need to retrieve the actor from somewhere, you would do that here:
-    // e.g., const actor = someGlobalReference.actors?.get(actorId);
-    // const attributeValue = actor.rollAction(attributeId, 'attribute');
-    // console.log('Roll result:', attributeValue);
+    // this.actor is available here since Foundry's ApplicationV2 action framework
+    // invokes action handlers with `this` bound to the sheet instance.
+    // TODO: wire this up to the actual roll pipeline once it exists, e.g.:
+    // this.actor.rollAttribute(attributeId);
   }
 
   /**
-   * Handler for deleting an Item
-   * @param event
-   * @private
+   * Handler for deleting an embedded Item, after confirmation.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
    */
-  static #onDeleteItem(event) {
-    const itemId = event.target.closest('.item').dataset.itemId;
-    console.log('Polaris | Delete item:', itemId);
+  static async #onDeleteItem(event, target) {
+    const { itemId, itemName } = Pol3BaseActorSheet.#datasetOf(target, '.item') ?? {};
+    if (!itemId) return;
+
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: 'Delete Item', icon: 'fas fa-trash' },
+      content: `Are you sure you want to delete ${itemName}?`,
+      rejectLabel: false,
+      modal: true,
+    });
+    if (!confirmed) return;
+
+    await this.actor.deleteEmbeddedDocuments('Item', [itemId]);
   }
 
   /**
-   * Handler for rolling an Item
-   * @param event
-   * @private
+   * Handler for rolling an Item.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
    */
-  static #onRollItem(event) {
-    const itemId = event.target.closest('.item').dataset.itemId;
-    console.log('Polaris | Roll item:', itemId);
+  static #onRollItem(event, target) {
+    const { itemId, itemName } = Pol3BaseActorSheet.#datasetOf(target, '.item') ?? {};
+    if (!itemId) return;
+
+    // TODO: wire this up to the actual roll pipeline once it exists, e.g.:
+    // const item = this.actor.items.get(itemId);
+    // item.roll();
   }
+
+  /**
+   * Handler for toggling an item's equipped status.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async #onToggleEquipped(event, target) {
+    const itemId = target.closest('.item')?.dataset.itemId;
+    const item = itemId ? this.actor.items.get(itemId) : null;
+    if (!item) return;
+
+    const isEquipped = target instanceof HTMLInputElement ? target.checked : !item.system.isEquipped;
+    await item.update({ 'system.isEquipped': isEquipped });
+  }
+
+  /* -------------------------------------------- */
+  /*  Drag & drop                                  */
+
+  /* -------------------------------------------- */
 
   /** @override */
   _onRender(_context, _options) {
@@ -433,8 +366,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   async _onDragOver(event) {
   }
 
-  /* -------------------------------------------- */
-
   /**
    * An event that occurs when data is dropped into a drop target.
    * @param {DragEvent} event
@@ -447,7 +378,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     const allowed = Hooks.call('dropActorSheetData', actor, this, data);
     if (allowed === false) return;
 
-    // Dropped Documents
     const documentClass = getDocumentClass(data.type);
     if (documentClass) {
       const document = await documentClass.fromDropData(data);
@@ -455,12 +385,10 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     }
   }
 
-  /* -------------------------------------------- */
-
   /**
-   * Handle a dropped document on the ActorSheet
-   * @param {DragEvent} event         The initiating drop event
-   * @param {Document} document       The resolved Document class
+   * Handle a dropped document on the ActorSheet.
+   * @param {DragEvent} event
+   * @param {Document} document
    * @returns {Promise<void>}
    * @protected
    */
@@ -483,14 +411,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       return false;
     }
 
-    if ((item.type === 'skill') && this.actor.items.has(item.id)) {
+    if (item.type === 'skill' && this.actor.items.has(item.id)) {
       ui.notifications.warn(game.i18n.localize('POL3.WARNING.SkillAlreadyExists'));
       return false;
     }
-//TODO : set a flag to retrieve original object later
-    //if (this.actor.uuid === item.parent?.uuid) return this._onSortItem(event, item);
+
+    // TODO: set a flag to retrieve the original object later, and handle in-sheet
+    // reordering via _onSortItem when dropping onto the same actor.
     const keepId = !this.actor.items.has(item.id);
-    console.log('Polaris | Drop Item:', item);
     await Item.create(item, { parent: this.actor, keepId });
   }
 }

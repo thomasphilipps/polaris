@@ -1,0 +1,20 @@
+<div class="flexcol">
+  <div class="flexrow">
+    <label for="attribute-base" class="flex2">{{localize "POL3.ATTRIBUTE.BaseValue"}}</label>
+    <input class="flex1" type="number" id="attribute-base" name="base" value="{{attribute.base}}"
+           max="20"
+           autofocus onfocus="this.select()">
+  </div>
+  <div class="flexrow">
+    <label for="attribute-genetic-modifier" class="flex2">{{localize
+      "POL3.ATTRIBUTE.GeneticModifier"}}</label>
+    <input class="flex1" type="number" id="attribute-genetic-modifier" name="geneticModifier"
+           value="{{attribute.geneticModifier}}" onfocus="this.select()">
+  </div>
+  <div class="flexrow">
+    <label for="attribute-competence-points" class="flex2">{{localize
+      "POL3.ATTRIBUTE.CompetencePointsModifier"}}</label>
+    <input class="flex1" type="number" id="attribute-competence-points" name="competencePoints"
+           value="{{attribute.competencePointsModifier}}" onfocus="this.select()">
+  </div>
+</div>

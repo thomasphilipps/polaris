@@ -1,5 +1,8 @@
 {
   "POL3": {
+    "DIALOG": {
+      "SaveButton": "Enregister"
+    },
     "WARNING": {
       "NotOwner": "Vous n'êtes pas propriétaire de cet item",
       "SkillAlreadyExists": "Cette compétence existe déjà"
@@ -45,7 +48,11 @@
       "Mean": "Allure moyenne",
       "Fast": "Allure rapide",
       "Sprint": "Allure maximale",
-      "Initiative": "Initiative"
+      "Initiative": "Initiative",
+      "BaseValue": "Valeur de base",
+      "GeneticModifier": "Mod. type génétique",
+      "CompetencePointsModifier": "Mod. points de compétence",
+      "ConfigureAttribute": "Configurer l'attribut {attributeName}"
     },
     "SHEETS": {
       "GENERAL": {
