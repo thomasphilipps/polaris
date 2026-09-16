@@ -1,11 +1,13 @@
-import { ATTRIBUTE } from './attributes.mjs';
+import { ATTRIBUTE } from './actor/attributes.mjs';
 import * as SKILL from './item/skills.mjs';
 import * as WEAPON from './item/weapons.mjs';
+import * as WOUND from './actor/wounds.mjs';
 
 export const POL3 = {
   ATTRIBUTE,
   SKILL,
   WEAPON,
+  WOUND,
 };
 
 POL3.GENETICTYPE = {

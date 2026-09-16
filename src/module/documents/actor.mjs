@@ -24,6 +24,7 @@ export default class Pol3Actor extends Actor {
     this._prepareLuck(system);
     this._prepareSecondaryAttributes(system, attributes);
     this._prepareActorDisplacement(system, attributes);
+    //this._prepareWounds(system);
   }
 
   /**
@@ -223,6 +224,15 @@ export default class Pol3Actor extends Actor {
     // By default, luck is 11
     this._setSystemAttribute(system, 'baseLuck', 11);
   }
+
+  /**
+   * Prepare actor's wounds.
+   * @param {Object} system - The system data object of the actor.
+   */
+  _prepareWounds(system) {
+    this._setSystemAttribute(system, 'wounds', 0);
+  }
+   '
 
   /**
    * Utility method to set a system property with a standardized object structure:

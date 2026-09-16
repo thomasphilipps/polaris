@@ -1,5 +1,25 @@
 {
   "POL3": {
+    "WOUND": {
+      "SEVERITY": {
+        "light": "Légère",
+        "medium": "Moyenne",
+        "severe": "Grave",
+        "critical": "Critique",
+        "deadly": "Fatale",
+        "destroyed": "Membre détruit"
+      },
+      "ZONE": {
+        "head": "Tête",
+        "body": "Corps",
+        "armLeft": "Bras gauche",
+        "armRight": "Bras droit",
+        "legLeft": "Jambe gauche",
+        "legRight": "Jambe droite",
+        "finLeft": "Nageoire gauche",
+        "finRight": "Nageoire droite"
+      }
+    },
     "DIALOG": {
       "SaveButton": "Enregister"
     },
