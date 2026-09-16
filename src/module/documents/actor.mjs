@@ -24,7 +24,7 @@ export default class Pol3Actor extends Actor {
     this._prepareLuck(system);
     this._prepareSecondaryAttributes(system, attributes);
     this._prepareActorDisplacement(system, attributes);
-    //this._prepareWounds(system);
+    this._prepareWounds(system);
   }
 
   /**
@@ -227,12 +227,98 @@ export default class Pol3Actor extends Actor {
 
   /**
    * Prepare actor's wounds.
+   * Computes, for each zone, the worst active severity, its malus/actionImpossible,
+   * and whether the zone is destroyed; aggregates the results into system.woundsSummary.
    * @param {Object} system - The system data object of the actor.
    */
   _prepareWounds(system) {
-    this._setSystemAttribute(system, 'wounds', 0);
+    const { WOUND } = POL3;
+    let actorMalus = 0;
+    let isDead = false;
+    const destroyedZones = [];
+
+    for (const [zoneKey, zone] of Object.entries(system.wounds)) {
+      const { counters } = zone;
+      // Worst severity with a non-zero counter, walking from destroyed -> light
+      const worstSeverity = [...WOUND.SEVERITIES].reverse().find((s) => counters[s] > 0) ?? null;
+      const effectiveMax = (s) => WOUND.BASE_MAX[s] + (zone.resistant ? WOUND.RESISTANT_BONUS[s] : 0);
+      const isZoneDestroyed = worstSeverity === 'destroyed' && counters.destroyed >= effectiveMax('destroyed');
+
+      zone.worstSeverity = worstSeverity;
+      zone.malus = worstSeverity ? WOUND.MALUS[worstSeverity] : 0;
+      zone.actionImpossible = worstSeverity ? WOUND.ACTION_IMPOSSIBLE[worstSeverity] : false;
+      zone.isDestroyed = isZoneDestroyed;
+
+      if (isZoneDestroyed) {
+        destroyedZones.push(zoneKey);
+        if (zone.lethal) isDead = true;
+      }
+      actorMalus = Math.min(actorMalus, zone.malus);
+    }
+
+    system.woundsSummary = { malus: actorMalus, destroyedZones, isDead };
   }
-   '
+
+  /**
+   * Apply a wound of the given severity to a zone, cascading the overflow into
+   * the next severity whenever the effective maximum of a severity is exceeded.
+   * @param {string} zoneKey - The zone to apply the wound to (e.g. 'head').
+   * @param {string} severity - The severity to apply (one of POL3.WOUND.SEVERITIES).
+   * @param {number} amount - The number of counters to add (default 1).
+   */
+  async applyWound(zoneKey, severity, amount = 1) {
+    const { WOUND } = POL3;
+    const zone = this.system.wounds[zoneKey];
+    if (!zone) return;
+
+    const counters = { ...zone.counters };
+    const effectiveMax = (s) => WOUND.BASE_MAX[s] + (zone.resistant ? WOUND.RESISTANT_BONUS[s] : 0);
+
+    let currentSeverity = severity;
+    counters[currentSeverity] += amount;
+
+    while (currentSeverity !== 'destroyed' && counters[currentSeverity] > effectiveMax(currentSeverity)) {
+      const overflow = counters[currentSeverity] - effectiveMax(currentSeverity);
+      counters[currentSeverity] = effectiveMax(currentSeverity);
+
+      const nextSeverity = WOUND.SEVERITIES[WOUND.SEVERITIES.indexOf(currentSeverity) + 1];
+      counters[nextSeverity] += overflow;
+      currentSeverity = nextSeverity;
+    }
+
+    if (currentSeverity === 'destroyed') {
+      counters.destroyed = Math.min(counters.destroyed, effectiveMax('destroyed'));
+    }
+
+    await this.update({ [`system.wounds.${zoneKey}.counters`]: counters });
+  }
+
+  /**
+   * Heal the worst active severity of a zone, clearing all lower severities
+   * once the worst one reaches 0.
+   * @param {string} zoneKey - The zone to heal.
+   * @param {number} amount - The number of counters to remove (default 1).
+   */
+  async healWound(zoneKey, amount = 1) {
+    const { WOUND } = POL3;
+    const zone = this.system.wounds[zoneKey];
+    if (!zone) return;
+
+    const counters = { ...zone.counters };
+    const worstSeverity = [...WOUND.SEVERITIES].reverse().find((s) => counters[s] > 0);
+    if (!worstSeverity) return;
+
+    counters[worstSeverity] = Math.max(0, counters[worstSeverity] - amount);
+
+    if (counters[worstSeverity] === 0) {
+      const worstIndex = WOUND.SEVERITIES.indexOf(worstSeverity);
+      WOUND.SEVERITIES.slice(0, worstIndex).forEach((s) => {
+        counters[s] = 0;
+      });
+    }
+
+    await this.update({ [`system.wounds.${zoneKey}.counters`]: counters });
+  }
 
   /**
    * Utility method to set a system property with a standardized object structure:

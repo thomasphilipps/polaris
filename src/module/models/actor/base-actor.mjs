@@ -56,7 +56,7 @@ export class Pol3ActorDataModel extends foundry.abstract.TypeDataModel {
     return {
       wounds: new fields.SchemaField(
         Object.fromEntries(
-          Object.entries(POL3.WOUND.ZONES).map(([zoneKey, cfg]) => [
+          Object.entries(POL3.WOUND.ZONES()).map(([zoneKey, cfg]) => [
             zoneKey,
             new fields.SchemaField({
               resistant: new fields.BooleanField({ initial: cfg.resistant }),

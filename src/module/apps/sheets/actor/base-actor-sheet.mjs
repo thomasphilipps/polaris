@@ -20,6 +20,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       deleteItem: Pol3BaseActorSheet.#onDeleteItem,
       rollItem: Pol3BaseActorSheet.#onRollItem,
       toggleEquipped: Pol3BaseActorSheet.#onToggleEquipped,
+      applyWound: Pol3BaseActorSheet.#onApplyWound,
+      healWound: Pol3BaseActorSheet.#onHealWound,
     },
     form: {
       submitOnChange: true,
@@ -55,6 +57,10 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       id: 'equipment',
       template: 'systems/polaris/templates/sheets/actors/actor-equipment.hbs',
     },
+    wounds: {
+      id: 'wounds',
+      template: 'systems/polaris/templates/sheets/actors/actor-wounds.hbs',
+    },
     description: {
       id: 'description',
       template: undefined, // Set in _initializeActorSheetClass based on actor type
@@ -70,6 +76,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural' },
       { id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural' },
       { id: 'equipment', group: 'sheet', label: 'POL3.SHEETS.TABS.Equipment' },
+      { id: 'wounds', group: 'sheet', label: 'POL3.SHEETS.TABS.Wounds' },
       { id: 'description', group: 'sheet', label: 'POL3.SHEETS.TABS.Description' },
       { id: 'notes', group: 'sheet', label: 'POL3.SHEETS.TABS.GMDescription' },
     ],
@@ -90,7 +97,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     options.parts = ['tabs', 'header', 'body', 'description'];
 
     if (!this.document.limited) {
-      options.parts.splice(3, 0, 'attributes', 'skills', 'equipment');
+      options.parts.splice(3, 0, 'attributes', 'skills', 'equipment', 'wounds');
     }
 
     if (game.user.isGM) {
@@ -114,6 +121,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       speed: this.#prepareSpeeds(),
       source: this.document.toObject(),
       items: this.#prepareItems(),
+      wounds: this.#prepareWounds(),
       tabGroups,
       tabs: tabGroups.sheet,
     };
@@ -200,6 +208,22 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       skills: this._prepareSkills(),
       weapons: this._prepareWeapons(),
     };
+  }
+
+  #prepareWounds() {
+    const { wounds, woundsSummary } = this.actor.system;
+
+    const zones = {};
+    for (const [zoneKey, zone] of Object.entries(wounds)) {
+      const severitySquares = {};
+      const effectiveMax = (s) => POL3.WOUND.BASE_MAX[s] + (zone.resistant ? POL3.WOUND.RESISTANT_BONUS[s] : 0);
+      for (const [severityKey, severityValue] of Object.entries(zone.counters)) {
+        const arrayLength = effectiveMax(severityKey);
+        severitySquares[severityKey] = Array.from({ length: arrayLength }, (_, i) => i < severityValue);
+      }
+      zones[zoneKey] = { ...zone, severitySquares };
+    }
+    return { zones, summary: woundsSummary };
   }
 
   /**
@@ -340,6 +364,31 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
 
     const isEquipped = target instanceof HTMLInputElement ? target.checked : !item.system.isEquipped;
     await item.update({ 'system.isEquipped': isEquipped });
+  }
+
+  /**
+   * Handler for applying a wound of a given severity to a zone.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async #onApplyWound(event, target) {
+    const { zone, severity } = Pol3BaseActorSheet.#datasetOf(target, '[data-zone]') ?? {};
+    if (!zone || !severity) return;
+    console.log('Polaris | Applying wound:', zone, severity);
+    await this.actor.applyWound(zone, severity);
+  }
+
+  /**
+   * Handler for healing the worst active wound of a zone.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
+  static async #onHealWound(event, target) {
+    const { zone } = Pol3BaseActorSheet.#datasetOf(target, '[data-zone]') ?? {};
+    console.log('Polaris | Healing wound:', zone);
+    if (!zone) return;
+
+    await this.actor.healWound(zone);
   }
 
   /* -------------------------------------------- */

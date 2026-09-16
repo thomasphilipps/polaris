@@ -1,0 +1,38 @@
+<ul class="wound-zones">
+  {{#each wounds.zones as |zone zoneKey|}}
+    <li class="wound-zone flexrow {{#if zone.isDestroyed}}wound-zone-destroyed{{/if}}">
+      <div class="label flex1">{{localize (concat 'POL3.WOUND.ZONE.' zoneKey)}}</div>
+      <div class="wound-zone-counters flexrow">
+        {{#each zone.counters as |severity severityKey|}}
+          <span
+            class="wound-counter"
+            data-zone="{{zoneKey}}"
+            data-severity="{{severityKey}}"
+            data-action="applyWound"
+            data-tooltip="{{localize (concat 'POL3.WOUND.SEVERITY.' severityKey)}}">
+            {{localize (concat 'POL3.WOUND.SEVERITY.' severityKey)}}:
+            {{#each (lookup zone.severitySquares severityKey) as |filled|}}
+              {{#if filled}}
+                <i class="fa-solid fa-square"></i>
+              {{else}}
+                <i class="fa-regular fa-square"></i>
+              {{/if}}
+            {{/each}}
+          </span>
+        {{/each}}
+      </div>
+      <div class="wound-zone-status">
+        {{#if zone.worstSeverity}}
+          <span>{{localize 'POL3.WOUND.Malus'}}: {{zone.malus}}</span>
+        {{/if}}
+        {{#if zone.isDestroyed}}
+          <span class="wound-zone-destroyed-label">{{localize 'POL3.WOUND.Destroyed'}}</span>
+        {{/if}}
+      </div>
+      <div class="action-button flexrow">
+        <a class="button icon fa-solid fa-heart" data-action="healWound" data-zone="{{zoneKey}}"
+           data-tooltip="{{localize 'POL3.WOUND.Heal'}}"></a>
+      </div>
+    </li>
+  {{/each}}
+</ul>

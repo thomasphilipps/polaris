@@ -18,7 +18,12 @@
         "legRight": "Jambe droite",
         "finLeft": "Nageoire gauche",
         "finRight": "Nageoire droite"
-      }
+      },
+      "Apply": "Appliquer une blessure",
+      "Heal": "Soigner la pire blessure",
+      "Dead": "Mort",
+      "Destroyed": "Détruit",
+      "Malus": "Malus"
     },
     "DIALOG": {
       "SaveButton": "Enregister"
@@ -92,7 +97,8 @@
         "Configuration": "Configuration",
         "Description": "Description",
         "GMDescription": "Notes GM",
-        "Equipment": "Équipement"
+        "Equipment": "Équipement",
+        "Wounds": "Blessures"
       },
       "REFERENCE": {
         "Label": "Référence",
