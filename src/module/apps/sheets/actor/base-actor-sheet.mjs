@@ -213,6 +213,9 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   #prepareWounds() {
     const { wounds, woundsSummary } = this.actor.system;
 
+    const zoneKeys = Object.keys(wounds);
+    const severityKeys = Object.keys(POL3.WOUND.BASE_MAX); // canon order light->destroyed
+
     const zones = {};
     for (const [zoneKey, zone] of Object.entries(wounds)) {
       const severitySquares = {};
@@ -223,7 +226,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       }
       zones[zoneKey] = { ...zone, severitySquares };
     }
-    return { zones, summary: woundsSummary };
+    return { zones, zoneKeys, severityKeys, summary: woundsSummary };
   }
 
   /**
