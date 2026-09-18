@@ -10,6 +10,32 @@ export const POL3 = {
   WOUND,
 };
 
+POL3.SUCCESSTABLE = [
+  { threshold: 35, label: 'POL3.ROLL.Legendary', nextModifier: 9 },
+  { threshold: 25, label: 'POL3.ROLL.Heroic', nextModifier: 8 },
+  { threshold: 20, label: 'POL3.ROLL.Extraordinary', nextModifier: 7 },
+  { threshold: 15, label: 'POL3.ROLL.Perfect', nextModifier: 6 },
+  { threshold: 13, label: 'POL3.ROLL.Excellent', nextModifier: 5 },
+  { threshold: 10, label: 'POL3.ROLL.ReallyGood', nextModifier: 4 },
+  { threshold: 7, label: 'POL3.ROLL.Good', nextModifier: 3 },
+  { threshold: 5, label: 'POL3.ROLL.QuiteGood', nextModifier: 2 },
+  { threshold: 3, label: 'POL3.ROLL.Correct', nextModifier: 1 },
+];
+
+POL3.FAILURETABLE = [
+  { threshold: -35, label: 'POL3.ROLL.Catastrophic', nextModifier: -9 },
+  { threshold: -25, label: 'POL3.ROLL.Catastrophic', nextModifier: -8 },
+  { threshold: -20, label: 'POL3.ROLL.Catastrophic', nextModifier: -7 },
+  { threshold: -15, label: 'POL3.ROLL.Catastrophic', nextModifier: -6 },
+  { threshold: -13, label: 'POL3.ROLL.Execrable', nextModifier: -5 },
+  { threshold: -10, label: 'POL3.ROLL.ReallyBad', nextModifier: -4 },
+  { threshold: -7, label: 'POL3.ROLL.Bad', nextModifier: -3 },
+  { threshold: -5, label: 'POL3.ROLL.QuiteBad', nextModifier: -2 },
+  { threshold: -3, label: 'POL3.ROLL.Poor', nextModifier: -1 },
+];
+
+POL3.DEGREE_BARELY = 'POL3.ROLL.Barely';
+
 POL3.GENETICTYPE = {
   human: { label: 'POL3.ACTOR.GENETIC_TYPE.Human' },
   naturalHybrid: { label: 'POL3.ACTOR.GENETIC_TYPE.NaturalHybrid' },

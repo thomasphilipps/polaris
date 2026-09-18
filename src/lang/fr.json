@@ -1,5 +1,23 @@
 {
   "POL3": {
+    "ROLL": {
+      "Legendary": "Légendaire",
+      "Heroic": "Héroïque",
+      "Extraordinary": "Extraordinaire",
+      "Perfect": "Parfait",
+      "Excellent": "Excellent",
+      "ReallyGood": "Très bon",
+      "Good": "Bon",
+      "QuiteGood": "Assez bon",
+      "Correct": "Correct",
+      "Barely": "De justesse",
+      "Poor": "Médiocre",
+      "QuiteBad": "Assez mauvais",
+      "Bad": "Mauvais",
+      "ReallyBad": "Très mauvais",
+      "Execrable": "Exécrable",
+      "Catastrophic": "Catastrophique"
+    },
     "SETTINGS": {
       "WorldAmbiance": {
         "Name": "Ambiance du jeu",
