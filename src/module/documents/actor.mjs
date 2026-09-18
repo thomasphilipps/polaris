@@ -13,15 +13,30 @@ export default class Pol3Actor extends Actor {
   prepareDerivedData() {
     const { system } = this;
     const { attributes } = system;
+    const ambiance = game.settings.get('polaris', 'worldAmbiance');
+
+    // Setting Attribute Points and Luck accordingly to world ambiance
+    const worldAmbiance = () => {
+      switch (ambiance) {
+        case 'realistic':
+          return { attributePoints: 30, luck: 11 };
+        case 'intermediate':
+          return { attributePoints: 38, luck: 13 };
+        case 'heroic':
+          return { attributePoints: 46, luck: 15 };
+      }
+    };
+
+    console.log('Polaris | Ambiance: ', worldAmbiance());
 
     // Calculate total value and natural aptitude for each attribute
-    Object.values(attributes).forEach((attribute) => {
+    Object.values(attributes).forEach(attribute => {
       attribute.total = this._calculateAttributeTotalValue(attribute);
       attribute.naturalAptitude = this._calculateNaturalAptitude(attribute.total);
     });
 
     // Prepare other derived data
-    this._prepareLuck(system);
+    this._prepareLuck(system, worldAmbiance().luck);
     this._prepareSecondaryAttributes(system, attributes);
     this._prepareActorDisplacement(system, attributes);
     this._prepareWounds(system);
@@ -37,14 +52,14 @@ export default class Pol3Actor extends Actor {
    * @returns {number} The summed total of the attribute.
    */
   _calculateAttributeTotalValue({
-                                  base,
-                                  geneticModifier,
-                                  competencePointsModifier,
-                                  otherModifier,
-                                }) {
+    base,
+    geneticModifier,
+    competencePointsModifier,
+    otherModifier,
+  }) {
     return [base, geneticModifier, competencePointsModifier, otherModifier].reduce(
       (sum, val) => sum + val,
-      0,
+      0
     );
   }
 
@@ -55,7 +70,7 @@ export default class Pol3Actor extends Actor {
    */
   _calculateNaturalAptitude(total) {
     const valueArray = [25, 22, 19, 16, 13, 10, 8, 6, 5, 4];
-    const index = valueArray.findIndex((value) => total >= value);
+    const index = valueArray.findIndex(value => total >= value);
     return index !== -1 ? 6 - index : -4;
   }
 
@@ -91,7 +106,7 @@ export default class Pol3Actor extends Actor {
    */
   _prepareThresholds(system, attributes) {
     const stunThresholdValue = Math.round(
-      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3,
+      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3
     );
     const unconsciounessThresholdValue = stunThresholdValue + 10;
     const breathValue = Math.round((attributes.CON.total + attributes.VOL.total) / 2);
@@ -107,9 +122,9 @@ export default class Pol3Actor extends Actor {
   _prepareCloseCombatModifier(system, attributes) {
     const forTemp = attributes.FOR.total;
     const valueArray = POL3.TABLEARRAY.valueArray;
-    const closeCombatResultArray = POL3.TABLEARRAY.resultArray.map((num) => -num);
+    const closeCombatResultArray = POL3.TABLEARRAY.resultArray.map(num => -num);
     const upperBonusFor = Math.max(0, Math.floor((forTemp - 20) / 2));
-    const index = valueArray.findIndex((value) => forTemp >= value);
+    const index = valueArray.findIndex(value => forTemp >= value);
 
     const closeCombatModifierValue =
       index !== -1 ? closeCombatResultArray[index] + upperBonusFor : -6;
@@ -142,7 +157,7 @@ export default class Pol3Actor extends Actor {
       conTemp,
       valueArray,
       illnessResultArray,
-      upperBonusCon,
+      upperBonusCon
     );
 
     this._setSystemAttribute(system, 'illnessResistance', illnessResistanceValue);
@@ -162,7 +177,7 @@ export default class Pol3Actor extends Actor {
       volconTemp,
       valueArray,
       illnessResultArray,
-      upperBonusVolCon,
+      upperBonusVolCon
     );
 
     this._setSystemAttribute(system, 'drugResistance', drugResistanceValue);
@@ -217,12 +232,14 @@ export default class Pol3Actor extends Actor {
 
   /**
    * Prepare actor's luck.
-   * In the future, this might be adjusted by "ambience" features.
+   *
    * @param {Object} system - The system data object of the actor.
+   * @param {Number} luckValue - The actor's initial luck
+   *
+   * TODO: handle luck malus
    */
-  _prepareLuck(system) {
-    // By default, luck is 11
-    this._setSystemAttribute(system, 'baseLuck', 11);
+  _prepareLuck(system, luckValue = 13) {
+    this._setSystemAttribute(system, 'baseLuck', luckValue);
   }
 
   /**
@@ -240,9 +257,10 @@ export default class Pol3Actor extends Actor {
     for (const [zoneKey, zone] of Object.entries(system.wounds)) {
       const { counters } = zone;
       // Worst severity with a non-zero counter, walking from destroyed -> light
-      const worstSeverity = [...WOUND.SEVERITIES].reverse().find((s) => counters[s] > 0) ?? null;
-      const effectiveMax = (s) => WOUND.BASE_MAX[s] + (zone.resistant ? WOUND.RESISTANT_BONUS[s] : 0);
-      const isZoneDestroyed = worstSeverity === 'destroyed' && counters.destroyed >= effectiveMax('destroyed');
+      const worstSeverity = [...WOUND.SEVERITIES].reverse().find(s => counters[s] > 0) ?? null;
+      const effectiveMax = s => WOUND.BASE_MAX[s] + (zone.resistant ? WOUND.RESISTANT_BONUS[s] : 0);
+      const isZoneDestroyed =
+        worstSeverity === 'destroyed' && counters.destroyed >= effectiveMax('destroyed');
 
       zone.worstSeverity = worstSeverity;
       zone.malus = worstSeverity ? WOUND.MALUS[worstSeverity] : 0;
@@ -272,12 +290,15 @@ export default class Pol3Actor extends Actor {
     if (!zone) return;
 
     const counters = { ...zone.counters };
-    const effectiveMax = (s) => WOUND.BASE_MAX[s] + (zone.resistant ? WOUND.RESISTANT_BONUS[s] : 0);
+    const effectiveMax = s => WOUND.BASE_MAX[s] + (zone.resistant ? WOUND.RESISTANT_BONUS[s] : 0);
 
     let currentSeverity = severity;
     counters[currentSeverity] += amount;
 
-    while (currentSeverity !== 'destroyed' && counters[currentSeverity] > effectiveMax(currentSeverity)) {
+    while (
+      currentSeverity !== 'destroyed' &&
+      counters[currentSeverity] > effectiveMax(currentSeverity)
+    ) {
       const overflow = counters[currentSeverity] - effectiveMax(currentSeverity);
       counters[currentSeverity] = effectiveMax(currentSeverity);
 
@@ -305,14 +326,14 @@ export default class Pol3Actor extends Actor {
     if (!zone) return;
 
     const counters = { ...zone.counters };
-    const worstSeverity = [...WOUND.SEVERITIES].reverse().find((s) => counters[s] > 0);
+    const worstSeverity = [...WOUND.SEVERITIES].reverse().find(s => counters[s] > 0);
     if (!worstSeverity) return;
 
     counters[worstSeverity] = Math.max(0, counters[worstSeverity] - amount);
 
     if (counters[worstSeverity] === 0) {
       const worstIndex = WOUND.SEVERITIES.indexOf(worstSeverity);
-      WOUND.SEVERITIES.slice(0, worstIndex).forEach((s) => {
+      WOUND.SEVERITIES.slice(0, worstIndex).forEach(s => {
         counters[s] = 0;
       });
     }
@@ -346,9 +367,12 @@ export default class Pol3Actor extends Actor {
    * @param {number[]} resultArray - The array of corresponding results.
    * @param {number} upperBonus - Any additional bonus to subtract from the final result.
    * @returns {number} The calculated resistance.
+   *
+   *
+   *TODO: Check if this is necessary
    */
   _calculateResistance(temp, valueArray, resultArray, upperBonus) {
-    const idx = valueArray.findIndex((v) => temp >= v);
+    const idx = valueArray.findIndex(v => temp >= v);
     return idx !== -1 ? resultArray[idx] - upperBonus : 6;
   }
 
@@ -364,6 +388,7 @@ export default class Pol3Actor extends Actor {
     }
   }
 
+  // TODO: check if this is necessary
   #rollAttribute(actionId, data) {
     // Test if attributeId is an attribute or another value
     const regex = /^[A-Z]{3}$/;

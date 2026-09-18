@@ -5,8 +5,9 @@ const { api, sheets } = foundry.applications;
 /**
  * Pol3BaseActorSheet class that extends Foundry's ActorSheetV2 with Polaris-specific logic.
  */
-export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
-
+export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
+  sheets.ActorSheetV2
+) {
   static DEFAULT_OPTIONS = {
     classes: ['polaris', 'sheet', 'actor'],
     tag: 'form',
@@ -164,7 +165,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   async #prepareDescription() {
     const description = this.document.system.description;
     const context = { relativeTo: this.document, secrets: this.document.isOwner };
-    const enrich = (text) => foundry.applications.ux.TextEditor.implementation.enrichHTML(text, context);
+    const enrich = text =>
+      foundry.applications.ux.TextEditor.implementation.enrichHTML(text, context);
 
     const [GMNotes, publicText, secret] = await Promise.all([
       enrich(description.GMNotes),
@@ -189,12 +191,24 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
 
   #prepareSecondaryAttributes() {
     const {
-      stunThreshold, unconsciousnessThreshold, closeCombatModifier,
-      reaction, damageResistance, drugResistance, illnessResistance, breath,
+      stunThreshold,
+      unconsciousnessThreshold,
+      closeCombatModifier,
+      reaction,
+      damageResistance,
+      drugResistance,
+      illnessResistance,
+      breath,
     } = this.actor.system;
     return {
-      stunThreshold, unconsciousnessThreshold, closeCombatModifier,
-      reaction, damageResistance, drugResistance, illnessResistance, breath,
+      stunThreshold,
+      unconsciousnessThreshold,
+      closeCombatModifier,
+      reaction,
+      damageResistance,
+      drugResistance,
+      illnessResistance,
+      breath,
     };
   }
 
@@ -219,10 +233,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     const zones = {};
     for (const [zoneKey, zone] of Object.entries(wounds)) {
       const severitySquares = {};
-      const effectiveMax = (s) => POL3.WOUND.BASE_MAX[s] + (zone.resistant ? POL3.WOUND.RESISTANT_BONUS[s] : 0);
+      const effectiveMax = s =>
+        POL3.WOUND.BASE_MAX[s] + (zone.resistant ? POL3.WOUND.RESISTANT_BONUS[s] : 0);
       for (const [severityKey, severityValue] of Object.entries(zone.counters)) {
         const arrayLength = effectiveMax(severityKey);
-        severitySquares[severityKey] = Array.from({ length: arrayLength }, (_, i) => i < severityValue);
+        severitySquares[severityKey] = Array.from(
+          { length: arrayLength },
+          (_, i) => i < severityValue
+        );
       }
       zones[zoneKey] = { ...zone, severitySquares };
     }
@@ -239,10 +257,10 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   #prepareItemsByCategory(itemType, i18nPrefix) {
     const byCategory = Map.groupBy(
       this.actor.items.filter(i => i.type === itemType),
-      item => item.system.category ?? '',
+      item => item.system.category ?? ''
     );
 
-    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
     return [...byCategory.entries()]
       .map(([category, items]) => ({
@@ -253,13 +271,15 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   }
 
   _prepareSkills() {
-    return this.#prepareItemsByCategory('skill', 'POL3.SKILL.Category')
-      .map(({ label, itemList }) => ({ label, skillList: itemList }));
+    return this.#prepareItemsByCategory('skill', 'POL3.SKILL.Category').map(
+      ({ label, itemList }) => ({ label, skillList: itemList })
+    );
   }
 
   _prepareWeapons() {
-    return this.#prepareItemsByCategory('weapon', 'POL3.WEAPON.Category')
-      .map(({ label, itemList }) => ({ label, weaponList: itemList }));
+    return this.#prepareItemsByCategory('weapon', 'POL3.WEAPON.Category').map(
+      ({ label, itemList }) => ({ label, weaponList: itemList })
+    );
   }
 
   /* -------------------------------------------- */
@@ -290,7 +310,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
       window: { title, icon: 'fas fa-edit' },
       content: await foundry.applications.handlebars.renderTemplate(
         'systems/polaris/templates/dialogs/attribute-dialog.hbs',
-        { attribute },
+        { attribute }
       ),
       ok: { label: saveLabel, icon: 'fas fa-save' },
     });
@@ -299,7 +319,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     await this.actor.update({
       [`system.attributes.${attributeId}.base`]: attributeConfigs.base ?? attribute.base,
       [`system.attributes.${attributeId}.geneticModifier`]: attributeConfigs.geneticModifier ?? 0,
-      [`system.attributes.${attributeId}.competencePointsModifier`]: attributeConfigs.competencePoints ?? 0,
+      [`system.attributes.${attributeId}.competencePointsModifier`]:
+        attributeConfigs.competencePoints ?? 0,
     });
   }
 
@@ -309,10 +330,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
    * @param {HTMLElement} target
    */
   static #onTestAttribute(event, target) {
-    const {
-      attributeId,
-      attributeName,
-    } = Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
+    const { attributeId, attributeName } =
+      Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
     if (!attributeId) return;
 
     // this.actor is available here since Foundry's ApplicationV2 action framework
@@ -365,7 +384,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     const item = itemId ? this.actor.items.get(itemId) : null;
     if (!item) return;
 
-    const isEquipped = target instanceof HTMLInputElement ? target.checked : !item.system.isEquipped;
+    const isEquipped =
+      target instanceof HTMLInputElement ? target.checked : !item.system.isEquipped;
     await item.update({ 'system.isEquipped': isEquipped });
   }
 
@@ -377,7 +397,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
   static async #onApplyWound(event, target) {
     const { zone, severity } = Pol3BaseActorSheet.#datasetOf(target, '[data-zone]') ?? {};
     if (!zone || !severity) return;
-    console.log('Polaris | Applying wound:', zone, severity);
+
     await this.actor.applyWound(zone, severity);
   }
 
@@ -388,7 +408,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
    */
   static async #onHealWound(event, target) {
     const { zone } = Pol3BaseActorSheet.#datasetOf(target, '[data-zone]') ?? {};
-    console.log('Polaris | Healing wound:', zone);
     if (!zone) return;
 
     await this.actor.healWound(zone);
@@ -412,11 +431,9 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(s
     }).bind(this.element);
   }
 
-  async _onDragStart(event) {
-  }
+  async _onDragStart(event) {}
 
-  async _onDragOver(event) {
-  }
+  async _onDragOver(event) {}
 
   /**
    * An event that occurs when data is dropped into a drop target.

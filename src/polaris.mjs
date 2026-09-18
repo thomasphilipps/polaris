@@ -4,8 +4,9 @@ import * as applications from './module/apps/_module.mjs';
 import * as hooks from './module/config/hooks.mjs';
 import { POL3 } from './module/config/config.mjs';
 import { preloadHandlebarsTemplates } from './module/config/templates.mjs';
+import { registerSystemSettings } from './module/config/settings.mjs';
 
-Hooks.once('init', async function() {
+Hooks.once('init', async function () {
   console.log('Polaris | Initializing Polaris config');
   globalThis.polaris = game.system;
 
@@ -32,26 +33,42 @@ Hooks.once('init', async function() {
 
   foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
 
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, 'polaris', applications.Pol3HeroSheet, {
-    types: ['hero'],
-    makeDefault: true,
-    label: 'POL3.SHEETS.GENERAL.Hero',
-  });
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(
+    Actor,
+    'polaris',
+    applications.Pol3HeroSheet,
+    {
+      types: ['hero'],
+      makeDefault: true,
+      label: 'POL3.SHEETS.GENERAL.Hero',
+    }
+  );
 
   foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
 
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3SkillSheet, {
-    types: ['skill'],
-    makeDefault: true,
-    label: 'POL3.SHEETS.GENERAL.Skill',
-  });
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(
+    Item,
+    'polaris',
+    applications.Pol3SkillSheet,
+    {
+      types: ['skill'],
+      makeDefault: true,
+      label: 'POL3.SHEETS.GENERAL.Skill',
+    }
+  );
 
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, 'polaris', applications.Pol3WeaponSheet, {
-    types: ['weapon'],
-    makeDefault: true,
-    label: 'POL3.SHEETS.GENERAL.Weapon',
-  });
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(
+    Item,
+    'polaris',
+    applications.Pol3WeaponSheet,
+    {
+      types: ['weapon'],
+      makeDefault: true,
+      label: 'POL3.SHEETS.GENERAL.Weapon',
+    }
+  );
 
+  registerSystemSettings();
   await preloadHandlebarsTemplates();
 });
 

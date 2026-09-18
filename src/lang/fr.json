@@ -1,5 +1,14 @@
 {
   "POL3": {
+    "SETTINGS": {
+      "WorldAmbiance": {
+        "Name": "Ambiance du jeu",
+        "Hint": "Définit l'ambiance du jeu et ajuste certains paramètres (Chance, Points de Création...)",
+        "Realistic": "Réaliste",
+        "Intermediate": "Intermédiaire",
+        "Heroic": "Héroïque"
+      }
+    },
     "WOUND": {
       "SEVERITY": {
         "light": "Légère",
