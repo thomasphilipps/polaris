@@ -11,12 +11,12 @@ import { POL3 } from '../config/config.mjs';
  * @returns {object} outcome
  */
 export function resolveTaskCheck({
-  rollResult,
-  actionValue,
-  difficulty,
-  valueCrit = 0,
-  critFailReroll = null,
-}) {
+                                   rollResult,
+                                   actionValue,
+                                   difficulty,
+                                   valueCrit = 0,
+                                   critFailReroll = null,
+                                 }) {
   const globalDifficulty = actionValue + difficulty;
   const initialMargin = globalDifficulty - rollResult;
 

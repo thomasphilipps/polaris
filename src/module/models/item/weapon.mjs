@@ -9,6 +9,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
   static DEFAULT_CATEGORY = 'ranged';
   static WEAPON_RANGED_SUBCATEGORY = POL3.WEAPON.SUBCATEGORY.ranged;
   static DEFAULT_RANGED_SUBCATEGORY = 'draft';
+  static CATEGORY_TO_SKILL_CATEGORY = POL3.WEAPON.WEAPON_CATEGORY_TO_SKILL_CATEGORY;
 
   static defineSchema() {
     const fields = foundry.data.fields;
@@ -58,6 +59,28 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         blank: true,
         label: 'POL3.WEAPON.SHEET.InitiativeModifier',
       }),
+    };
+  }
+
+  getRollData() {
+    const actor = this.parent.actor;
+    const competence = actor?.getSkillValue(this.linkedSkill);
+
+    if (!competence?.value) {
+      ui.notifications.error(
+        game.i18n.format('POL3.ERROR.CannotUse', {
+          actorName: actor?.name,
+          itemName: this.parent.name,
+        }),
+      );
+      return null; // stoppe ici, la notification a déjà informé le joueur
+    }
+
+    return {
+      rollLabel: competence.label,
+      actionValue: competence.value,
+      valueCrit: competence.valueCrit,
+      difficulty: this.rangeModifier ?? 0,
     };
   }
 }

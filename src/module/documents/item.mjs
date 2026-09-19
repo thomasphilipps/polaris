@@ -12,7 +12,6 @@ export default class Pol3Item extends Item {
     this._setBookReferenceString(itemData);
 
 
-
     switch (this.type) {
       case 'skill':
         this._prepareSkillData(itemData, actorData);
@@ -131,5 +130,18 @@ export default class Pol3Item extends Item {
   _prepareWeaponData(itemData, actorData) {
     itemData.isRanged = itemData.category === 'ranged';
     itemData.isMelee = itemData.category === 'melee';
+  }
+
+  async roll() {
+    if (typeof this.system.getRollData !== 'function') {
+      console.warn(`POLARIS | L'item de type "${this.type}" ne définit pas getRollData()`);
+      return;
+    }
+
+    const rollData = this.system.getRollData();
+    if (!rollData) return;
+
+    const { taskCheck } = await import('../dice/task-check.mjs');
+    return taskCheck(rollData);
   }
 }

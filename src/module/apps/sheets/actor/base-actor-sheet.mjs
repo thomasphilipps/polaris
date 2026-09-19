@@ -1,4 +1,5 @@
 import { POL3 } from '../../../config/config.mjs';
+import { taskCheck } from '../../../dice/task-check.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -6,7 +7,7 @@ const { api, sheets } = foundry.applications;
  * Pol3BaseActorSheet class that extends Foundry's ActorSheetV2 with Polaris-specific logic.
  */
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
-  sheets.ActorSheetV2
+  sheets.ActorSheetV2,
 ) {
   static DEFAULT_OPTIONS = {
     classes: ['polaris', 'sheet', 'actor'],
@@ -95,7 +96,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
 
-    options.parts = ['tabs', 'header', 'body', 'description'];
+    options.parts = ['header', 'tabs', 'body', 'description'];
 
     if (!this.document.limited) {
       options.parts.splice(3, 0, 'attributes', 'skills', 'equipment', 'wounds');
@@ -239,7 +240,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
         const arrayLength = effectiveMax(severityKey);
         severitySquares[severityKey] = Array.from(
           { length: arrayLength },
-          (_, i) => i < severityValue
+          (_, i) => i < severityValue,
         );
       }
       zones[zoneKey] = { ...zone, severitySquares };
@@ -257,7 +258,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   #prepareItemsByCategory(itemType, i18nPrefix) {
     const byCategory = Map.groupBy(
       this.actor.items.filter(i => i.type === itemType),
-      item => item.system.category ?? ''
+      item => item.system.category ?? '',
     );
 
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
@@ -272,13 +273,13 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   _prepareSkills() {
     return this.#prepareItemsByCategory('skill', 'POL3.SKILL.Category').map(
-      ({ label, itemList }) => ({ label, skillList: itemList })
+      ({ label, itemList }) => ({ label, skillList: itemList }),
     );
   }
 
   _prepareWeapons() {
     return this.#prepareItemsByCategory('weapon', 'POL3.WEAPON.Category').map(
-      ({ label, itemList }) => ({ label, weaponList: itemList })
+      ({ label, itemList }) => ({ label, weaponList: itemList }),
     );
   }
 
@@ -310,7 +311,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
       window: { title, icon: 'fas fa-edit' },
       content: await foundry.applications.handlebars.renderTemplate(
         'systems/polaris/templates/dialogs/attribute-dialog.hbs',
-        { attribute }
+        { attribute },
       ),
       ok: { label: saveLabel, icon: 'fas fa-save' },
     });
@@ -329,15 +330,16 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {PointerEvent} event
    * @param {HTMLElement} target
    */
-  static #onTestAttribute(event, target) {
-    const { attributeId, attributeName } =
-      Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
+  static async #onTestAttribute(event, target) {
+    const { attributeId, attributeName, attributeValue } =
+    Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
     if (!attributeId) return;
-
-    // this.actor is available here since Foundry's ApplicationV2 action framework
-    // invokes action handlers with `this` bound to the sheet instance.
-    // TODO: wire this up to the actual roll pipeline once it exists, e.g.:
-    // this.actor.rollAttribute(attributeId);
+    const valueCrit = Math.round(parseInt(attributeValue) / 2);
+    await taskCheck({
+      rollLabel: attributeName,
+      actionValue: parseInt(attributeValue) || 0,
+      valueCrit: valueCrit,
+    });
   }
 
   /**
@@ -365,13 +367,13 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {PointerEvent} event
    * @param {HTMLElement} target
    */
-  static #onRollItem(event, target) {
-    const { itemId, itemName } = Pol3BaseActorSheet.#datasetOf(target, '.item') ?? {};
+  static async #onRollItem(event, target) {
+    const { itemId } = Pol3BaseActorSheet.#datasetOf(target, '.item') ?? {};
     if (!itemId) return;
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
 
-    // TODO: wire this up to the actual roll pipeline once it exists, e.g.:
-    // const item = this.actor.items.get(itemId);
-    // item.roll();
+    await item.roll();
   }
 
   /**
@@ -431,9 +433,11 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     }).bind(this.element);
   }
 
-  async _onDragStart(event) {}
+  async _onDragStart(event) {
+  }
 
-  async _onDragOver(event) {}
+  async _onDragOver(event) {
+  }
 
   /**
    * An event that occurs when data is dropped into a drop target.

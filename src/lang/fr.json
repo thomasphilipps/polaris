@@ -59,6 +59,9 @@
       "NotOwner": "Vous n'êtes pas propriétaire de cet item",
       "SkillAlreadyExists": "Cette compétence existe déjà"
     },
+    "ERROR": {
+      "CannotUse": "{actorName} ne peut pas utiliser {itemName}"
+    },
     "ATTRIBUTE": {
       "Label": "Attribut",
       "LabelPlural": "Attributs",

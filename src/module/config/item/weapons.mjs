@@ -70,3 +70,8 @@ export const BURST = {
     symbol: 'RL',
   },
 };
+
+export const WEAPON_CATEGORY_TO_SKILL_CATEGORY = {
+  ranged: 'rangedCombat',
+  melee: 'closeCombat',
+};

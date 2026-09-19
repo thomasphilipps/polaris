@@ -27,8 +27,6 @@ export default class Pol3Actor extends Actor {
       }
     };
 
-    console.log('Polaris | Ambiance: ', worldAmbiance());
-
     // Calculate total value and natural aptitude for each attribute
     Object.values(attributes).forEach(attribute => {
       attribute.total = this._calculateAttributeTotalValue(attribute);
@@ -52,14 +50,14 @@ export default class Pol3Actor extends Actor {
    * @returns {number} The summed total of the attribute.
    */
   _calculateAttributeTotalValue({
-    base,
-    geneticModifier,
-    competencePointsModifier,
-    otherModifier,
-  }) {
+                                  base,
+                                  geneticModifier,
+                                  competencePointsModifier,
+                                  otherModifier,
+                                }) {
     return [base, geneticModifier, competencePointsModifier, otherModifier].reduce(
       (sum, val) => sum + val,
-      0
+      0,
     );
   }
 
@@ -106,7 +104,7 @@ export default class Pol3Actor extends Actor {
    */
   _prepareThresholds(system, attributes) {
     const stunThresholdValue = Math.round(
-      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3
+      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3,
     );
     const unconsciounessThresholdValue = stunThresholdValue + 10;
     const breathValue = Math.round((attributes.CON.total + attributes.VOL.total) / 2);
@@ -157,7 +155,7 @@ export default class Pol3Actor extends Actor {
       conTemp,
       valueArray,
       illnessResultArray,
-      upperBonusCon
+      upperBonusCon,
     );
 
     this._setSystemAttribute(system, 'illnessResistance', illnessResistanceValue);
@@ -177,7 +175,7 @@ export default class Pol3Actor extends Actor {
       volconTemp,
       valueArray,
       illnessResultArray,
-      upperBonusVolCon
+      upperBonusVolCon,
     );
 
     this._setSystemAttribute(system, 'drugResistance', drugResistanceValue);
@@ -298,7 +296,7 @@ export default class Pol3Actor extends Actor {
     while (
       currentSeverity !== 'destroyed' &&
       counters[currentSeverity] > effectiveMax(currentSeverity)
-    ) {
+      ) {
       const overflow = counters[currentSeverity] - effectiveMax(currentSeverity);
       counters[currentSeverity] = effectiveMax(currentSeverity);
 
@@ -404,5 +402,26 @@ export default class Pol3Actor extends Actor {
   _capitalize(str) {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  /**
+   * Get relevant values of a skill.
+   * @param {string} skillName - The name of the skill to get the value for.
+   * @returns {Object} The competence skill value, or undefined if not found.
+   */
+
+  getSkillValue(skillName) {
+    const normalized = skillName?.trim().toLowerCase();
+    const competence = this.items.find(
+      i => i.type === 'skill' && i.name.trim().toLowerCase() === normalized,
+    );
+    if (!competence) return;
+
+    return {
+      label: competence.name,
+      baseLevel: competence.system.baseLevel,
+      value: competence.system.globalLevel,
+      valueCrit: competence.system.mastery,
+    };
   }
 }

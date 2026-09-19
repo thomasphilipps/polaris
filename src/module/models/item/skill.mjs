@@ -38,4 +38,13 @@ export default class Pol3Skill extends Pol3ItemDataModel {
       //globalValue: new fields.NumberField({initial: 0}),
     };
   }
+
+  getRollData() {
+    console.log(this);
+    return {
+      rollLabel: this.parent.name,
+      actionValue: this.globalLevel,
+      valueCrit: this.mastery,
+    };
+  }
 }
