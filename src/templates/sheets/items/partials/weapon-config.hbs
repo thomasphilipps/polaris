@@ -4,8 +4,9 @@
   data-group="{{tabs.config.group}}"
 >
   <fieldset class="item-category" {{fieldDisabled}}>
-    {{formField fields.linkedSkill value=source.system.linkedSkill localize=true}}
     {{formField fields.category value=source.system.category localize=true}}
+    {{formField fields.linkedSkill value=source.system.linkedSkill choices=linkedSkillOptions
+                localize=true}}
     {{#if item.system.isRanged}}
       {{formField fields.subcategory value=source.system.subcategory localize=true}}
     {{/if}}

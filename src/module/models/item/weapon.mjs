@@ -9,7 +9,6 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
   static DEFAULT_CATEGORY = 'ranged';
   static WEAPON_RANGED_SUBCATEGORY = POL3.WEAPON.SUBCATEGORY.ranged;
   static DEFAULT_RANGED_SUBCATEGORY = 'draft';
-  static CATEGORY_TO_SKILL_CATEGORY = POL3.WEAPON.WEAPON_CATEGORY_TO_SKILL_CATEGORY;
 
   static defineSchema() {
     const fields = foundry.data.fields;

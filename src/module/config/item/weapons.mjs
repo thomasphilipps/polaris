@@ -71,7 +71,7 @@ export const BURST = {
   },
 };
 
-export const WEAPON_CATEGORY_TO_SKILL_CATEGORY = {
+export const CATEGORY_TO_SKILL_CATEGORY = {
   ranged: 'rangedCombat',
   melee: 'closeCombat',
 };
