@@ -320,7 +320,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
     const saveLabel = game.i18n.localize('POL3.DIALOG.SaveButton');
     const label = game.i18n.localize(POL3.ATTRIBUTE[attributeId]?.label);
-    const title = game.i18n.format('POL3.ATTRIBUTE.ConfigureAttribute', { attributeName: label });
+    const title = game.i18n.format('POL3.ATTRIBUTE.Configure', { attributeName: label });
 
     const attributeConfigs = await foundry.applications.api.DialogV2.input({
       window: { title, icon: 'fas fa-edit' },
