@@ -39,7 +39,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
       }),
       chocDamage: new fields.StringField({ blank: true, label: 'POL3.WEAPON.SHEET.ChocDamage' }),
       penetration: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Penetration' }),
-      allonge: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Allonge' }),
+      allonge: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Reach' }),
       hitDistance: new fields.SchemaField({
         close: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Close' }),
         short: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Short' }),
@@ -48,7 +48,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         extreme: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Extreme' }),
       }),
       tags: new fields.SetField(
-        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS }),
+        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS })
       ),
       minimalStrength: new fields.NumberField({
         blank: true,
@@ -70,7 +70,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         game.i18n.format('POL3.ERROR.CannotUse', {
           actorName: actor?.name,
           itemName: this.parent.name,
-        }),
+        })
       );
       return null; // stoppe ici, la notification a déjà informé le joueur
     }

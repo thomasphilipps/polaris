@@ -7,7 +7,7 @@ const { api, sheets } = foundry.applications;
  * Pol3BaseActorSheet class that extends Foundry's ActorSheetV2 with Polaris-specific logic.
  */
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
-  sheets.ActorSheetV2,
+  sheets.ActorSheetV2
 ) {
   static DEFAULT_OPTIONS = {
     classes: ['polaris', 'sheet', 'actor'],
@@ -75,8 +75,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   static TABS = {
     sheet: [
-      { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.LabelPlural' },
-      { id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.SkillPlural' },
+      { id: 'attributes', group: 'sheet', label: 'POL3.ATTRIBUTE.Label_other' },
+      { id: 'skills', group: 'sheet', label: 'POL3.SHEETS.GENERAL.Skill_other' },
       { id: 'equipment', group: 'sheet', label: 'POL3.SHEETS.TABS.Equipment' },
       { id: 'wounds', group: 'sheet', label: 'POL3.SHEETS.TABS.Wounds' },
       { id: 'description', group: 'sheet', label: 'POL3.SHEETS.TABS.Description' },
@@ -215,6 +215,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   #prepareSpeeds() {
     const { groundSpeed, swimSpeed } = this.actor.system;
+    console.log(groundSpeed);
     return { groundSpeed, swimSpeed };
   }
 
@@ -228,8 +229,18 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   #prepareWounds() {
     const { wounds, woundsSummary } = this.actor.system;
 
+    const toPascalCase = str =>
+      str
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/[-_ ]+([a-zA-Z0-9])/g, (_, match) => match.toUpperCase())
+        .replace(/^([a-z])/, (_, match) => match.toUpperCase());
+
     const zoneKeys = Object.keys(wounds);
-    const severityKeys = Object.keys(POL3.WOUND.BASE_MAX); // canon order light->destroyed
+    const rawSeverityKeys = Object.keys(POL3.WOUND.BASE_MAX);
+    const severityKeys = rawSeverityKeys.map(key => ({
+      key,
+      label: `POL3.WOUND.SEVERITY.${toPascalCase(key)}`,
+    }));
 
     const zones = {};
     for (const [zoneKey, zone] of Object.entries(wounds)) {
@@ -240,10 +251,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
         const arrayLength = effectiveMax(severityKey);
         severitySquares[severityKey] = Array.from(
           { length: arrayLength },
-          (_, i) => i < severityValue,
+          (_, i) => i < severityValue
         );
       }
-      zones[zoneKey] = { ...zone, severitySquares };
+      zones[zoneKey] = {
+        ...zone,
+        label: `POL3.ZONES.${toPascalCase(zoneKey)}.Label`,
+        severitySquares,
+      };
     }
     return { zones, zoneKeys, severityKeys, summary: woundsSummary };
   }
@@ -258,7 +273,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   #prepareItemsByCategory(itemType, i18nPrefix) {
     const byCategory = Map.groupBy(
       this.actor.items.filter(i => i.type === itemType),
-      item => item.system.category ?? '',
+      item => item.system.category ?? ''
     );
 
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
@@ -273,13 +288,13 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   _prepareSkills() {
     return this.#prepareItemsByCategory('skill', 'POL3.SKILL.Category').map(
-      ({ label, itemList }) => ({ label, skillList: itemList }),
+      ({ label, itemList }) => ({ label, skillList: itemList })
     );
   }
 
   _prepareWeapons() {
     return this.#prepareItemsByCategory('weapon', 'POL3.WEAPON.Category').map(
-      ({ label, itemList }) => ({ label, weaponList: itemList }),
+      ({ label, itemList }) => ({ label, weaponList: itemList })
     );
   }
 
@@ -311,7 +326,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
       window: { title, icon: 'fas fa-edit' },
       content: await foundry.applications.handlebars.renderTemplate(
         'systems/polaris/templates/dialogs/attribute-dialog.hbs',
-        { attribute },
+        { attribute }
       ),
       ok: { label: saveLabel, icon: 'fas fa-save' },
     });
@@ -332,7 +347,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async #onTestAttribute(event, target) {
     const { attributeId, attributeName, attributeValue } =
-    Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
+      Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
     if (!attributeId) return;
     const valueCrit = Math.round(parseInt(attributeValue) / 2);
     await taskCheck({
@@ -433,11 +448,9 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     }).bind(this.element);
   }
 
-  async _onDragStart(event) {
-  }
+  async _onDragStart(event) {}
 
-  async _onDragOver(event) {
-  }
+  async _onDragOver(event) {}
 
   /**
    * An event that occurs when data is dropped into a drop target.

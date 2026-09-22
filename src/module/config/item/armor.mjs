@@ -34,19 +34,19 @@ export const CATEGORY = {
 
 export const ZONES = {
   head: {
-    label: 'POL3.ARMOR.ZONES.Head.Label',
-    symbol: 'POL3.ARMOR.ZONES.Head.Symbol',
+    label: 'POL3.ZONES.Head.Label',
+    symbol: 'POL3.ZONES.Head.Symbol',
   },
   body: {
-    label: 'POL3.ARMOR.ZONES.Body.Label',
-    symbol: 'POL3.ARMOR.ZONES.Body.Symbol',
+    label: 'POL3.ZONES.Body.Label',
+    symbol: 'POL3.ZONES.Body.Symbol',
   },
   arms: {
-    label: 'POL3.ARMOR.ZONES.Arms.Label',
-    symbol: 'POL3.ARMOR.ZONES.Arms.Symbol',
+    label: 'POL3.ZONES.Arms.Label',
+    symbol: 'POL3.ZONES.Arms.Symbol',
   },
   legs: {
-    label: 'POL3.ARMOR.ZONES.Legs.Label',
-    symbol: 'POL3.ARMOR.ZONES.Legs.Symbol',
+    label: 'POL3.ZONES.Legs.Label',
+    symbol: 'POL3.ZONES.Legs.Symbol',
   },
 };

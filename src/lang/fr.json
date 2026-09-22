@@ -1,269 +1,276 @@
 {
   "POL3": {
-    "ROLL": {
-      "Legendary": "Légendaire",
-      "Heroic": "Héroïque",
-      "Extraordinary": "Extraordinaire",
-      "Perfect": "Parfait",
-      "Excellent": "Excellent",
-      "ReallyGood": "Très bon",
-      "Good": "Bon",
-      "QuiteGood": "Assez bon",
-      "Correct": "Correct",
-      "Barely": "De justesse",
-      "Poor": "Médiocre",
-      "QuiteBad": "Assez mauvais",
-      "Bad": "Mauvais",
-      "ReallyBad": "Très mauvais",
-      "Execrable": "Exécrable",
-      "Catastrophic": "Catastrophique"
-    },
-    "SETTINGS": {
-      "WorldAmbiance": {
-        "Name": "Ambiance du jeu",
-        "Hint": "Définit l'ambiance du jeu et ajuste certains paramètres (Chance, Points de Création...)",
-        "Realistic": "Réaliste",
-        "Intermediate": "Intermédiaire",
-        "Heroic": "Héroïque"
+    "ACTOR": {
+      "DESCRIPTION": {
+        "Age": "Âge",
+        "BasicTraining": "Formation de base",
+        "Build": "Corpulence",
+        "DistinguishingMarks": "Signes particuliers",
+        "Eyes": "Yeux",
+        "Fertile": "Fécond",
+        "GeneticType": "Type génétique",
+        "GeographicOrigin": "Origine géographique",
+        "Hair": "Cheveux",
+        "Handedness": "Latéralité",
+        "History": "Historique",
+        "PhysicalDescription": "Description physique",
+        "PrivateNotes": "Notes privées",
+        "Sex": "Sexe",
+        "Size": "Taille",
+        "Skin": "Peau",
+        "SocialOrigin": "Origine sociale",
+        "Studies": "Études supérieures",
+        "Weight": "Poids"
+      },
+      "GENETIC_TYPE": {
+        "GeneticHybrid": "Hybride génétique",
+        "Human": "Humain",
+        "NaturalHybrid": "Hybride naturel",
+        "TechnoHybrid": "Techno-hybride"
+      },
+      "HANDEDNESS": {
+        "Ambidextrous": "Ambidextre",
+        "LeftHanded": "Gaucher",
+        "RightHanded": "Droitier"
+      },
+      "SEX": {
+        "Female": "Femme",
+        "Male": "Homme"
       }
     },
-    "WOUND": {
-      "SEVERITY": {
-        "light": "Légère",
-        "medium": "Moyenne",
-        "severe": "Grave",
-        "critical": "Critique",
-        "deadly": "Fatale",
-        "destroyed": "Membre détruit"
+    "ARMOR": {
+      "Protection": "Protection",
+      "ShockProtection": "Protection contre les chocs",
+      "TYPE": {
+        "PersonalField": "Champ personnel",
+        "Shield": "Bouclier",
+        "Simple": "Simple",
+        "SphericalField": "Champ sphérique"
+      }
+    },
+    "ATTRIBUTE": {
+      "Configure": "Configurer l'attribut {attributeName}",
+      "First": "Attribut 1",
+      "Label_one": "Attribut",
+      "Label_other": "Attributs",
+      "Modifiers": {
+        "BaseValue": "Valeur de base",
+        "CompetencePoints": "Mod. points de compétence",
+        "Genetic": "Mod. type génétique"
       },
-      "ZONE": {
-        "head": "Tête",
-        "body": "Corps",
-        "armLeft": "Bras gauche",
-        "armRight": "Bras droit",
-        "legLeft": "Jambe gauche",
-        "legRight": "Jambe droite",
-        "finLeft": "Nageoire gauche",
-        "finRight": "Nageoire droite"
+      "PRIMARY": {
+        "Adaptation": { "Abbr": "ADA", "Label": "ADAptation" },
+        "Build": { "Abbr": "GAB", "Label": "GABarit" },
+        "Constitution": { "Abbr": "CON", "Label": "CONstitution" },
+        "Coordination": { "Abbr": "COO", "Label": "COOrdination" },
+        "Initiative": { "Abbr": "INI", "Label": "Initiative" },
+        "Intelligence": { "Abbr": "INT", "Label": "INTelligence" },
+        "Luck": { "Abbr": "CHA", "Label": "CHAnce" },
+        "Perception": { "Abbr": "PER", "Label": "PERception" },
+        "Presence": { "Abbr": "PRE", "Label": "PREsence" },
+        "Strength": { "Abbr": "FOR", "Label": "FORce" },
+        "Willpower": { "Abbr": "VOL", "Label": "VOLonté" }
       },
-      "Apply": "Appliquer une blessure",
-      "Heal": "Soigner la pire blessure",
-      "Dead": "Mort",
-      "Destroyed": "Détruit",
-      "Malus": "Malus"
+      "SECONDARIES": {
+        "Breath": "Souffle",
+        "CloseCombatModifier": "Modificateur de dommages (contact)",
+        "DamageResistance": "Résistance aux dommages",
+        "DrugResistance": "Résistance aux drogues",
+        "IllnessResistance": "Résistance aux maladies, poisons et radiations",
+        "Label": "Attributs secondaires",
+        "Reaction": "Réaction",
+        "Speed": {
+          "Fast": "Allure rapide",
+          "Label": "Déplacements",
+          "Mean": "Allure moyenne",
+          "Slow": "Allure lente",
+          "Sprint": "Allure maximale"
+        },
+        "GroundSpeed": "Au sol",
+        "SwimSpeed": "Dans l'eau",
+        "StunThreshold": "Seuil de choc",
+        "UnconsciousnessThreshold": "Seuil d'inconscience"
+      },
+      "Second": "Attribut 2"
+    },
+    "BOOKS": {
+      "CoreRulebook1": "Livre de base 1",
+      "CoreRulebook2": "Livre de base 2"
     },
     "DIALOG": {
-      "SaveButton": "Enregister"
-    },
-    "WARNING": {
-      "NotOwner": "Vous n'êtes pas propriétaire de cet item",
-      "SkillAlreadyExists": "Cette compétence existe déjà"
+      "SaveButton": "Enregistrer"
     },
     "ERROR": {
       "CannotUse": "{actorName} ne peut pas utiliser {itemName}"
     },
-    "ATTRIBUTE": {
-      "Label": "Attribut",
-      "LabelPlural": "Attributs",
-      "SecondaryAttributes": "Attributs secondaires",
-      "FirstAttribute": "Attribut 1",
-      "SecondAttribute": "Attribut 2",
-      "Strength": "FORce",
-      "StrengthAbbr": "FOR",
-      "Constitution": "CONstitution",
-      "ConstitutionAbbr": "CON",
-      "Coordination": "COOrdination",
-      "CoordinationAbbr": "COO",
-      "Adaptation": "ADAptation",
-      "AdaptationAbbr": "ADA",
-      "Perception": "PERception",
-      "PerceptionAbbr": "PER",
-      "Intelligence": "INTelligence",
-      "IntelligenceAbbr": "INT",
-      "Willpower": "VOLonté",
-      "WillpowerAbbr": "VOL",
-      "Presence": "PREsence",
-      "PresenceAbbr": "PRE",
-      "Luck": "CHAnce",
-      "LuckAbbr": "CHA",
-      "Build": "GABarit",
-      "BuildAbbr": "GAB",
-      "StunThreshold": "Seuil de choc",
-      "UnconsciousnessThreshold": "Seuil d'inconscience",
-      "CloseCombatModifier": "Modificateur de dommages (contact)",
-      "Reaction": "Réaction",
-      "DamageResistance": "Résistance aux dommages",
-      "DrugResistance": "Résistance aux drogues",
-      "IllnessResistance": "Résistance aux maladies, poisons et radiations",
-      "Breath": "Souffle",
-      "Speed": "Déplacements",
-      "GroundSpeed": "Au sol",
-      "SwimSpeed": "Dans l'eau",
-      "Slow": "Allure lente",
-      "Mean": "Allure moyenne",
-      "Fast": "Allure rapide",
-      "Sprint": "Allure maximale",
-      "Initiative": "Initiative",
-      "BaseValue": "Valeur de base",
-      "GeneticModifier": "Mod. type génétique",
-      "CompetencePointsModifier": "Mod. points de compétence",
-      "ConfigureAttribute": "Configurer l'attribut {attributeName}"
+    "ROLL": {
+      "Bad": "Mauvais",
+      "Barely": "De justesse",
+      "Catastrophic": "Catastrophique",
+      "Correct": "Correct",
+      "Excellent": "Excellent",
+      "Execrable": "Exécrable",
+      "Good": "Bon",
+      "Heroic": "Héroïque",
+      "Legendary": "Légendaire",
+      "Perfect": "Parfait",
+      "Poor": "Médiocre",
+      "QuiteBad": "Assez mauvais",
+      "QuiteGood": "Assez bon",
+      "ReallyBad": "Très mauvais",
+      "ReallyGood": "Très bon"
+    },
+    "SETTINGS": {
+      "WorldAmbiance": {
+        "Heroic": "Héroïque",
+        "Hint": "Définit l'ambiance du jeu et ajuste certains paramètres (Chance, Points de Création...)",
+        "Intermediate": "Intermédiaire",
+        "Name": "Ambiance du jeu",
+        "Realistic": "Réaliste"
+      }
     },
     "SHEETS": {
+      "DETAILS": {
+        "Availability": "Disponibilité",
+        "BlackMarketAvailability": "Dispo marché noir",
+        "Integrity": "Intégrité",
+        "IsEquipped": "Équipé",
+        "Manufacturer": "Fabricant",
+        "Price": "Coût",
+        "Quantity": "Quantité",
+        "TechLevel": "Niveau technologique",
+        "Traits": "Traits",
+        "Weight": "Poids"
+      },
       "GENERAL": {
-        "Specialization": "Spécialisation",
+        "Armor": "Armure",
         "Category": "Catégorie",
-        "Properties": "Propriétés",
-        "Skill": "Compétence",
-        "SkillPlural": "Compétences",
-        "Weapon": "Arme",
-        "Details": "Détails",
         "Characteristics": "Caractéristiques",
+        "Details": "Détails",
+        "Hero": "Personnage joueur",
         "LinkedSkill": "Compétence associée",
+        "Properties": "Propriétés",
+        "Skill_one": "Compétence",
+        "Skill_other": "Compétences",
+        "Specialization": "Spécialisation",
         "Subcategory": "Famille",
-        "Hero": "Personnage joueur"
+        "Type": "Type",
+        "Weapon": "Arme"
+      },
+      "REFERENCE": {
+        "Book": "Livre",
+        "Label": "Référence",
+        "Page": "Page"
       },
       "TABS": {
         "Configuration": "Configuration",
         "Description": "Description",
-        "GMDescription": "Notes GM",
         "Equipment": "Équipement",
+        "GMDescription": "Notes GM",
         "Wounds": "Blessures"
-      },
-      "REFERENCE": {
-        "Label": "Référence",
-        "Book": "Livre",
-        "Page": "Page"
-      },
-      "DETAILS": {
-        "Price": "Coût",
-        "Quantity": "Quantité",
-        "Weight": "Poids",
-        "Availability": "Disponibilité",
-        "BlackMarketAvailability": "Dispo marché noir",
-        "TechLevel": "Niveau technologique",
-        "Manufacturer": "Fabricant",
-        "Integrity": "Intégrité",
-        "IsEquipped": "Équipé",
-        "Traits": "Traits"
-      }
-    },
-    "ACTOR": {
-      "DESCRIPTION": {
-        "PhysicalDescription": "Description physique",
-        "PrivateNotes": "Notes privées",
-        "History": "Historique",
-        "Size": "Taille",
-        "Weight": "Poids",
-        "Skin": "Peau",
-        "Build": "Corpulence",
-        "Hair": "Cheveux",
-        "Eyes": "Yeux",
-        "Handedness": "Latéralité",
-        "DistinguishingMarks": "Signes particuliers",
-        "GeneticType": "Type génétique",
-        "Age": "Âge",
-        "Sex": "Sexe",
-        "Fertile": "Fécond",
-        "GeographicOrigin": "Origine géographique",
-        "SocialOrigin": "Origine sociale",
-        "BasicTraining": "Formation de base",
-        "Studies": "Études supérieures"
-      },
-      "GENETIC_TYPE": {
-        "Human": "Humain",
-        "NaturalHybrid": "Hybride naturel",
-        "TechnoHybrid": "Techno-hybride",
-        "GeneticHybrid": "Hybride génétique"
-      },
-      "SEX": {
-        "Male": "Homme",
-        "Female": "Femme"
-      },
-      "HANDEDNESS": {
-        "RightHanded": "Droitier",
-        "LeftHanded": "Gaucher",
-        "Ambidextrous": "Ambidextre"
       }
     },
     "SKILL": {
-      "SHEET": {
-        "AssociatedAttributes": "Attributs associés"
-      },
       "Category": {
-        "PhysicalAptitude": "Aptitudes physiques",
         "CloseCombat": "Combat (contact)",
+        "Knowledge": "Connaissances",
+        "Language": "Langues/Langages",
+        "PhysicalAptitude": "Aptitudes physiques",
+        "Pilot": "Pilotage",
         "RangedCombat": "Combat (tir)",
         "Social": "Communication/Relations sociales",
         "SpecialSkill": "Compétences spéciales",
-        "Knowledge": "Connaissances",
         "Stealth": "Furtivité/Subterfuge",
-        "Language": "Langues/Langages",
-        "Pilot": "Pilotage",
         "Survival": "Survie/Extérieur",
         "Technique": "Techniques"
       },
       "Property": {
         "Difficult": "Difficile",
-        "Reserved": "Réservée",
         "LimitsOtherSkills": "Limitative",
         "NaturalProgression": "Progression Naturelle",
-        "Prerequisites": "Pré requis Nécessaire"
+        "Prerequisites": "Prérequis Nécessaire",
+        "Reserved": "Réservée"
+      },
+      "SHEET": {
+        "AssociatedAttributes": "Attributs associés"
       }
     },
+    "WARNING": {
+      "NotOwner": "Vous n'êtes pas propriétaire de cet item",
+      "SkillAlreadyExists": "Cette compétence existe déjà"
+    },
     "WEAPON": {
-      "SHEET": {
-        "BurstMode": "Modes de tir",
-        "BaseDamage": "Dégâts",
-        "ChocDamage": "Dégâts de choc",
-        "MinimalStrength": "Force minimale",
-        "Penetration": "Pénétration",
-        "InitiativeModifier": "Modificateur d'initiative",
-        "Allonge": "Allonge",
-        "Range": "Portée"
+      "Burst": {
+        "LongBurst": "Rafale longue",
+        "ShortBurst": "Rafale courte",
+        "SingleShot": "Coup par coup"
       },
       "Category": {
-        "Ranged": "Arme à distance",
+        "CreatureAttack": "Attaque (créature)",
         "Melee": "Arme de contact",
-        "CreatureAttack": "Attaque (créature)"
+        "Ranged": "Arme à distance"
       },
-      "Burst": {
-        "SingleShot": "Coup par coup",
-        "ShortBurst": "Rafale courte",
-        "LongBurst": "Rafale longue"
+      "Range": {
+        "Close": { "Abbr": "BP", "Label": "Bout portant" },
+        "Extreme": { "Abbr": "EX", "Label": "Portée extrême" },
+        "Long": { "Abbr": "LP", "Label": "Longue portée" },
+        "Medium": { "Abbr": "MP", "Label": "Portée moyenne" },
+        "Short": { "Abbr": "CP", "Label": "Courte portée" }
+      },
+      "SHEET": {
+        "BaseDamage": "Dégâts",
+        "BurstMode": "Modes de tir",
+        "ChocDamage": "Dégâts de choc",
+        "InitiativeModifier": "Modificateur d'initiative",
+        "MinimalStrength": "Force minimale",
+        "Penetration": "Pénétration",
+        "Range": "Portée",
+        "Reach": "Allonge"
       },
       "Subcategory": {
         "Draft": "Arme de trait",
-        "Throwing": "Arme de jet",
         "Handgun": "Arme de poing",
         "Rifle": "Fusil",
-        "Sniper": "Arme de précision"
-      },
-      "Range": {
-        "Close": "Bout portant",
-        "CloseAbbr": "BP",
-        "Short": "Courte portée",
-        "ShortAbbr": "CP",
-        "Medium": "Portée moyenne",
-        "MediumAbbr": "MP",
-        "Long": "Longue portée",
-        "LongAbbr": "LP",
-        "Extreme": "Portée extrême",
-        "ExtremeAbbr": "EX"
+        "Sniper": "Arme de précision",
+        "Throwing": "Arme de jet"
       }
     },
-    "BOOKS": {
-      "CoreRulebook1": "Livre de base 1",
-      "CoreRulebook2": "Livre de base 2"
+    "WOUND": {
+      "Apply": "Appliquer une blessure",
+      "Dead": "Mort",
+      "Destroyed": "Détruit",
+      "Heal": "Soigner la pire blessure",
+      "Malus": "Malus",
+      "SEVERITY": {
+        "Critical": "Critique",
+        "Deadly": "Fatale",
+        "Destroyed": "Membre détruit",
+        "Light": "Légère",
+        "Medium": "Moyenne",
+        "Severe": "Grave"
+      }
+    },
+    "ZONES": {
+      "ArmLeft": { "Label": "Bras gauche", "Symbol": "BG" },
+      "ArmRight": { "Label": "Bras droit", "Symbol": "BD" },
+      "Arms": { "Label": "Bras", "Symbol": "B" },
+      "Body": { "Label": "Corps", "Symbol": "C" },
+      "FinLeft": { "Label": "Nageoire gauche", "Symbol": "NG" },
+      "FinRight": { "Label": "Nageoire droite", "Symbol": "ND" },
+      "Head": { "Label": "Tête", "Symbol": "T" },
+      "LegLeft": { "Label": "Jambe gauche", "Symbol": "JG" },
+      "LegRight": { "Label": "Jambe droite", "Symbol": "JD" },
+      "Legs": { "Label": "Jambes", "Symbol": "J" }
     }
   },
   "TYPES": {
-    "Item": {
-      "skill": "Compétence",
-      "weapon": "Arme"
-    },
     "Actor": {
       "hero": "Personnage joueur"
+    },
+    "Item": {
+      "armor": "Armure",
+      "skill": "Compétence",
+      "weapon": "Arme"
     }
   }
 }
