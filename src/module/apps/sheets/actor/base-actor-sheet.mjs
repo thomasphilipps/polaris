@@ -215,7 +215,6 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   #prepareSpeeds() {
     const { groundSpeed, swimSpeed } = this.actor.system;
-    console.log(groundSpeed);
     return { groundSpeed, swimSpeed };
   }
 
@@ -349,6 +348,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     const { attributeId, attributeName, attributeValue } =
       Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
     if (!attributeId) return;
+    console.log(`POL3.ATTRIBUTE[${attributeId}]: ${attributeName}`);
     const valueCrit = Math.round(parseInt(attributeValue) / 2);
     await taskCheck({
       rollLabel: attributeName,

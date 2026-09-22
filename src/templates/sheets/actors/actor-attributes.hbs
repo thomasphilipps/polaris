@@ -21,15 +21,17 @@
       {{/each}}
     </ul>
   </div>
-
   <div>
     <ul class="attribute-variable">
-      <li class="attribute flexrow" data-attribute-id="{{variableAttributeScores.baseLuck.id}}">
-        <div class="label">{{localize "POL3.ATTRIBUTE.PRIMARY.Luck.Label"}}</div>
+      <li class="attribute flexrow"
+          data-attribute-value="{{variableAttributeScores.baseLuck.value}}"
+          data-attribute-id="{{variableAttributeScores.baseLuck.id}}"
+          data-attribute-name="{{localize variableAttributeScores.baseLuck.label}}">
+        <div class="label">{{localize "POL3.ATTRIBUTE.SECONDARIES.BaseLuck"}}</div>
         <span class="input value">{{variableAttributeScores.baseLuck.value}}</span>
         <div class="action-button flexrow">
           <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-             data-tooltip="Test {{localize "POL3.ATTRIBUTE.PRIMARY.Luck.Abbr"}}"></a>
+             data-tooltip="Test {{localize "POL3.ATTRIBUTE.SECONDARIES.BaseLuck"}}"></a>
         </div>
       </li>
     </ul>
@@ -38,12 +40,14 @@
   <div>
     <ul class="attribute-variable">
       <li class="attribute flexrow"
-          data-attribute-id="{{variableAttributeScores.baseInitiative.id}}">
-        <div class="label">{{localize "POL3.ATTRIBUTE.PRIMARY.Initiative.Label"}}</div>
+          data-attribute-id="{{variableAttributeScores.baseInitiative.id}}"
+      data-attribute-value="{{variableAttributeScores.baseInitiative.value}}"
+      data-attribute-name="{{localize variableAttributeScores.baseInitiative.label}}">
+        <div class="label">{{localize "POL3.ATTRIBUTE.SECONDARIES.BaseInitiative"}}</div>
         <span class="input value">{{variableAttributeScores.baseInitiative.value}}</span>
         <div class="action-button flexrow">
           <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-             data-tooltip="Test {{localize "POL3.ATTRIBUTE.PRIMARY.Initiative.Label"}}"></a>
+             data-tooltip="Test {{localize "POL3.ATTRIBUTE.SECONDARIES.BaseInitiative"}}"></a>
         </div>
       </li>
     </ul>
@@ -53,7 +57,10 @@
   <div>
     <ul class="secondary-attribute-list">
       {{#each secondaryAttributeScores as |secAttribute|}}
-        <li class="attribute flexrow" data-attribute-id="{{secAttribute.id}}">
+        <li class="attribute flexrow"
+            data-attribute-id="{{secAttribute.id}}"
+            data-attribute-name="{{localize secAttribute.label}}"
+            data-attribute-value="{{secAttribute.value}}">
           <div class="label">{{localize secAttribute.label}}</div>
           <span class="input value">{{secAttribute.value}}</span>
           <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"

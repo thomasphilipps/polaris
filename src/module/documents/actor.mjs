@@ -95,7 +95,6 @@ export default class Pol3Actor extends Actor {
     const reactionValue = Math.round((attributes.PER.total + attributes.VOL.total) / 2);
 
     this._setSystemAttribute(system, 'reaction', reactionValue);
-    // baseInitiative is identical to reaction in your example
     this._setSystemAttribute(system, 'baseInitiative', reactionValue);
   }
 
@@ -374,26 +373,6 @@ export default class Pol3Actor extends Actor {
     return idx !== -1 ? resultArray[idx] - upperBonus : 6;
   }
 
-  rollAction(actionId, actionType) {
-    const data = this.system;
-
-    switch (actionType) {
-      case 'attribute':
-        return this.#rollAttribute(actionId, data);
-      case 'skill':
-        console.log('Polaris | Skill');
-        break;
-    }
-  }
-
-  // TODO: check if this is necessary
-  #rollAttribute(actionId, data) {
-    // Test if attributeId is an attribute or another value
-    const regex = /^[A-Z]{3}$/;
-    const isPrimaryAttribute = regex.test(actionId);
-    return isPrimaryAttribute ? data.attributes[actionId].total : data[actionId].value;
-  }
-
   /**
    * Helper to capitalize the first letter of a string.
    * @param {string} str - The string to capitalize.
@@ -401,7 +380,10 @@ export default class Pol3Actor extends Actor {
    */
   _capitalize(str) {
     if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return str
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .replace(/[-_ ]+([a-zA-Z0-9])/g, (_, match) => match.toUpperCase())
+      .replace(/^([a-z])/, (_, match) => match.toUpperCase());
   }
 
   /**
