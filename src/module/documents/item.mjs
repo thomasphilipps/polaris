@@ -1,3 +1,5 @@
+import * as CONFIG from '../config/config.mjs';
+
 export default class Pol3Item extends Item {
   get hasActor() {
     return this.isOwned && this.actor !== null && this.actor !== undefined;
@@ -11,7 +13,6 @@ export default class Pol3Item extends Item {
     //Sets the reference string
     this._setBookReferenceString(itemData);
 
-
     switch (this.type) {
       case 'skill':
         this._prepareSkillData(itemData, actorData);
@@ -21,6 +22,11 @@ export default class Pol3Item extends Item {
       case 'weapon':
         this._prepareTags(itemData, CONFIG.POL3.WEAPON.BURST);
         this._prepareWeaponData(itemData, actorData);
+        break;
+      case 'armor':
+        this._prepareTags(itemData, CONFIG.POL3.ARMOR.TYPE);
+        this._prepareArmorData(itemData, actorData);
+        break;
     }
     return super.prepareBaseData();
   }
@@ -130,6 +136,10 @@ export default class Pol3Item extends Item {
   _prepareWeaponData(itemData, actorData) {
     itemData.isRanged = itemData.category === 'ranged';
     itemData.isMelee = itemData.category === 'melee';
+  }
+
+  _prepareArmorData(itemData, actorData) {
+    itemData.isShield = itemData.category === 'shield';
   }
 
   async roll() {

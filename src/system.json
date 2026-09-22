@@ -17,12 +17,8 @@
       "discord": "loahn_68"
     }
   ],
-  "esmodules": [
-    "polaris.mjs"
-  ],
-  "styles": [
-    "polaris.css"
-  ],
+  "esmodules": ["polaris.mjs"],
+  "styles": ["polaris.css"],
   "packs": [
     {
       "name": "skills",
@@ -35,7 +31,8 @@
   "documentTypes": {
     "Item": {
       "weapon": {},
-      "skill": {}
+      "skill": {},
+      "armor": {}
     },
     "Actor": {
       "hero": {}

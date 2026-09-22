@@ -21,6 +21,7 @@ Hooks.once('init', async function () {
   CONFIG.Item.dataModels = {
     skill: models.Pol3Skill,
     weapon: models.Pol3Weapon,
+    armor: models.Pol3Armor,
   };
 
   CONFIG.Actor.documentClass = documents.Pol3Actor;
@@ -65,6 +66,17 @@ Hooks.once('init', async function () {
       types: ['weapon'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Weapon',
+    }
+  );
+
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(
+    Item,
+    'polaris',
+    applications.Pol3ArmorSheet,
+    {
+      types: ['armor'],
+      makeDefault: true,
+      label: 'POL3.SHEETS.GENERAL.Armor',
     }
   );
 
