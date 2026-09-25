@@ -1,13 +1,20 @@
 import { POL3 } from '../../../config/config.mjs';
 import { taskCheck } from '../../../dice/task-check.mjs';
+import {
+  datasetOf,
+  toPascalCase,
+  groupItemsByField,
+  openConfigDialog,
+} from '../../../utils/sheet-utils.mjs';
 
 const { api, sheets } = foundry.applications;
 
-/**
- * Pol3BaseActorSheet class that extends Foundry's ActorSheetV2 with Polaris-specific logic.
- */
+/*-------------------------------------------------------------------------------------------*/
+/* Pol3BaseActorSheet class that extends Foundry's ActorSheetV2 with Polaris-specific logic. */
+/*-------------------------------------------------------------------------------------------*/
+
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
-  sheets.ActorSheetV2
+  sheets.ActorSheetV2,
 ) {
   static DEFAULT_OPTIONS = {
     classes: ['polaris', 'sheet', 'actor'],
@@ -90,10 +97,11 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   };
 
   /* -------------------------------------------- */
-  /*  Rendering                                    */
+  /*  Rendering                                   */
 
   /* -------------------------------------------- */
 
+  /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
 
@@ -108,6 +116,12 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
+  /**
+   * Prepares the complete rendering context passed to the sheet’s Handlebars templates.
+   * @override
+   * @param {object} options
+   * @returns {Promise<object>}
+   */
   async _prepareContext(options) {
     const tabGroups = this._getTabs();
 
@@ -139,6 +153,11 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     this.PARTS.description.template = `systems/polaris/templates/sheets/actors/${actor.type}-description.hbs`;
   }
 
+  /**
+   * Generates the tab layout (active, CSS classes) based on the user type
+   * and the document’s permission level (limited or unrestricted).
+   * @returns {Record<string, Record<string, object>>}
+   */
   _getTabs() {
     const tabs = {};
     const isGM = game.user.isGM;
@@ -160,10 +179,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /* -------------------------------------------- */
-  /*  Context preparation                          */
+  /*  Context preparation                         */
 
   /* -------------------------------------------- */
 
+  /**
+   * Adds content to the three text fields in the description (GM notes, public, private).
+   * @returns {Promise<{GMNotes: string, public: string, secret: string}>}
+   */
   async #prepareDescription() {
     const description = this.document.system.description;
     const context = { relativeTo: this.document, secrets: this.document.isOwner };
@@ -179,6 +202,10 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     return { GMNotes, public: publicText, secret };
   }
 
+  /**
+   * Sets the main attributes (total value, display order).
+   * @returns {object[]}
+   */
   #prepareAttributes() {
     const data = this.actor.system.attributes;
     return Object.values(POL3.ATTRIBUTE)
@@ -186,11 +213,19 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
       .sort((a, b) => a.order - b.order);
   }
 
+  /**
+   * Sets the variable attributes (chance and base initiative).
+   * @returns {{baseLuck: number, baseInitiative: number}}
+   */
   #prepareVariableAttributes() {
     const { baseLuck, baseInitiative } = this.actor.system;
     return { baseLuck, baseInitiative };
   }
 
+  /**
+   * resets the calculated secondary attributes (thresholds, resistances, reaction, etc.).
+   * @returns {object}
+   */
   #prepareSecondaryAttributes() {
     const {
       stunThreshold,
@@ -214,26 +249,36 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     };
   }
 
+  /**
+   * Sets the actor’s movement speeds.
+   * @returns {{groundSpeed: number, swimSpeed: number}}
+   */
   #prepareSpeeds() {
     const { groundSpeed, swimSpeed } = this.actor.system;
     return { groundSpeed, swimSpeed };
   }
 
+  /**
+   * PPrepares all the sections of grouped items displayed on the sheet (skills,
+   * weapons, armour, etc.). Each section delegates to a protected method `_prepareXxx`,
+   * which can be overridden by subclasses.
+   * @returns {Record<string, {label: string, itemList: Item[]}[]>}
+   */
   #prepareItems() {
     return {
       skills: this._prepareSkills(),
       weapons: this._prepareWeapons(),
+      armors: this._prepareArmors(),
     };
   }
 
+  /**
+   * Prepares the injury zones and counters for display (ticked/unticked boxes
+   * by severity, by zone).
+   * @returns {{zones: object, zoneKeys: string[], severityKeys: object[], summary: object}}
+   */
   #prepareWounds() {
     const { wounds, woundsSummary } = this.actor.system;
-
-    const toPascalCase = str =>
-      str
-        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-        .replace(/[-_ ]+([a-zA-Z0-9])/g, (_, match) => match.toUpperCase())
-        .replace(/^([a-z])/, (_, match) => match.toUpperCase());
 
     const zoneKeys = Object.keys(wounds);
     const rawSeverityKeys = Object.keys(POL3.WOUND.BASE_MAX);
@@ -251,7 +296,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
         const arrayLength = effectiveMax(severityKey);
         severitySquares[severityKey] = Array.from(
           { length: arrayLength },
-          (_, i) => i < severityValue
+          (_, i) => i < severityValue,
         );
       }
       zones[zoneKey] = {
@@ -264,98 +309,78 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Group an actor's embedded items of a given type by category, then by name,
-   * sorted alphabetically at every level.
-   * @param {string} itemType    - The item type to filter (e.g. 'skill', 'weapon')
-   * @param {string} i18nPrefix  - The i18n key prefix for category labels
+   * Groups the actor’s skills by category. Can be overridden by a subclass.
    * @returns {{label: string, itemList: Item[]}[]}
    */
-  #prepareItemsByCategory(itemType, i18nPrefix) {
-    const byCategory = Map.groupBy(
-      this.actor.items.filter(i => i.type === itemType),
-      item => item.system.category ?? ''
-    );
-
-    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
-
-    return [...byCategory.entries()]
-      .map(([category, items]) => ({
-        label: game.i18n.localize(`${i18nPrefix}.${capitalize(category)}`),
-        itemList: [...items].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '')),
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label));
-  }
-
   _prepareSkills() {
-    return this.#prepareItemsByCategory('skill', 'POL3.SKILL.Category').map(
-      ({ label, itemList }) => ({ label, skillList: itemList })
-    );
+    return groupItemsByField(this.actor.items, 'skill', 'POL3.SKILL.Category');
   }
 
+  /**
+   * Groups the actor’s weapons by category (ranged/melee/creatureAttack). Can be overridden.
+   * @returns {{label: string, itemList: Item[]}[]}
+   */
   _prepareWeapons() {
-    return this.#prepareItemsByCategory('weapon', 'POL3.WEAPON.Category').map(
-      ({ label, itemList }) => ({ label, weaponList: itemList })
-    );
+    return groupItemsByField(this.actor.items, 'weapon', 'POL3.WEAPON.Category');
+  }
+
+  /**
+   * Groups the actor’s armour by type (simple/personalField/sphericalField/shield).
+   * Note: Groups by `system.type` rather than `system.category`, as the latter represents
+   * the protection category (A/B/C/D) rather than a thematic grouping. Overridable.
+   * @returns {{label: string, itemList: Item[]}[]}
+   */
+  _prepareArmors() {
+    return groupItemsByField(this.actor.items, 'armor', 'POL3.ARMOR.Type', 'type');
   }
 
   /* -------------------------------------------- */
-  /*  Action handlers                              */
+  /*  Action handlers                             */
 
   /* -------------------------------------------- */
 
   /**
-   * Resolve the dataset of the closest ancestor matching a selector.
+   * Handler for configuring a skill (currently: mastery) via a dialogue box.
+   * @param {PointerEvent} event
    * @param {HTMLElement} target
-   * @param {string} selector
-   * @returns {DOMStringMap|null}
    */
-  static #datasetOf(target, selector) {
-    return target.closest(selector)?.dataset ?? null;
-  }
-
   static async #onConfigureSkill(event, target) {
-    const { skillId } = Pol3BaseActorSheet.#datasetOf(target, '.item');
-
-    const skill = skillId ? this.actor.items.filter(s => s._id === skillId)[0] : null;
+    const { itemId } = datasetOf(target, '.item') ?? {};
+    const skill = itemId ? this.actor.items.get(itemId) : null;
     if (!skill) return;
 
-    const saveLabel = game.i18n.localize('POL3.DIALOG.SaveButton');
-    const label = skill.name;
-    const title = game.i18n.format('POL3.ATTRIBUTE.Configure', { attributeName: label });
+    const title = game.i18n.format('POL3.DIALOG.ConfigureTitle', { name: skill.name });
 
-    const skillConfigs = await foundry.applications.api.DialogV2.input({
-      window: { title, icon: 'fas fa-edit' },
-      content: await foundry.applications.handlebars.renderTemplate(
-        'systems/polaris/templates/dialogs/skill-dialog.hbs',
-        { skill }
-      ),
-      ok: { label: saveLabel, icon: 'fas fa-save' },
+    const skillConfigs = await openConfigDialog({
+      template: 'systems/polaris/templates/dialogs/skill-dialog.hbs',
+      templateData: { skill },
+      title,
     });
     if (!skillConfigs) return;
 
-    console.log('Polaris | skillConfig: ', skillConfigs);
-
-    await this.actor.update({
-      [`items.${skillId}.system.mastery`]: skillConfigs.mastery ?? skill.system.mastery,
+    await skill.update({
+      'system.mastery': skillConfigs.mastery ?? skill.system.mastery,
     });
   }
 
+  /**
+   * Handler for configuring an attribute (base, genetic modifier, skill points)
+   * via a dialogue box.
+   * @param {PointerEvent} event
+   * @param {HTMLElement} target
+   */
   static async #onConfigureAttribute(event, target) {
-    const { attributeId } = Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
+    const { attributeId } = datasetOf(target, '.attribute') ?? {};
     const attribute = attributeId ? this.actor.system.attributes[attributeId] : null;
     if (!attribute) return;
 
-    const saveLabel = game.i18n.localize('POL3.DIALOG.SaveButton');
     const label = game.i18n.localize(POL3.ATTRIBUTE[attributeId]?.label);
-    const title = game.i18n.format('POL3.ATTRIBUTE.Configure', { attributeName: label });
+    const title = game.i18n.format('POL3.DIALOG.ConfigureTitle', { name: label });
 
-    const attributeConfigs = await foundry.applications.api.DialogV2.input({
-      window: { title, icon: 'fas fa-edit' },
-      content: await foundry.applications.handlebars.renderTemplate(
-        'systems/polaris/templates/dialogs/attribute-dialog.hbs',
-        { attribute }
-      ),
-      ok: { label: saveLabel, icon: 'fas fa-save' },
+    const attributeConfigs = await openConfigDialog({
+      template: 'systems/polaris/templates/dialogs/attribute-dialog.hbs',
+      templateData: { attribute },
+      title,
     });
     if (!attributeConfigs) return;
 
@@ -374,9 +399,9 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async #onTestAttribute(event, target) {
     const { attributeId, attributeName, attributeValue } =
-      Pol3BaseActorSheet.#datasetOf(target, '.attribute') ?? {};
+    datasetOf(target, '.attribute') ?? {};
     if (!attributeId) return;
-    console.log(`POL3.ATTRIBUTE[${attributeId}]: ${attributeName}`);
+
     const valueCrit = Math.round(parseInt(attributeValue) / 2);
     await taskCheck({
       rollLabel: attributeName,
@@ -391,12 +416,12 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    */
   static async #onDeleteItem(event, target) {
-    const { itemId, itemName } = Pol3BaseActorSheet.#datasetOf(target, '.item') ?? {};
+    const { itemId, itemName } = datasetOf(target, '.item') ?? {};
     if (!itemId) return;
 
     const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: 'Delete Item', icon: 'fas fa-trash' },
-      content: `Are you sure you want to delete ${itemName}?`,
+      window: { title: game.i18n.localize('POL3.DIALOG.DeleteItemTitle'), icon: 'fas fa-trash' },
+      content: game.i18n.format('POL3.DIALOG.DeleteItemConfirm', { itemName }),
       rejectLabel: false,
       modal: true,
     });
@@ -411,7 +436,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    */
   static async #onRollItem(event, target) {
-    const { itemId } = Pol3BaseActorSheet.#datasetOf(target, '.item') ?? {};
+    const { itemId } = datasetOf(target, '.item') ?? {};
     if (!itemId) return;
     const item = this.actor.items.get(itemId);
     if (!item) return;
@@ -425,7 +450,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    */
   static async #onToggleEquipped(event, target) {
-    const itemId = target.closest('.item')?.dataset.itemId;
+    const { itemId } = datasetOf(target, '.item') ?? {};
     const item = itemId ? this.actor.items.get(itemId) : null;
     if (!item) return;
 
@@ -435,12 +460,12 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * Handler for applying a wound of a given severity to a zone.
+   * Handler for applying a wound of given severity to a zone.
    * @param {PointerEvent} event
    * @param {HTMLElement} target
    */
   static async #onApplyWound(event, target) {
-    const { zone, severity } = Pol3BaseActorSheet.#datasetOf(target, '[data-zone]') ?? {};
+    const { zone, severity } = datasetOf(target, '[data-zone]') ?? {};
     if (!zone || !severity) return;
 
     await this.actor.applyWound(zone, severity);
@@ -452,14 +477,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    */
   static async #onHealWound(event, target) {
-    const { zone } = Pol3BaseActorSheet.#datasetOf(target, '[data-zone]') ?? {};
+    const { zone } = datasetOf(target, '[data-zone]') ?? {};
     if (!zone) return;
 
     await this.actor.healWound(zone);
   }
 
   /* -------------------------------------------- */
-  /*  Drag & drop                                  */
+  /*  Drag & drop                                 */
 
   /* -------------------------------------------- */
 
@@ -476,9 +501,13 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     }).bind(this.element);
   }
 
-  async _onDragStart(event) {}
+  // Callbacks required by Foundry’s DragDrop API, even without any associated logic:
+  // Leaving them empty rather than removing them would break the binding above.
+  async _onDragStart(event) {
+  }
 
-  async _onDragOver(event) {}
+  async _onDragOver(event) {
+  }
 
   /**
    * An event that occurs when data is dropped into a drop target.
@@ -519,9 +548,17 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     }
   }
 
+  /**
+   * Handle dropping an Item onto the sheet: refuse if not owner, refuse duplicate skills,
+   * otherwise create the embedded item (keeping its id if it isn't already present).
+   * @param {DragEvent} event
+   * @param {Item} item
+   * @returns {Promise<boolean|void>}
+   * @protected
+   */
   async _onDropItem(event, item) {
     if (!this.actor.isOwner) {
-      ui.notifications.warn(game.i18n.localize('POL3.WARNIING.NotOwner'));
+      ui.notifications.warn(game.i18n.localize('POL3.WARNING.NotOwner'));
       return false;
     }
 

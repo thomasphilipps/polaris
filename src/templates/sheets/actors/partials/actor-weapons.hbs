@@ -2,7 +2,7 @@
   {{#each items.weapons as |category|}}
     {{category.label}}
     <ul>
-      {{#each category.weaponList as |weapon|}}
+      {{#each category.itemList as |weapon|}}
         <li class="item flexrow" data-item-id="{{weapon.id}}" data-item-name="{{weapon.name}}">
           <div class="label flex1">{{weapon.name}}</div>
           <div class="weapon-attributes">
