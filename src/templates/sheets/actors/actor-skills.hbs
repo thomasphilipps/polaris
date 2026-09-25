@@ -8,7 +8,7 @@
       <ul>
         {{#each category.skillList as |skill|}}
           <li class="item flexrow"
-              data-item-id="{{skill._id}}">
+              data-skill-id="{{skill._id}}">
             <!--              data-item-name="{{skill.name}}"-->
             <!--              data-item-value="{{skill.system.globalLevel}}"-->
             <!--              data-item-mastery="{{skill.system.mastery}}"-->
@@ -21,6 +21,9 @@
               <span>{{skill.system.baseLevel}}</span>
               <span>{{skill.system.mastery}}</span>
               <span>{{skill.system.globalLevel}}</span>
+              <span>
+                <a class="button icon fa-solid fa-gears" data-action="configureSkill"></a>
+              </span>
             </div>
             <div class="action-button flexrow">
               <a class="button icon fa-solid fa-dice-d20" data-action="rollItem"

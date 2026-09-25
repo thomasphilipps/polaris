@@ -4,4 +4,16 @@
   <fieldset class="item-type"{{fieldDisabled}}>
     {{formField fields.type value=source.system.type localize=true}}
   </fieldset>
+  <fieldset class="item-sub-fieldset" {{fieldDisabled}}>
+    <legend>{{localize "POL3.ARMOR.SHEET.ProtectedZones"}}</legend>
+    {{formField fields.tags value=source.system.tags localize=true widget=tagsWidget}}
+  </fieldset>
+  <fieldset class="item-sub-fieldset" {{fieldDisabled}}>
+    {{formField fields.category value=source.system.category localize=true}}
+  </fieldset>
+  <fieldset class="item-sub-fieldset" {{fieldDisabled}}>
+    <legend>{{localize "POL3.ARMOR.SHEET.ProtectionBonuses"}}</legend>
+    {{formField fields.baseProtection value=source.system.baseProtection localize=true}}
+    {{formField fields.shockProtection value=source.system.shockProtection localize=true}}
+  </fieldset>
 </section>

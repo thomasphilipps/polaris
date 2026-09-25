@@ -18,6 +18,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     },
     actions: {
       configureAttribute: Pol3BaseActorSheet.#onConfigureAttribute,
+      configureSkill: Pol3BaseActorSheet.#onConfigureSkill,
       testAttribute: Pol3BaseActorSheet.#onTestAttribute,
       deleteItem: Pol3BaseActorSheet.#onDeleteItem,
       rollItem: Pol3BaseActorSheet.#onRollItem,
@@ -310,6 +311,33 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    */
   static #datasetOf(target, selector) {
     return target.closest(selector)?.dataset ?? null;
+  }
+
+  static async #onConfigureSkill(event, target) {
+    const { skillId } = Pol3BaseActorSheet.#datasetOf(target, '.item');
+
+    const skill = skillId ? this.actor.items.filter(s => s._id === skillId)[0] : null;
+    if (!skill) return;
+
+    const saveLabel = game.i18n.localize('POL3.DIALOG.SaveButton');
+    const label = skill.name;
+    const title = game.i18n.format('POL3.ATTRIBUTE.Configure', { attributeName: label });
+
+    const skillConfigs = await foundry.applications.api.DialogV2.input({
+      window: { title, icon: 'fas fa-edit' },
+      content: await foundry.applications.handlebars.renderTemplate(
+        'systems/polaris/templates/dialogs/skill-dialog.hbs',
+        { skill }
+      ),
+      ok: { label: saveLabel, icon: 'fas fa-save' },
+    });
+    if (!skillConfigs) return;
+
+    console.log('Polaris | skillConfig: ', skillConfigs);
+
+    await this.actor.update({
+      [`items.${skillId}.system.mastery`]: skillConfigs.mastery ?? skill.system.mastery,
+    });
   }
 
   static async #onConfigureAttribute(event, target) {

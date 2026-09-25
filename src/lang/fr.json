@@ -41,6 +41,9 @@
     "ARMOR": {
       "Protection": "Protection",
       "ShockProtection": "Protection contre les chocs",
+      "SHEET": {
+        "ProtectedZones": "Zones protégées"
+      },
       "TYPE": {
         "PersonalField": "Champ personnel",
         "Shield": "Bouclier",
