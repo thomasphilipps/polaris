@@ -1,0 +1,35 @@
+folder: bNbZmWj08BeSXpAF
+name: Escalade
+type: skill
+_id: XkXkHCrlH0ryMJb9
+img: systems/polaris/assets/icons/physicalAptitude.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    page: 190
+    book: coreRulebook1
+  specialization: ''
+  firstAttribute: FOR
+  secondAttribute: COO
+  category: physicalAptitude
+  tags: []
+  mastery: 0
+effects: []
+sort: 0
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730850361288
+  modifiedTime: 1730850410846
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!items!XkXkHCrlH0ryMJb9'
+

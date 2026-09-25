@@ -1,0 +1,20 @@
+name: Combat (tir)
+sorting: a
+folder: null
+type: Item
+_id: OICydXnwlFLJ86nz
+description: ''
+sort: 0
+color: '#bd10e0'
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730296624972
+  modifiedTime: 1730296697267
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!folders!OICydXnwlFLJ86nz'
+

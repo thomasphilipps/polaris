@@ -4,9 +4,9 @@
   "description": "Système du jeu Polaris 3ème édition par Philippe Tessier, Raphaël Bombayl et François Menneteau, d'après l'univers crée par Philippe Tessier",
   "version": "2.0.0",
   "compatibility": {
-    "minimum": 12,
-    "verified": 12,
-    "maximum": 12
+    "minimum": 14,
+    "verified": "14.367",
+    "maximum": 14
   },
   "url": "https://github.com/thomasphilipps/polaris/",
   "manifest": "",
@@ -19,9 +19,23 @@
   ],
   "esmodules": ["polaris.mjs"],
   "styles": ["polaris.css"],
+  "packs": [
+    {
+      "name": "skills",
+      "label": "Compétences",
+      "path": "packs/skills",
+      "type": "Item"
+    }
+  ],
+  "packFolders": [],
   "documentTypes": {
     "Item": {
-      "weapon": {}
+      "weapon": {},
+      "skill": {},
+      "armor": {}
+    },
+    "Actor": {
+      "hero": {}
     }
   },
   "languages": [

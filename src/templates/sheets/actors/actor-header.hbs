@@ -1,0 +1,21 @@
+<section class="sheet-header">
+  <div class="flexcol">
+    <div class="flexrow">
+      <img
+        src="{{source.img}}"
+        data-edit='img'
+        title="{{source.name}}"
+        height="100"
+        width="100"
+        alt="{{source.name}}"
+      />
+      <h1>
+        {{#if isEditable}}
+          {{formInput actor.schema.fields.name value=source.name placeholder='Actor Name'}}
+        {{else}}
+          {{actor.name}}
+        {{/if}}
+      </h1>
+    </div>
+  </div>
+</section>

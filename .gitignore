@@ -6,3 +6,22 @@ dist/
 
 # Environment variables
 .env.local
+
+# IDE files
+.vscode/
+.idea/
+.run/
+.junie/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Task Runner files
+gulpfile.js
+
+# FoundryVTT
+packs/
+
+# Rollup
+rollup.config.mjs

@@ -1,0 +1,36 @@
+folder: gpwVSORLuzrZSwts
+name: Analyse empathique
+type: skill
+_id: BX56qvrUIHPpngFE
+img: systems/polaris/assets/icons/social.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    page: 183
+    book: coreRulebook1
+  specialization: ''
+  firstAttribute: ADA
+  secondAttribute: VOL
+  category: social
+  tags:
+    - isDifficult
+  mastery: 0
+effects: []
+sort: 0
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730850652898
+  modifiedTime: 1730850808592
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!items!BX56qvrUIHPpngFE'
+

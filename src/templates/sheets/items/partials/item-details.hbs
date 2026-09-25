@@ -1,0 +1,11 @@
+<fieldset class="item-details"  {{fieldDisabled}}>
+  <legend>{{localize "POL3.SHEETS.GENERAL.Details"}}</legend>
+  {{formField fields.price value=source.system.price localize=true classes="slim"}}
+  {{formField fields.weight value=source.system.weight localize=true classes="slim"}}
+
+  {{formField fields.availability value=source.system.availability localize=true classes="slim"}}
+  {{formField fields.blackMarketAvailability value=source.system.blackMarketAvailability
+              localize=true classes="slim"}}
+  {{formField fields.manufacturer value=source.system.manufacturer localize=true}}
+
+</fieldset>

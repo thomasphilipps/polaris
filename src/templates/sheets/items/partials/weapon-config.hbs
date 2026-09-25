@@ -1,0 +1,66 @@
+<section
+  class="tab sheet-body  flexcol  {{tabs.config.cssClass}}"
+  data-tab="{{tabs.config.id}}"
+  data-group="{{tabs.config.group}}"
+>
+  <fieldset class="item-category" {{fieldDisabled}}>
+    {{formField fields.category value=source.system.category localize=true}}
+    {{formField fields.linkedSkill value=source.system.linkedSkill choices=linkedSkillOptions
+                localize=true}}
+    {{#if item.system.isRanged}}
+      {{formField fields.subcategory value=source.system.subcategory localize=true}}
+    {{/if}}
+  </fieldset>
+  <fieldset class="item-weapon-characteristics" {{fieldDisabled}}>
+    <legend>{{localize "POL3.SHEETS.GENERAL.Characteristics"}}</legend>
+    {{formField fields.baseDamage value=source.system.baseDamage localize=true}}
+    {{#if item.system.isMelee}}
+      {{formField fields.chocDamage value=source.system.chocDamage localize=true}}
+      {{formField fields.penetration value=source.system.penetration localize=true}}
+      {{formField fields.allonge value=source.system.allonge localize=true}}
+    {{/if}}
+    {{#if item.system.isRanged}}
+      <fieldset class="item-sub-fieldset">
+        <legend>{{localize "POL3.WEAPON.SHEET.Range"}}</legend>
+        {{formField
+          fields.hitDistance.fields.close
+          value=source.system.hitDistance.close
+          localize=true
+          classes="slim"
+        }}
+        {{formField
+          fields.hitDistance.fields.short
+          value=source.system.hitDistance.short
+          localize=true
+          classes="slim"
+        }}
+        {{formField
+          fields.hitDistance.fields.medium
+          value=source.system.hitDistance.medium
+          localize=true
+          classes="slim"
+        }}
+        {{formField
+          fields.hitDistance.fields.long
+          value=source.system.hitDistance.long
+          localize=true
+          classes="slim"
+        }}
+        {{formField
+          fields.hitDistance.fields.extreme
+          value=source.system.hitDistance.extreme
+          localize=true
+          classes="slim"
+        }}
+      </fieldset>
+      <fieldset class="item-sub-fieldset" {{fieldDisabled}}>
+        <legend>{{localize "POL3.WEAPON.SHEET.BurstMode"}}</legend>
+        {{formField fields.tags value=source.system.tags localize=true widget=tagsWidget}}
+      </fieldset>
+    {{/if}}
+    {{formField fields.minimalStrength value=source.system.minimalStrength localize=true}}
+    {{formField fields.initiativeModifier value=source.system.initiativeModifier localize=true}}
+
+  </fieldset>
+  {{> systems/polaris/templates/sheets/items/partials/item-details.hbs}}
+</section>

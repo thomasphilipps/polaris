@@ -1,0 +1,14 @@
+<section
+  class="tab flexcol {{tabs.wounds.cssClass}}"
+  data-tab="{{tabs.wounds.id}}"
+  data-group="{{tabs.wounds.group}}">
+  <div class="wounds-summary flexrow">
+    <span>{{localize 'POL3.WOUND.Malus'}}: {{wounds.summary.malus}}</span>
+    {{#if wounds.summary.isDead}}
+      <span class="wounds-dead">{{localize 'POL3.WOUND.Dead'}}</span>
+    {{/if}}
+  </div>
+  <div>
+    {{> "systems/polaris/templates/sheets/actors/partials/actor-wound-zone.hbs"}}
+  </div>
+</section>

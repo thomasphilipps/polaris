@@ -1,0 +1,38 @@
+<section>
+  {{#each items.weapons as |category|}}
+    {{category.label}}
+    <ul>
+      {{#each category.itemList as |weapon|}}
+        <li class="item flexrow" data-item-id="{{weapon.id}}" data-item-name="{{weapon.name}}">
+          <div class="label flex1">{{weapon.name}}</div>
+          <div class="weapon-attributes">
+            <span>{{weapon.system.baseDamage}}</span>
+            <span>{{weapon.system.penetration}}</span>
+            <span>{{weapon.system.chocDamage}}</span>
+            <span>{{weapon.system.minimalStrength}}</span>
+            <span>{{weapon.system.initiativeModifier}}</span>
+            {{#if weapon.system.isRanged}}
+              <span>{{weapon.system.hitDistance.close}}/{{weapon.system.hitDistance.short}}
+                /{{weapon.system.hitDistance.medium}}/{{weapon.system.hitDistance.long}}
+                ({{weapon.system.hitDistance.extreme}})</span>
+              <span>{{weapon.system.tagString}}</span>
+            {{/if}}
+            {{#if weapon.system.isMelee}}
+              <span>{{weapon.system.allonge}}</span>
+            {{/if}}
+          </div>
+          <div>
+            <input type="checkbox" data-action="toggleEquipped" {{checked weapon.system.isEquipped}}
+                   data-tooltip="{{localize 'POL3.SHEETS.DETAILS.IsEquipped'}}">
+          </div>
+          <div class="action-button flexrow">
+            <a class="button icon fa-solid fa-dice-d20" data-action="rollItem"
+               data-tooltip="Roll {{weapon.name}}"></a>
+            <a class="button icon fa-solid fa-trash" data-action="deleteItem"
+               data-tooltip="Delete {{weapon.name}}"></a>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  {{/each}}
+</section>

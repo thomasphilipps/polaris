@@ -1,0 +1,47 @@
+<div class="grid-table wound-table" style="--cols: {{wounds.zoneKeys.length}}">
+  <div class="grid-table-row grid-table-header">
+    <div class="grid-table-cell grid-table-corner"></div>
+    {{#each wounds.zones as |zone zoneKey|}}
+      <!-- Utilisation directe de zone.label -->
+      <div class="grid-table-cell {{#if zone.isDestroyed}} is-disabled-look {{/if}}">
+        {{localize zone.label}}
+      </div>
+    {{/each}}
+  </div>
+
+  {{#each wounds.severityKeys as |sev|}}
+    <div class="grid-table-row">
+      <!-- Utilisation directe de sev.label -->
+      <div class="grid-table-cell grid-table-rowlabel">
+        {{localize sev.label}}
+      </div>
+
+      {{#each ../wounds.zones as |zone zoneKey|}}
+        <div class="grid-table-cell wound-counter {{#if zone.isDestroyed}} is-disabled-look {{/if}}"
+             data-zone="{{zoneKey}}"
+             data-severity="{{sev.key}}"
+             {{#unless zone.isDestroyed }}data-action="applyWound"{{/unless}}>
+          {{#each (lookup zone.severitySquares sev.key) as |filled|}}
+            {{#if filled}}
+              <i class="fa-solid fa-square"></i>
+            {{else}}
+              <i class="fa-regular fa-square"></i>
+            {{/if}}
+          {{/each}}
+        </div>
+      {{/each}}
+    </div>
+  {{/each}}
+
+  <div class="grid-table-row">
+    <div class="grid-table-cell grid-table-corner"></div>
+    {{#each wounds.zones as |zone zoneKey|}}
+      <div class="grid-table-cell action-button">
+        <a class="button icon fa-solid fa-heart"
+           data-action="healWound"
+           data-zone="{{zoneKey}}"
+           data-tooltip="{{localize 'POL3.WOUND.Heal'}}"></a>
+      </div>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,20 @@
+name: Aptitudes physiques
+sorting: a
+folder: null
+type: Item
+_id: bNbZmWj08BeSXpAF
+description: ''
+sort: 0
+color: '#3c94bc'
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730585575287
+  modifiedTime: 1730585662025
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!folders!bNbZmWj08BeSXpAF'
+

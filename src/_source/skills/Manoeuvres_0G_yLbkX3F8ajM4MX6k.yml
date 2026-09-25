@@ -1,0 +1,36 @@
+folder: bNbZmWj08BeSXpAF
+name: Manoeuvres 0G
+type: skill
+_id: yLbkX3F8ajM4MX6k
+img: systems/polaris/assets/icons/physicalAptitude.png
+system:
+  description:
+    public: ''
+    secret: ''
+  reference:
+    page: 194
+    book: coreRulebook1
+  specialization: ''
+  firstAttribute: COO
+  secondAttribute: ADA
+  category: physicalAptitude
+  tags:
+    - limitsOtherSkills
+  mastery: 0
+effects: []
+sort: 0
+ownership:
+  default: 0
+  LPR9EurxvkIFgTTd: 3
+flags: {}
+_stats:
+  compendiumSource: null
+  duplicateSource: null
+  coreVersion: '12.331'
+  systemId: polaris
+  systemVersion: 2.0.0
+  createdTime: 1730850430002
+  modifiedTime: 1730850478044
+  lastModifiedBy: LPR9EurxvkIFgTTd
+_key: '!items!yLbkX3F8ajM4MX6k'
+

@@ -1,0 +1,34 @@
+<section
+  class="tab flexcol {{tabs.skills.cssClass}}"
+  data-tab="{{tabs.skills.id}}"
+  data-group="{{tabs.skills.group}}">
+  <ul>
+    {{#each items.skills as |category|}}
+      {{category.label}}
+      <ul>
+        {{#each category.itemList as |skill|}}
+          <li class="item flexrow"
+              data-item-id="{{skill._id}}"
+              data-item-name="{{skill.name}}">
+            <div class="label flex1">{{skill.name}}</div>
+            <div class="skill-attributes">
+              <span>{{skill.system.infoString}}</span>
+            </div>
+            <div class="skill-levels">
+              <span>{{skill.system.baseLevel}}</span>
+              <span>{{skill.system.mastery}}</span>
+              <span>{{skill.system.globalLevel}}</span>
+            </div>
+            <div class="action-button flexrow">
+              <a class="button icon fa-solid fa-gears" data-action="configureSkill"></a>
+              <a class="button icon fa-solid fa-dice-d20" data-action="rollItem"
+                 data-tooltip="Roll {{skill.name}}"></a>
+              <a class="button icon fa-solid fa-trash" data-action="deleteItem"
+                 data-tooltip="Delete {{skill.name}}"></a>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    {{/each}}
+  </ul>
+</section>
