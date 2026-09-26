@@ -87,9 +87,10 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
     }
 
     let difficulty = 0;
+    let target = null;
 
     if (this.category === 'ranged') {
-      const target = getSingleTarget();
+      target = getSingleTarget();
       if (!target) return null;
 
       const attackerToken = getActorToken(actor);
@@ -104,20 +105,16 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
       }
 
       difficulty += CONFIG.POL3.WEAPON.RANGE[rangeBand].modifier;
-
-      console.log('POLARIS | Range check:', {
-        distance,
-        rangeBand,
-        modifier: CONFIG.POL3.WEAPON.RANGE[rangeBand]?.modifier,
-      });
     }
-
-
+    
     return {
       rollLabel: competence.label,
       actionValue: competence.value,
       valueCrit: competence.valueCrit,
       difficulty,
+      isAttack: true,
+      weapon: this.parent,
+      target,
     };
   }
 }

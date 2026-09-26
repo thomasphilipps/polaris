@@ -53,3 +53,16 @@ export function buildDefaultWounds(creatureType) {
     ]),
   );
 }
+
+/**
+ * Damage thresholds mapping final physical damage to wound severity.
+ * 1-4 points of final damage: no wound at all (below the lightest threshold).
+ */
+export const SEVERITY_THRESHOLDS = [
+  { threshold: 5, severity: 'light' },
+  { threshold: 10, severity: 'medium' },
+  { threshold: 15, severity: 'severe' },
+  { threshold: 20, severity: 'critical' },
+  { threshold: 25, severity: 'deadly' },
+  { threshold: 30, severity: 'destroyed' },
+];

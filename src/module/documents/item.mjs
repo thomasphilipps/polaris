@@ -1,4 +1,5 @@
 import * as CONFIG from '../config/config.mjs';
+import { taskCheck } from '../dice/task-check.mjs';
 
 export default class Pol3Item extends Item {
   get hasActor() {
@@ -151,7 +152,6 @@ export default class Pol3Item extends Item {
     const rollData = this.system.getRollData();
     if (!rollData) return;
 
-    const { taskCheck } = await import('../dice/task-check.mjs');
     return taskCheck(rollData);
   }
 }
