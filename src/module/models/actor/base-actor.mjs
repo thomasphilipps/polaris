@@ -54,24 +54,26 @@ export function heroFields() {
 export class Pol3ActorDataModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
-      wounds: new fields.SchemaField(
-        Object.fromEntries(
-          Object.entries(POL3.WOUND.ZONES()).map(([zoneKey, cfg]) => [
-            zoneKey,
-            new fields.SchemaField({
-              resistant: new fields.BooleanField({ initial: cfg.resistant }),
-              lethal: new fields.BooleanField({ initial: cfg.lethal }),
-              counters: new fields.SchemaField(
-                Object.fromEntries(
-                  POL3.WOUND.SEVERITIES.map(s => [
-                    s,
-                    new fields.NumberField({ initial: 0, min: 0 }),
-                  ]),
-                ),
-              ),
-            }),
-          ]),
-        ),
+      bodyTemplate: new fields.StringField({
+        label: 'POL3.SHEETS.GENERAL.BodyTemplate',
+        required: true,
+        choices: POL3.BODY_TEMPLATE.TYPE,
+        initial: 'humanoid',
+      }),
+      // Dynamic mapping: keys are zone names (vary per bodyTemplate), each validated
+      // against the same per-zone schema. Populated/synced in Pol3Actor#_preCreate
+      // and #_preUpdate rather than here, since defineSchema() can't know an
+      // instance's bodyTemplate value (it runs once per class, not per actor).
+      wounds: new fields.TypedObjectField(
+        new fields.SchemaField({
+          resistant: new fields.BooleanField(),
+          lethal: new fields.BooleanField(),
+          counters: new fields.SchemaField(
+            Object.fromEntries(
+              POL3.WOUND.SEVERITIES.map(s => [s, new fields.NumberField({ initial: 0, min: 0 })]),
+            ),
+          ),
+        }),
       ),
       description: new fields.SchemaField({
         public: new fields.HTMLField(),

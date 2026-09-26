@@ -3,6 +3,7 @@ import * as SKILL from './item/skills.mjs';
 import * as WEAPON from './item/weapons.mjs';
 import * as WOUND from './actor/wounds.mjs';
 import * as ARMOR from './item/armor.mjs';
+import * as BODY_TEMPLATE from './actor/bodyTemplates.mjs';
 
 export const POL3 = {
   ATTRIBUTE,
@@ -10,6 +11,7 @@ export const POL3 = {
   WEAPON,
   WOUND,
   ARMOR,
+  BODY_TEMPLATE,
 };
 
 POL3.SUCCESSTABLE = [

@@ -123,6 +123,10 @@
       },
       "Second": "Attribut 2"
     },
+    "BODY_TEMPLATE": {
+      "Humanoid": "Humain",
+      "Fish": "Poisson"
+    },
     "BOOKS": {
       "CoreRulebook1": "Livre de base 1",
       "CoreRulebook2": "Livre de base 2"
@@ -195,6 +199,7 @@
       },
       "GENERAL": {
         "Armor": "Armure",
+        "BodyTemplate": "Modèle corporel",
         "Category": "Catégorie",
         "Characteristics": "Caractéristiques",
         "Details": "Détails",

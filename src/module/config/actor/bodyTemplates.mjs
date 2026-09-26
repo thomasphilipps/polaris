@@ -14,3 +14,9 @@ export const BODY_TEMPLATES = {
     { name: 'finRight', resistant: false, lethal: false, label: 'POL3.ZONE.FinRight' },
   ],
 };
+
+/** Choices for the `bodyTemplate` field on an actor. */
+export const TYPE = {
+  humanoid: { label: 'POL3.BODY_TEMPLATE.Humanoid' },
+  fish: { label: 'POL3.BODY_TEMPLATE.Fish' },
+};

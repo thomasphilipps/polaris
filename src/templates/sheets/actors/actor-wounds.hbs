@@ -2,6 +2,11 @@
   class="tab flexcol {{tabs.wounds.cssClass}}"
   data-tab="{{tabs.wounds.id}}"
   data-group="{{tabs.wounds.group}}">
+  <div class="wound-template">
+    <fieldset class="hero-details" {{fieldDisabled}}>
+      {{formField fields.bodyTemplate value=source.system.bodyTemplate localize=true}}
+    </fieldset>
+  </div>
   <div class="wounds-summary flexrow">
     <span>{{localize 'POL3.WOUND.Malus'}}: {{wounds.summary.malus}}</span>
     {{#if wounds.summary.isDead}}
@@ -9,6 +14,6 @@
     {{/if}}
   </div>
   <div>
-    {{> "systems/polaris/templates/sheets/actors/partials/actor-wound-zone.hbs"}}
+      {{> "systems/polaris/templates/sheets/actors/partials/actor-wound-zone.hbs"}}
   </div>
 </section>

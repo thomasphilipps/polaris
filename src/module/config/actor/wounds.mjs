@@ -32,3 +32,24 @@ export const ZONES = (creatureType = 'humanoid') => {
 
   return Object.fromEntries(templates.map(({ name, ...zone }) => [name, zone]));
 };
+
+/**
+ * Builds a fresh `system.wounds`-shaped object for a given creature type, with
+ * all counters at 0. Used to populate a new actor's wounds, or to add missing
+ * zones when an actor's bodyTemplate changes.
+ * @param {string} creatureType
+ * @returns {object}
+ */
+export function buildDefaultWounds(creatureType) {
+  const zones = ZONES(creatureType);
+  return Object.fromEntries(
+    Object.entries(zones).map(([zoneKey, cfg]) => [
+      zoneKey,
+      {
+        resistant: cfg.resistant,
+        lethal: cfg.lethal,
+        counters: Object.fromEntries(SEVERITIES.map(s => [s, 0])),
+      },
+    ]),
+  );
+}
