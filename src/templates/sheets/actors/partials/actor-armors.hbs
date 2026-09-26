@@ -1,0 +1,21 @@
+<section>
+  {{#each items.armors as |type|}}
+    {{localize type.label}}
+    <ul>
+      {{#each type.itemList as |armor|}}
+        <li class="item flexrow" data-item-id="{{armor.id}}" data-item-name="{{armor.name}}">
+          <div class="label flex1">{{armor.name}}</div>
+          <div class="armor-attributes">
+            <span>{{armor.system.baseProtection}}</span>
+            <span>{{armor.system.shockProtection}}</span>
+            <span>{{armor.system.tagString}}</span>
+          </div>
+          <div>
+            <input type="checkbox" data-action="toggleEquipped" {{checked armor.system.isEquipped}}
+                   data-tooltip="{{localize 'POL3.SHEETS.DETAILS.IsEquipped'}}">
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  {{/each}}
+</section>
