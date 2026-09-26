@@ -1,4 +1,10 @@
 import { Pol3ItemDataModel, itemGlobalFields, specialNameOption } from './base-item.mjs';
+import {
+  getSingleTarget,
+  getActorToken,
+  measureTokenDistance,
+  getRangeBand,
+} from '../../utils/combat-utils.mjs';
 import { POL3 } from '../../config/config.mjs';
 
 //function weapon
@@ -48,7 +54,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         extreme: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Extreme' }),
       }),
       tags: new fields.SetField(
-        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS })
+        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS }),
       ),
       minimalStrength: new fields.NumberField({
         blank: true,
@@ -61,6 +67,11 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
     };
   }
 
+  /**
+   * Builds the roll parameters for this weapon: the linked skill's value, plus
+   * (for ranged weapons) the range modifier computed from the current target's distance.
+   * @returns {{rollLabel: string, actionValue: number, valueCrit: number, difficulty: number}|null}
+   */
   getRollData() {
     const actor = this.parent.actor;
     const competence = actor?.getSkillValue(this.linkedSkill);
@@ -70,16 +81,43 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         game.i18n.format('POL3.ERROR.CannotUse', {
           actorName: actor?.name,
           itemName: this.parent.name,
-        })
+        }),
       );
-      return null; // stoppe ici, la notification a déjà informé le joueur
+      return null;
     }
+
+    let difficulty = 0;
+
+    if (this.category === 'ranged') {
+      const target = getSingleTarget();
+      if (!target) return null;
+
+      const attackerToken = getActorToken(actor);
+      if (!attackerToken) return null;
+
+      const distance = measureTokenDistance(attackerToken, target);
+      const rangeBand = getRangeBand(distance, this.hitDistance);
+
+      if (!rangeBand) {
+        ui.notifications.error(game.i18n.format('POL3.ERROR.OutOfRange', { itemName: this.parent.name }));
+        return null;
+      }
+
+      difficulty += CONFIG.POL3.WEAPON.RANGE[rangeBand].modifier;
+
+      console.log('POLARIS | Range check:', {
+        distance,
+        rangeBand,
+        modifier: CONFIG.POL3.WEAPON.RANGE[rangeBand]?.modifier,
+      });
+    }
+
 
     return {
       rollLabel: competence.label,
       actionValue: competence.value,
       valueCrit: competence.valueCrit,
-      difficulty: this.rangeModifier ?? 0,
+      difficulty,
     };
   }
 }

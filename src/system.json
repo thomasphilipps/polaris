@@ -17,8 +17,18 @@
       "discord": "loahn_68"
     }
   ],
-  "esmodules": ["polaris.mjs"],
-  "styles": ["polaris.css"],
+  "grid": {
+    "type": 1,
+    "distance": 2,
+    "units": "m",
+    "diagonals": 1
+  },
+  "esmodules": [
+    "polaris.mjs"
+  ],
+  "styles": [
+    "polaris.css"
+  ],
   "packs": [
     {
       "name": "skills",

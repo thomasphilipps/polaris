@@ -62,15 +62,42 @@
         "Genetic": "Mod. type génétique"
       },
       "PRIMARY": {
-        "Adaptation": { "Abbr": "ADA", "Label": "ADAptation" },
-        "Build": { "Abbr": "GAB", "Label": "GABarit" },
-        "Constitution": { "Abbr": "CON", "Label": "CONstitution" },
-        "Coordination": { "Abbr": "COO", "Label": "COOrdination" },
-        "Intelligence": { "Abbr": "INT", "Label": "INTelligence" },
-        "Perception": { "Abbr": "PER", "Label": "PERception" },
-        "Presence": { "Abbr": "PRE", "Label": "PREsence" },
-        "Strength": { "Abbr": "FOR", "Label": "FORce" },
-        "Willpower": { "Abbr": "VOL", "Label": "VOLonté" }
+        "Adaptation": {
+          "Abbr": "ADA",
+          "Label": "ADAptation"
+        },
+        "Build": {
+          "Abbr": "GAB",
+          "Label": "GABarit"
+        },
+        "Constitution": {
+          "Abbr": "CON",
+          "Label": "CONstitution"
+        },
+        "Coordination": {
+          "Abbr": "COO",
+          "Label": "COOrdination"
+        },
+        "Intelligence": {
+          "Abbr": "INT",
+          "Label": "INTelligence"
+        },
+        "Perception": {
+          "Abbr": "PER",
+          "Label": "PERception"
+        },
+        "Presence": {
+          "Abbr": "PRE",
+          "Label": "PREsence"
+        },
+        "Strength": {
+          "Abbr": "FOR",
+          "Label": "FORce"
+        },
+        "Willpower": {
+          "Abbr": "VOL",
+          "Label": "VOLonté"
+        }
       },
       "SECONDARIES": {
         "Breath": "Souffle",
@@ -100,11 +127,31 @@
       "CoreRulebook1": "Livre de base 1",
       "CoreRulebook2": "Livre de base 2"
     },
+    "DAMAGE": {
+      "Title": "Dégâts",
+      "Points": "points de dégâts",
+      "NoWound": "Aucune blessure",
+      "NoDamage": "Aucun dégât"
+    },
     "DIALOG": {
+      "Cancel": "Annuler",
+      "ConfigureTitle": "Configuration de {name}",
+      "Confirm": "Confirmer",
+      "DeleteItemConfirm": "Êtes-vous sûr de vouloir supprimer {itemName} ?",
+      "DeleteItemTitle": "Suppression",
+      "LocationAuto": "Automatique (jet de d20)",
+      "LocationManual": "Manuelle",
+      "LocationMode": "Méthode",
+      "LocationTitle": "Localisation de l'impact",
+      "LocationZone": "Zone touchée",
       "SaveButton": "Enregistrer"
     },
     "ERROR": {
-      "CannotUse": "{actorName} ne peut pas utiliser {itemName}"
+      "CannotUse": "{actorName} ne peut pas utiliser {itemName}",
+      "NoTarget": "Aucune cible sélectionnée.",
+      "MultipleTargets": "Une seule cible peut être visée pour le moment.",
+      "NoToken": "{actorName} n'a pas de jeton sur cette scène.",
+      "OutOfRange": "La cible est hors de portée pour {itemName}."
     },
     "ROLL": {
       "Bad": "Mauvais",
@@ -215,11 +262,26 @@
         "Ranged": "Arme à distance"
       },
       "Range": {
-        "Close": { "Abbr": "BP", "Label": "Bout portant" },
-        "Extreme": { "Abbr": "EX", "Label": "Portée extrême" },
-        "Long": { "Abbr": "LP", "Label": "Longue portée" },
-        "Medium": { "Abbr": "MP", "Label": "Portée moyenne" },
-        "Short": { "Abbr": "CP", "Label": "Courte portée" }
+        "Close": {
+          "Abbr": "BP",
+          "Label": "Bout portant"
+        },
+        "Extreme": {
+          "Abbr": "EX",
+          "Label": "Portée extrême"
+        },
+        "Long": {
+          "Abbr": "LP",
+          "Label": "Longue portée"
+        },
+        "Medium": {
+          "Abbr": "MP",
+          "Label": "Portée moyenne"
+        },
+        "Short": {
+          "Abbr": "CP",
+          "Label": "Courte portée"
+        }
       },
       "SHEET": {
         "BaseDamage": "Dégâts",
@@ -255,16 +317,46 @@
       }
     },
     "ZONES": {
-      "ArmLeft": { "Label": "Bras gauche", "Symbol": "BG" },
-      "ArmRight": { "Label": "Bras droit", "Symbol": "BD" },
-      "Arms": { "Label": "Bras", "Symbol": "B" },
-      "Body": { "Label": "Corps", "Symbol": "C" },
-      "FinLeft": { "Label": "Nageoire gauche", "Symbol": "NG" },
-      "FinRight": { "Label": "Nageoire droite", "Symbol": "ND" },
-      "Head": { "Label": "Tête", "Symbol": "T" },
-      "LegLeft": { "Label": "Jambe gauche", "Symbol": "JG" },
-      "LegRight": { "Label": "Jambe droite", "Symbol": "JD" },
-      "Legs": { "Label": "Jambes", "Symbol": "J" }
+      "ArmLeft": {
+        "Label": "Bras gauche",
+        "Symbol": "BG"
+      },
+      "ArmRight": {
+        "Label": "Bras droit",
+        "Symbol": "BD"
+      },
+      "Arms": {
+        "Label": "Bras",
+        "Symbol": "B"
+      },
+      "Body": {
+        "Label": "Corps",
+        "Symbol": "C"
+      },
+      "FinLeft": {
+        "Label": "Nageoire gauche",
+        "Symbol": "NG"
+      },
+      "FinRight": {
+        "Label": "Nageoire droite",
+        "Symbol": "ND"
+      },
+      "Head": {
+        "Label": "Tête",
+        "Symbol": "T"
+      },
+      "LegLeft": {
+        "Label": "Jambe gauche",
+        "Symbol": "JG"
+      },
+      "LegRight": {
+        "Label": "Jambe droite",
+        "Symbol": "JD"
+      },
+      "Legs": {
+        "Label": "Jambes",
+        "Symbol": "J"
+      }
     }
   },
   "TYPES": {
