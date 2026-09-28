@@ -331,7 +331,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @returns {{label: string, itemList: Item[]}[]}
    */
   _prepareArmors() {
-    return groupItemsByField(this.actor.items, 'armor', 'POL3.ARMOR.Type', 'type');
+    return groupItemsByField(this.actor.items, 'armor', 'POL3.ARMOR.TYPE', 'type');
   }
 
   /* -------------------------------------------- */

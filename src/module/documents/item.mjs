@@ -25,7 +25,7 @@ export default class Pol3Item extends Item {
         this._prepareWeaponData(itemData, actorData);
         break;
       case 'armor':
-        this._prepareTags(itemData, CONFIG.POL3.ARMOR.TYPE);
+        this._prepareTags(itemData, CONFIG.POL3.ARMOR.ZONES);
         this._prepareArmorData(itemData, actorData);
         break;
     }
@@ -72,7 +72,7 @@ export default class Pol3Item extends Item {
    */
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
-      .map(tag => (itemData.tags.has(tag) ? `| ${properties[tag].symbol} ` : ''))
+      .map(tag => (itemData.tags.has(tag) ? `| ${game.i18n.localize(properties[tag].symbol)} ` : ''))
       .join('');
     tagString = tagString ? tagString + '|' : tagString;
     itemData.tagString = tagString;

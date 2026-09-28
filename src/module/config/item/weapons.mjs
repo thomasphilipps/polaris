@@ -58,16 +58,16 @@ export const RANGE = {
 
 export const BURST = {
   single: {
-    label: 'POL3.WEAPON.Burst.SingleShot',
-    symbol: 'CC',
+    label: 'POL3.WEAPON.BURST.SingleShot.Label',
+    symbol: 'POL3.WEAPON.BURST.SingleShot.Symbol',
   },
   short: {
-    label: 'POL3.WEAPON.Burst.ShortBurst',
-    symbol: 'RC',
+    label: 'POL3.WEAPON.BURST.ShortBurst.Label',
+    symbol: 'POL3.WEAPON.BURST.ShortBurst.Symbol',
   },
   long: {
-    label: 'POL3.WEAPON.Burst.LongBurst',
-    symbol: 'RL',
+    label: 'POL3.WEAPON.BURST.LongBurst.Label',
+    symbol: 'POL3.WEAPON.BURST.LongBurst.Symbol',
   },
 };
 

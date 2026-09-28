@@ -256,10 +256,19 @@
       "SkillAlreadyExists": "Cette compétence existe déjà"
     },
     "WEAPON": {
-      "Burst": {
-        "LongBurst": "Rafale longue",
-        "ShortBurst": "Rafale courte",
-        "SingleShot": "Coup par coup"
+      "BURST": {
+        "LongBurst": {
+          "Label": "Rafale longue",
+          "Symbol": "RL"
+        },
+        "ShortBurst": {
+          "Label": "Rafale courte",
+          "Symbol": "RC"
+        },
+        "SingleShot": {
+          "Label": "Coup par coup",
+          "Symbol": "CC"
+        }
       },
       "Category": {
         "CreatureAttack": "Attaque (créature)",
