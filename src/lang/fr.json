@@ -42,7 +42,8 @@
       "Protection": "Protection",
       "ShockProtection": "Protection contre les chocs",
       "SHEET": {
-        "ProtectedZones": "Zones protégées"
+        "ProtectedZones": "Zones protégées",
+        "ProtectionBonuses": "Bonus de protection"
       },
       "TYPE": {
         "PersonalField": "Champ personnel",
@@ -224,6 +225,12 @@
         "Equipment": "Équipement",
         "GMDescription": "Notes GM",
         "Wounds": "Blessures"
+      },
+      "TOOLTIPS": {
+        "Configure": "Configurer: {itemName}",
+        "Delete": "Supprimer: {itemName}",
+        "Roll": "Lancer: {itemName}",
+        "Test": "Tester: {itemName}"
       }
     },
     "SKILL": {

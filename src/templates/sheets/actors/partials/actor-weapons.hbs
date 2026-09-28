@@ -27,9 +27,9 @@
           </div>
           <div class="action-button flexrow">
             <a class="button icon fa-solid fa-dice-d20" data-action="rollItem"
-               data-tooltip="Roll {{weapon.name}}"></a>
+               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Roll' itemName=weapon.name}}"></a>
             <a class="button icon fa-solid fa-trash" data-action="deleteItem"
-               data-tooltip="Delete {{weapon.name}}"></a>
+               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Delete' itemName=weapon.name}}"></a>
           </div>
         </li>
       {{/each}}

@@ -20,11 +20,12 @@
               <span>{{skill.system.globalLevel}}</span>
             </div>
             <div class="action-button flexrow">
-              <a class="button icon fa-solid fa-gears" data-action="configureSkill"></a>
+              <a class="button icon fa-solid fa-gears" data-action="configureSkill"
+              data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Configure' itemName=skill.name}}"></a>
               <a class="button icon fa-solid fa-dice-d20" data-action="rollItem"
-                 data-tooltip="Roll {{skill.name}}"></a>
+                 data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Roll' itemName=skill.name}}"></a>
               <a class="button icon fa-solid fa-trash" data-action="deleteItem"
-                 data-tooltip="Delete {{skill.name}}"></a>
+                 data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Delete' itemName=skill.name}}"></a>
             </div>
           </li>
         {{/each}}

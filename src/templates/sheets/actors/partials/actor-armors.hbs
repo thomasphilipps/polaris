@@ -14,6 +14,10 @@
             <input type="checkbox" data-action="toggleEquipped" {{checked armor.system.isEquipped}}
                    data-tooltip="{{localize 'POL3.SHEETS.DETAILS.IsEquipped'}}">
           </div>
+          <div class="action-button flexrow">
+            <a class="button icon fa-solid fa-trash" data-action="deleteItem"
+               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Delete' itemName=armor.name}}"></a>
+          </div>
         </li>
       {{/each}}
     </ul>
