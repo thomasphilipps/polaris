@@ -1,6 +1,7 @@
 import { resolveLocation, resolveFinalDamage, resolveWoundSeverity } from './damage-resolver.mjs';
 import { promptLocationChoice } from '../apps/dialogs/location-dialog.mjs';
 import { toPascalCase } from '../utils/sheet-utils.mjs';
+import { requestApplyWound } from '../net/socket.mjs';
 
 // Armor zones (head/body/arms/legs) are coarser than wound zones
 // (head/body/armLeft/armRight/legLeft/legRight). Fish zones (finLeft/finRight)
@@ -81,7 +82,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
     finalDamage > 0 ? resolveWoundSeverity(finalDamage, CONFIG.POL3.WOUND.SEVERITY_THRESHOLDS) : null;
 
   if (severity) {
-    await targetActor.applyWound(zone, severity);
+    await requestApplyWound({ actor: targetActor, zone, severity });
   }
 
   const zoneLabel = game.i18n.localize(`POL3.ZONES.${toPascalCase(zone)}.Label`);

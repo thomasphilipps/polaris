@@ -158,6 +158,15 @@
       "NoToken": "{actorName} n'a pas de jeton sur cette scène.",
       "OutOfRange": "La cible est hors de portée pour {itemName}."
     },
+    "OPPOSED": {
+      "DefenseRequest": "{actorName} doit se défendre contre {attackLabel}.",
+      "ForceDefense": "Répondre à sa place",
+      "RespondingTo": "Défense contre : {attackLabel}",
+      "TestType": "Type de test",
+      "Skill": "Compétence",
+      "Attribute": "Attribut",
+      "DialogTitle": "Test d'opposition — Défense"
+    },
     "ROLL": {
       "Bad": "Mauvais",
       "Barely": "De justesse",

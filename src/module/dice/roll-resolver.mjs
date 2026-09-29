@@ -52,11 +52,19 @@ export function resolveTaskCheck({
     }
   }
 
-  _applyDegree(outcome, outcome.isSuccess ? POL3.SUCCESSTABLE : POL3.FAILURETABLE);
+  applyDegree(outcome, outcome.isSuccess ? POL3.SUCCESSTABLE : POL3.FAILURETABLE);
   return outcome;
 }
 
-function _applyDegree(outcome, table) {
+/**
+ * Looks up the degree label and nextModifier for a given rollMargin against a
+ * threshold table (POL3.SUCCESSTABLE or POL3.FAILURETABLE), mutating `outcome`.
+ * Exported so other resolvers (e.g. opposed checks) can recompute the degree
+ * on an adjusted margin without duplicating this lookup.
+ * @param {object} outcome  Must have a `rollMargin` property; mutated in place.
+ * @param {{threshold: number, label: string, nextModifier: number}[]} table
+ */
+export function applyDegree(outcome, table) {
   const isPositive = outcome.rollMargin >= 0;
   for (const entry of table) {
     const reached = isPositive
