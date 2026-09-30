@@ -1,4 +1,5 @@
 import { POL3 } from '../config/config.mjs';
+import { consumeForcedD20 } from '../dev/dice-cheat.mjs';
 
 /**
  * Calculates the result of a task roll based on known values.
@@ -11,12 +12,12 @@ import { POL3 } from '../config/config.mjs';
  * @returns {object} outcome
  */
 export function resolveTaskCheck({
-                                   rollResult,
-                                   actionValue,
-                                   difficulty,
-                                   valueCrit = 0,
-                                   critFailReroll = null,
-                                 }) {
+  rollResult,
+  actionValue,
+  difficulty,
+  valueCrit = 0,
+  critFailReroll = null,
+}) {
   const globalDifficulty = actionValue + difficulty;
   const initialMargin = globalDifficulty - rollResult;
 
@@ -79,6 +80,19 @@ export function applyDegree(outcome, table) {
 }
 
 /**
+ * Rolls a 1d20, using a queued forced value if one is pending (dev cheat).
+ * Exported so any 1d20 roll in the system (task checks, hit location...)
+ * benefits from the same cheat mechanism.
+ * @returns {Promise<Roll>}
+ */
+export async function rollD20() {
+  const forced = consumeForcedD20();
+  const roll = new Roll(forced !== null ? String(forced) : '1d20');
+  await roll.evaluate();
+  return roll;
+}
+
+/**
  * Rolls a 1d20 and resolves a full task check outcome (including the
  * critical-failure re-roll when applicable). Shared by any caller that needs
  * "roll + resolve" together: task-check.mjs, melee-check.mjs, and the
@@ -90,14 +104,12 @@ export function applyDegree(outcome, table) {
  * @returns {Promise<{roll: Roll, outcome: object}>}
  */
 export async function rollTaskCheck({ actionValue, difficulty, valueCrit = 0 }) {
-  const roll = new Roll('1d20');
-  await roll.evaluate();
+  const roll = await rollD20();
 
   const globalDifficulty = actionValue + difficulty;
   let critFailReroll = null;
   if (globalDifficulty < 20 && roll.total === 20) {
-    const reroll = new Roll('1d20');
-    await reroll.evaluate();
+    const reroll = await rollD20();
     critFailReroll = reroll.total;
   }
 

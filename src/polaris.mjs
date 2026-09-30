@@ -6,8 +6,9 @@ import { POL3 } from './module/config/config.mjs';
 import { preloadHandlebarsTemplates } from './module/config/templates.mjs';
 import { registerSystemSettings } from './module/config/settings.mjs';
 import { initSocketListeners } from './module/net/socket.mjs';
+import { forceNextD20, clearForcedRolls } from './module/dev/dice-cheat.mjs';
 
-Hooks.once('init', async function() {
+Hooks.once('init', async function () {
   console.log('Polaris | Initializing Polaris config');
   globalThis.polaris = game.system;
 
@@ -17,6 +18,11 @@ Hooks.once('init', async function() {
     documents,
     hooks,
   };
+
+  if (process.env.NODE_ENV !== 'production') {
+    game.system.api.dev = { forceNextD20, clearForcedRolls };
+    console.log('POLARIS | Dev dice cheat enabled — game.system.api.dev.forceNextD20(value)');
+  }
 
   CONFIG.Item.documentClass = documents.Pol3Item;
   CONFIG.Item.dataModels = {
@@ -45,7 +51,7 @@ Hooks.once('init', async function() {
       types: ['hero'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Hero',
-    },
+    }
   );
 
   foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
@@ -58,7 +64,7 @@ Hooks.once('init', async function() {
       types: ['skill'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Skill',
-    },
+    }
   );
 
   foundry.applications.apps.DocumentSheetConfig.registerSheet(
@@ -69,7 +75,7 @@ Hooks.once('init', async function() {
       types: ['weapon'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Weapon',
-    },
+    }
   );
 
   foundry.applications.apps.DocumentSheetConfig.registerSheet(
@@ -80,7 +86,7 @@ Hooks.once('init', async function() {
       types: ['armor'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Armor',
-    },
+    }
   );
 
   registerSystemSettings();
@@ -96,4 +102,3 @@ Hooks.on('preUpdateItem', (item, updateData, options, userId) => {
 Hooks.on('renderChatMessageHTML', (message, html, context) => {
   hooks.onRenderChatMessageHTML(message, html, context);
 });
-

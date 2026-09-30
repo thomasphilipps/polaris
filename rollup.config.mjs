@@ -1,5 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
 import sass from 'rollup-plugin-sass';
 import terser from '@rollup/plugin-terser';
 import copy from 'rollup-plugin-copy-watch';
@@ -13,8 +14,8 @@ function resolveFoundryPath() {
     return `${process.env.FOUNDRY_DATA_PATH}/systems/polaris`;
   }
 
-  const isWSL = Boolean(process.env.WSL_DISTRO_NAME)
-    || os.release().toLowerCase().includes('microsoft');
+  const isWSL =
+    Boolean(process.env.WSL_DISTRO_NAME) || os.release().toLowerCase().includes('microsoft');
 
   return isWSL
     ? `${process.env.HOME}/foundrydata/Data/systems/polaris`
@@ -31,11 +32,22 @@ export default {
     sourcemap: true,
   },
   plugins: [
+    replace({
+      preventAssignment: true,
+      'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
+    }),
     resolve(),
     commonjs(),
     isProduction && terser(),
     copy({
-      watch: ['src/assets/', 'src/lang/', 'src/templates/', 'src/system.json', 'src/polaris.css', 'src/packs'],
+      watch: [
+        'src/assets/',
+        'src/lang/',
+        'src/templates/',
+        'src/system.json',
+        'src/polaris.css',
+        'src/packs',
+      ],
       targets: [
         { src: ['src/assets/*', '!src/**/*~'], dest: `${foundryPath}/assets` },
         { src: ['src/lang/*', '!src/**/*~'], dest: `${foundryPath}/lang` },

@@ -2,6 +2,7 @@ import { resolveLocation, resolveFinalDamage, resolveWoundSeverity } from './dam
 import { promptLocationChoice } from '../apps/dialogs/location-dialog.mjs';
 import { toPascalCase } from '../utils/sheet-utils.mjs';
 import { requestApplyWound } from '../net/socket.mjs';
+import { rollD20 } from './roll-resolver.mjs';
 
 // Armor zones (head/body/arms/legs) are coarser than wound zones
 // (head/body/armLeft/armRight/legLeft/legRight). Fish zones (finLeft/finRight)
@@ -48,8 +49,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
   if (choice.mode === 'manual') {
     zone = choice.zone;
   } else {
-    locationRoll = new Roll('1d20');
-    await locationRoll.evaluate();
+    locationRoll = await rollD20();
     zone = resolveLocation({ locationTables, combatType, rollResult: locationRoll.total });
     if (!zone) {
       console.warn('POLARIS | Could not resolve a hit location');
@@ -66,7 +66,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
   const damageResistance = targetActor.system.damageResistance?.value ?? 0;
   const armorZone = WOUND_ZONE_TO_ARMOR_ZONE[zone];
   const armor = targetActor.items.find(
-    i => i.type === 'armor' && i.system.isEquipped && armorZone && i.system.tags.has(armorZone),
+    i => i.type === 'armor' && i.system.isEquipped && armorZone && i.system.tags.has(armorZone)
   );
   const armorProtection = armor?.system.baseProtection ?? 0;
 
@@ -79,7 +79,9 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
   });
 
   const severity =
-    finalDamage > 0 ? resolveWoundSeverity(finalDamage, CONFIG.POL3.WOUND.SEVERITY_THRESHOLDS) : null;
+    finalDamage > 0
+      ? resolveWoundSeverity(finalDamage, CONFIG.POL3.WOUND.SEVERITY_THRESHOLDS)
+      : null;
 
   if (severity) {
     await requestApplyWound({ actor: targetActor, zone, severity });
