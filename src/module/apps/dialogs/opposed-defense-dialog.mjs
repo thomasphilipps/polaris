@@ -1,5 +1,5 @@
 import { groupItemsByField } from '../../utils/sheet-utils.mjs';
-import { resolveTaskCheck } from '../../dice/roll-resolver.mjs';
+import { rollTaskCheck } from '../../dice/roll-resolver.mjs';
 import { POL3 } from '../../config/config.mjs';
 
 /**
@@ -21,7 +21,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     .map(
       g => `<optgroup label="${g.label}">
         ${g.itemList.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
-      </optgroup>`,
+      </optgroup>`
     )
     .join('');
 
@@ -47,7 +47,8 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
   const syncVisibility = root => {
     const testType = root.querySelector('[name="testType"]').value;
     root.querySelector('[data-skill-group]').style.display = testType === 'skill' ? '' : 'none';
-    root.querySelector('[data-attribute-group]').style.display = testType === 'attribute' ? '' : 'none';
+    root.querySelector('[data-attribute-group]').style.display =
+      testType === 'attribute' ? '' : 'none';
   };
 
   const choice = await foundry.applications.api.DialogV2.wait({
@@ -81,13 +82,13 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
 
   let rollLabel;
   let actionValue;
-  let valueCrit = 0; // ⚠️ pas de bonus critique documenté pour un test d'Attribut pur — à confirmer
+  let valueCrit = 0;
 
   if (choice.testType === 'attribute') {
     const attrKey = choice.attribute;
     rollLabel = game.i18n.localize(POL3.ATTRIBUTE[attrKey].label);
     actionValue = actor.system.attributes[attrKey].total;
-    valueCrit = Math.round(actionValue * 0.5);
+    valueCrit = Math.round(actionValue / 2);
   } else {
     const skill = actor.items.get(choice.skillId);
     rollLabel = skill.name;
@@ -95,9 +96,14 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     valueCrit = skill.system.mastery;
   }
 
-  const roll = new Roll('1d20');
-  await roll.evaluate();
+  const { roll, outcome } = await rollTaskCheck({ actionValue, difficulty, valueCrit });
 
-  const outcome = resolveTaskCheck({ rollResult: roll.total, actionValue, difficulty, valueCrit });
+  // Visible locally on the Defender's client, regardless of the summary
+  // the Attacker will post once the challenge is resolved.
+  await roll.toMessage({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    flavor: `<strong>${rollLabel}</strong> (${game.i18n.format('POL3.OPPOSED.RespondingTo', { attackLabel })})`,
+  });
+
   return { ...outcome, rollLabel };
 }

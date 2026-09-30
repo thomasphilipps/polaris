@@ -77,3 +77,36 @@ export function applyDegree(outcome, table) {
     }
   }
 }
+
+/**
+ * Rolls a 1d20 and resolves a full task check outcome (including the
+ * critical-failure re-roll when applicable). Shared by any caller that needs
+ * "roll + resolve" together: task-check.mjs, melee-check.mjs, and the
+ * opposed-defense dialog.
+ * @param {object} params
+ * @param {number} params.actionValue
+ * @param {number} params.difficulty
+ * @param {number} [params.valueCrit=0]
+ * @returns {Promise<{roll: Roll, outcome: object}>}
+ */
+export async function rollTaskCheck({ actionValue, difficulty, valueCrit = 0 }) {
+  const roll = new Roll('1d20');
+  await roll.evaluate();
+
+  const globalDifficulty = actionValue + difficulty;
+  let critFailReroll = null;
+  if (globalDifficulty < 20 && roll.total === 20) {
+    const reroll = new Roll('1d20');
+    await reroll.evaluate();
+    critFailReroll = reroll.total;
+  }
+
+  const outcome = resolveTaskCheck({
+    rollResult: roll.total,
+    actionValue,
+    difficulty,
+    valueCrit,
+    critFailReroll,
+  });
+  return { roll, outcome };
+}

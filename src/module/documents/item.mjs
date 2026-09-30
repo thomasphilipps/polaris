@@ -1,5 +1,6 @@
 import * as CONFIG from '../config/config.mjs';
 import { taskCheck } from '../dice/task-check.mjs';
+import { meleeCheck } from '../dice/melee-check.mjs';
 
 export default class Pol3Item extends Item {
   get hasActor() {
@@ -72,7 +73,9 @@ export default class Pol3Item extends Item {
    */
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
-      .map(tag => (itemData.tags.has(tag) ? `| ${game.i18n.localize(properties[tag].symbol)} ` : ''))
+      .map(tag =>
+        itemData.tags.has(tag) ? `| ${game.i18n.localize(properties[tag].symbol)} ` : ''
+      )
       .join('');
     tagString = tagString ? tagString + '|' : tagString;
     itemData.tagString = tagString;
@@ -152,6 +155,9 @@ export default class Pol3Item extends Item {
     const rollData = this.system.getRollData();
     if (!rollData) return;
 
+    if (this.type === 'weapon' && this.system.category !== 'ranged') {
+      return meleeCheck(rollData);
+    }
     return taskCheck(rollData);
   }
 }

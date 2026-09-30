@@ -40,7 +40,6 @@ export default class Pol3Skill extends Pol3ItemDataModel {
   }
 
   getRollData() {
-    console.log(this);
     return {
       rollLabel: this.parent.name,
       actionValue: this.globalLevel,

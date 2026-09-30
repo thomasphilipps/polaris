@@ -159,6 +159,12 @@
       "OutOfRange": "La cible est hors de portée pour {itemName}."
     },
     "OPPOSED": {
+      "RESULT": {
+        "AttackerWins": "L'Attaquant touche sa cible.",
+        "DefenderWins": "L'attaque est parée.",
+        "Tie": "Égalité — les deux combattants se touchent simultanément.",
+        "BothFail": "Aucune des deux attaques ne passe."
+      },
       "DefenseRequest": "{actorName} doit se défendre contre {attackLabel}.",
       "ForceDefense": "Répondre à sa place",
       "RespondingTo": "Défense contre : {attackLabel}",

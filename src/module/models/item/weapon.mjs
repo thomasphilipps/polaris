@@ -54,7 +54,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         extreme: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Extreme' }),
       }),
       tags: new fields.SetField(
-        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS }),
+        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS })
       ),
       minimalStrength: new fields.NumberField({
         blank: true,
@@ -81,7 +81,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         game.i18n.format('POL3.ERROR.CannotUse', {
           actorName: actor?.name,
           itemName: this.parent.name,
-        }),
+        })
       );
       return null;
     }
@@ -98,15 +98,21 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
 
       const distance = measureTokenDistance(attackerToken, target);
       const rangeBand = getRangeBand(distance, this.hitDistance);
-
       if (!rangeBand) {
-        ui.notifications.error(game.i18n.format('POL3.ERROR.OutOfRange', { itemName: this.parent.name }));
+        ui.notifications.error(
+          game.i18n.format('POL3.ERROR.OutOfRange', { itemName: this.parent.name })
+        );
         return null;
       }
-
       difficulty += CONFIG.POL3.WEAPON.RANGE[rangeBand].modifier;
+    } else {
+      // Melee/creatureAttack: only the target is needed here — Allonge and the
+      // opposition itself are computed in melee-check.mjs, which needs both
+      // combatants' weapons at once (out of scope for a single weapon's own data).
+      target = getSingleTarget();
+      if (!target) return null;
     }
-    
+
     return {
       rollLabel: competence.label,
       actionValue: competence.value,
