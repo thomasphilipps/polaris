@@ -145,13 +145,16 @@
       "Confirm": "Confirmer",
       "DeleteItemConfirm": "Êtes-vous sûr de vouloir supprimer {itemName} ?",
       "DeleteItemTitle": "Suppression",
+      "ExistingModifiers": "Modificateurs existants",
       "LocationAuto": "Automatique (jet de d20)",
       "LocationManual": "Manuelle",
       "LocationMode": "Méthode",
       "LocationTitle": "Localisation de l'impact",
       "LocationZone": "Zone touchée",
       "ModifierTitle": "Modificateurs",
-      "SaveButton": "Enregistrer"
+      "NoAutomaticModifier": "Aucun modificateur automatique",
+      "SaveButton": "Enregistrer",
+      "Total": "Total"
     },
     "ERROR": {
       "CannotUse": "{actorName} ne peut pas utiliser {itemName}",

@@ -38,6 +38,7 @@ export async function meleeCheck({ rollLabel, actionValue, valueCrit, weapon, ta
 
   //TODO: handle askForModifier
   const { outcome: attackerOutcome } = await rollTaskCheck({
+    actor: attackerActor,
     actionValue,
     difficulty: attackerDifficulty,
     valueCrit,

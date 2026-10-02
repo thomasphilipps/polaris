@@ -6,7 +6,7 @@ import { POL3 } from '../../config/config.mjs';
  * Prompts whoever controls `actor` to choose an Attribute or Skill to defend
  * with, then rolls it against the given difficulty.
  * @param {object} params
- * @param {Actor} params.actor
+ * @param {Pol3Actor} params.actor
  * @param {number} params.difficulty
  * @param {string} params.attackLabel
  * @returns {Promise<object|null>} A resolveTaskCheck outcome (+ rollLabel), or null if cancelled
@@ -98,6 +98,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
 
   //TODO: handle askForModifier
   const { roll, outcome } = await rollTaskCheck({
+    actor,
     actionValue,
     difficulty,
     valueCrit,

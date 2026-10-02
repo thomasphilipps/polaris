@@ -1,6 +1,7 @@
 import { POL3 } from '../config/config.mjs';
 import { consumeForcedD20 } from '../dev/dice-cheat.mjs';
 import { promptAdHocModifier } from '../apps/dialogs/modifier-dialog.mjs';
+import { collectAutomaticModifiers } from './automatic-modifiers.mjs';
 
 /**
  * Calculates the result of a task roll based on known values.
@@ -99,6 +100,7 @@ export async function rollD20() {
  * "roll + resolve" together: task-check.mjs, melee-check.mjs, and the
  * opposed-defense dialog.
  * @param {object} params
+ * @param {Pol3Actor} params.actor
  * @param {number} params.actionValue
  * @param {number} params.difficulty
  * @param {number} [params.valueCrit=0]
@@ -107,6 +109,7 @@ export async function rollD20() {
  * @returns {Promise<{roll: Roll, outcome: object}>}
  */
 export async function rollTaskCheck({
+                                      actor,
                                       actionValue,
                                       difficulty,
                                       valueCrit = 0,
@@ -114,8 +117,13 @@ export async function rollTaskCheck({
                                       contextLabel = '',
                                     }) {
 
+  const automaticModifiersList = collectAutomaticModifiers(actor);
+  const automaticModifiers = automaticModifiersList.reduce((total, modifier) => total + modifier.value, 0);
+
+  difficulty += automaticModifiers;
+
   if (askForModifier) {
-    const addedDifficulty = await promptAdHocModifier(contextLabel);
+    const addedDifficulty = await promptAdHocModifier(contextLabel, automaticModifiersList, automaticModifiers);
     if (addedDifficulty === null) return { roll: null, outcome: null };
     difficulty += addedDifficulty;
   }

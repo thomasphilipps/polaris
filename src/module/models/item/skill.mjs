@@ -32,7 +32,7 @@ export default class Pol3Skill extends Pol3ItemDataModel {
         initial: this.DEFAULT_CATEGORY,
       }),
       tags: new fields.SetField(
-        new fields.StringField({ required: true, choices: this.ITEM_PROPERTIES })
+        new fields.StringField({ required: true, choices: this.ITEM_PROPERTIES }),
       ),
       mastery: new fields.NumberField({ initial: 0, integer: true }),
       //globalValue: new fields.NumberField({initial: 0}),
@@ -41,6 +41,7 @@ export default class Pol3Skill extends Pol3ItemDataModel {
 
   getRollData() {
     return {
+      actor: this.parent.actor,
       rollLabel: this.parent.name,
       actionValue: this.globalLevel,
       valueCrit: this.mastery,

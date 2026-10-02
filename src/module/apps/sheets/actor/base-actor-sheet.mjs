@@ -404,6 +404,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
     const valueCrit = Math.round(parseInt(attributeValue) / 2);
     await taskCheck({
+      actor: this.actor,
       rollLabel: attributeName,
       actionValue: parseInt(attributeValue) || 0,
       valueCrit: valueCrit,
