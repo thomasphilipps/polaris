@@ -57,6 +57,7 @@
       "First": "Attribut 1",
       "Label_one": "Attribut",
       "Label_other": "Attributs",
+      "Mastery": "Maîtrise",
       "Modifiers": {
         "BaseValue": "Valeur de base",
         "CompetencePoints": "Mod. points de compétence",
@@ -149,6 +150,7 @@
       "LocationMode": "Méthode",
       "LocationTitle": "Localisation de l'impact",
       "LocationZone": "Zone touchée",
+      "ModifierTitle": "Modificateurs",
       "SaveButton": "Enregistrer"
     },
     "ERROR": {

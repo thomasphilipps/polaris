@@ -2,15 +2,25 @@ import { rollTaskCheck } from './roll-resolver.mjs';
 import { damageCheck } from './damage-check.mjs';
 
 export async function taskCheck({
-  rollLabel,
-  actionValue = 0,
-  difficulty = 0,
-  valueCrit = 0,
-  isAttack = false,
-  weapon = null,
-  target = null,
-} = {}) {
-  const { roll, outcome } = await rollTaskCheck({ actionValue, difficulty, valueCrit });
+                                  rollLabel,
+                                  actionValue = 0,
+                                  difficulty = 0,
+                                  valueCrit = 0,
+                                  isAttack = false,
+                                  weapon = null,
+                                  target = null,
+                                } = {}) {
+
+  //TODO: handle askForModifier
+  const { roll, outcome } = await rollTaskCheck({
+    actionValue,
+    difficulty,
+    valueCrit,
+    askForModifier: true,
+    contextLabel: rollLabel,
+  });
+
+  if (outcome === null) return null;
 
   const flavor = `<strong>${rollLabel}</strong><br>
     ${outcome.isSuccess ? 'Réussite' : 'Échec'}${outcome.isCritical ? ' critique' : ''}

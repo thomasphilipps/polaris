@@ -21,7 +21,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     .map(
       g => `<optgroup label="${g.label}">
         ${g.itemList.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
-      </optgroup>`
+      </optgroup>`,
     )
     .join('');
 
@@ -96,7 +96,16 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     valueCrit = skill.system.mastery;
   }
 
-  const { roll, outcome } = await rollTaskCheck({ actionValue, difficulty, valueCrit });
+  //TODO: handle askForModifier
+  const { roll, outcome } = await rollTaskCheck({
+    actionValue,
+    difficulty,
+    valueCrit,
+    askForModifier: true,
+    contextLabel: rollLabel,
+  });
+
+  if (outcome === null) return null;
 
   // Visible locally on the Defender's client, regardless of the summary
   // the Attacker will post once the challenge is resolved.

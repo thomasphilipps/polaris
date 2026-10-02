@@ -1,5 +1,6 @@
 import { POL3 } from '../config/config.mjs';
 import { consumeForcedD20 } from '../dev/dice-cheat.mjs';
+import { promptAdHocModifier } from '../apps/dialogs/modifier-dialog.mjs';
 
 /**
  * Calculates the result of a task roll based on known values.
@@ -12,12 +13,12 @@ import { consumeForcedD20 } from '../dev/dice-cheat.mjs';
  * @returns {object} outcome
  */
 export function resolveTaskCheck({
-  rollResult,
-  actionValue,
-  difficulty,
-  valueCrit = 0,
-  critFailReroll = null,
-}) {
+                                   rollResult,
+                                   actionValue,
+                                   difficulty,
+                                   valueCrit = 0,
+                                   critFailReroll = null,
+                                 }) {
   const globalDifficulty = actionValue + difficulty;
   const initialMargin = globalDifficulty - rollResult;
 
@@ -101,9 +102,24 @@ export async function rollD20() {
  * @param {number} params.actionValue
  * @param {number} params.difficulty
  * @param {number} [params.valueCrit=0]
+ * @param {boolean} [params.askForModifier=true]
+ * @param {string} [params.contextLabel='']
  * @returns {Promise<{roll: Roll, outcome: object}>}
  */
-export async function rollTaskCheck({ actionValue, difficulty, valueCrit = 0 }) {
+export async function rollTaskCheck({
+                                      actionValue,
+                                      difficulty,
+                                      valueCrit = 0,
+                                      askForModifier = true,
+                                      contextLabel = '',
+                                    }) {
+
+  if (askForModifier) {
+    const addedDifficulty = await promptAdHocModifier(contextLabel);
+    if (addedDifficulty === null) return { roll: null, outcome: null };
+    difficulty += addedDifficulty;
+  }
+
   const roll = await rollD20();
 
   const globalDifficulty = actionValue + difficulty;

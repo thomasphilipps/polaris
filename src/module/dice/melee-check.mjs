@@ -29,18 +29,23 @@ export async function meleeCheck({ rollLabel, actionValue, valueCrit, weapon, ta
   if (!defenderActor) return;
 
   const defenderWeapon = defenderActor.items.find(
-    i => i.type === 'weapon' && i.system.isEquipped && i.system.category !== 'ranged'
+    i => i.type === 'weapon' && i.system.isEquipped && i.system.category !== 'ranged',
   );
 
   const allongeDiff = (weapon.system.allonge ?? 0) - (defenderWeapon?.system.allonge ?? 0);
   const attackerDifficulty = allongeDiff > 0 ? allongeDiff : 0;
   const defenderDifficulty = allongeDiff < 0 ? -allongeDiff : 0;
 
+  //TODO: handle askForModifier
   const { outcome: attackerOutcome } = await rollTaskCheck({
     actionValue,
     difficulty: attackerDifficulty,
     valueCrit,
+    askForModifier: true,
+    contextLabel: rollLabel,
   });
+
+  if (attackerOutcome === null) return;
 
   const defenderOutcome = await requestOpposedDefense({
     defenderActor,
@@ -69,7 +74,7 @@ export async function meleeCheck({ rollLabel, actionValue, valueCrit, weapon, ta
   if (result === 'tie') {
     if (!defenderWeapon) {
       console.warn(
-        `POLARIS | ${defenderActor.name} n'a pas d'arme de mêlée équipée : dégâts de riposte ignorés (combat à mains nues non modélisé).`
+        `POLARIS | ${defenderActor.name} n'a pas d'arme de mêlée équipée : dégâts de riposte ignorés (combat à mains nues non modélisé).`,
       );
       return;
     }
