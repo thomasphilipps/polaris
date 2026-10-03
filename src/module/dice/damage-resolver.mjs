@@ -22,20 +22,27 @@ export function resolveLocation({ locationTables, combatType, rollResult }) {
  * @param {object} params
  * @param {number} params.weaponDamageRoll         Result of the weapon's damage formula roll
  * @param {number} params.successModifier          nextModifier from the attack's resolveTaskCheck outcome
+ * @param {number} [params.otherModifiers=0]       Additional modifiers, e.g. displacement, combat techniques...
  * @param {number} [params.closeCombatModifier=0]  Attacker's close combat damage modifier (melee only)
  * @param {number} [params.damageResistance=0]     Target's damage resistance (negative value)
  * @param {number} [params.armorProtection=0]      Protection value of armor covering the hit zone
  * @returns {number} Final damage, floored at 0
  */
 export function resolveFinalDamage({
-                                     weaponDamageRoll,
-                                     successModifier,
-                                     closeCombatModifier = 0,
-                                     damageResistance = 0,
-                                     armorProtection = 0,
-                                   }) {
+  weaponDamageRoll,
+  successModifier,
+  otherModifiers = 0,
+  closeCombatModifier = 0,
+  damageResistance = 0,
+  armorProtection = 0,
+}) {
   const total =
-    weaponDamageRoll + successModifier + closeCombatModifier + damageResistance - armorProtection;
+    weaponDamageRoll +
+    successModifier +
+    otherModifiers +
+    closeCombatModifier +
+    damageResistance -
+    armorProtection;
   return Math.max(0, total);
 }
 

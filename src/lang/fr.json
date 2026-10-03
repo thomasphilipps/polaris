@@ -137,7 +137,8 @@
       "Title": "Dégâts",
       "Points": "points de dégâts",
       "NoWound": "Aucune blessure",
-      "NoDamage": "Aucun dégât"
+      "NoDamage": "Aucun dégât",
+      "ModifierContext": "Dégâts: {weaponName}"
     },
     "DIALOG": {
       "Cancel": "Annuler",

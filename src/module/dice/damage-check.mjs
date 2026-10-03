@@ -1,4 +1,5 @@
 import { resolveLocation, resolveFinalDamage, resolveWoundSeverity } from './damage-resolver.mjs';
+import { promptAdHocModifier } from '../apps/dialogs/modifier-dialog.mjs';
 import { promptLocationChoice } from '../apps/dialogs/location-dialog.mjs';
 import { toPascalCase } from '../utils/sheet-utils.mjs';
 import { requestApplyWound } from '../net/socket.mjs';
@@ -60,6 +61,13 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
   const damageRoll = new Roll(weapon.system.baseDamage);
   await damageRoll.evaluate();
 
+  const adHocDamageModifier = await promptAdHocModifier(
+    game.i18n.format('POL3.DAMAGE.ModifierContext', { weaponName: weapon.name }),
+    [],
+    0
+  );
+  const adHocModifier = adHocDamageModifier ?? 0;
+
   const closeCombatModifier =
     combatType === 'melee' ? (weapon.actor?.system.closeCombatModifier?.value ?? 0) : 0;
 
@@ -74,6 +82,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
     weaponDamageRoll: damageRoll.total,
     successModifier,
     closeCombatModifier,
+    adHocModifier,
     damageResistance,
     armorProtection,
   });
