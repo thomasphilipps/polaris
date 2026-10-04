@@ -17,11 +17,5 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Task Runner files
-gulpfile.js
-
 # FoundryVTT
 packs/
-
-# Rollup
-rollup.config.mjs
