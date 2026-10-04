@@ -88,10 +88,11 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 ## 6. Prochaines étapes envisageables
 
-1. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
-2. Trancher « sauter le dialogue » ; préparer les chat cards.
-3. Audit i18n (textes en dur, clés manquantes).
-4. Clés stables pour les compétences (supprime la dette #1).
+Choix en attente de Thomas entre les pistes 1 à 3 (recommandation : 1 puis 2, pour que les modificateurs de la phase D s'affichent sans retouche).
+
+1. Chat cards détaillées (dette #7) + trancher « sauter le dialogue ».
+2. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
+3. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
 
 ## 7. Mise à jour de ce fichier
 

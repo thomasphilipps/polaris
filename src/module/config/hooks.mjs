@@ -15,10 +15,13 @@ export function onPreCreateItem(item, data, options, userId) {
 
 export function onPreUpdateItem(item, updateData, options, userId) {
   switch (item.type) {
-    case 'skill':
-      const updatedSkillImage = `systems/polaris/assets/icons/${updateData.system.category}.png`;
-      updateData.system.category ? updateData.img = updatedSkillImage : null;
+    case 'skill': {
+      const category = updateData.system?.category;
+      if (category) {
+        updateData.img = `systems/polaris/assets/icons/${category}.png`;
+      }
       break;
+    }
   }
 }
 

@@ -11,7 +11,7 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 - **Langue** : conversation en français. Code, commentaires et JSDoc en **anglais**. Le français n'apparaît que dans les valeurs de `src/lang/fr.json`.
 - **Thomas veut coder lui-même** pour s'approprier le projet. Par défaut : guider, ne pas livrer l'implémentation complète.
   - Découper en petites étapes, lui laisser écrire, relire son code.
-  - Face à un bug, poser d'abord la question qui mène à la cause avant de donner la correction.
+  - Face à un bug, poser d'abord la question qui mène à la cause avant de donner la correction. Cette question doit être dans un bloc à part, annoncée explicitement comme une piste de bug (fichier/fonction concernés) — jamais glissée dans une liste d'autres corrections.
   - Réduire les indications au fil de la progression (il trouve déjà seul des bugs de logique et des cas limites oubliés).
   - Code complet seulement s'il le demande explicitement.
 - **Gros chantier** : proposer l'architecture et les décisions à trancher (tableaux courts), attendre sa validation, puis seulement guider/coder.

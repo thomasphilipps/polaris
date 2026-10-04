@@ -2,14 +2,29 @@ import path from 'path';
 //import fs from 'fs';
 import { Command } from 'commander';
 import { compilePack, extractPack } from '@foundryvtt/foundryvtt-cli';
+import os from 'os';
+
+function resolveFoundryPath() {
+  // Override manuel si besoin (nouvelle machine, cas particulier, etc.)
+  if (process.env.FOUNDRY_DATA_PATH) {
+    return `${process.env.FOUNDRY_DATA_PATH}/systems/polaris`;
+  }
+
+  const isWSL =
+    Boolean(process.env.WSL_DISTRO_NAME) || os.release().toLowerCase().includes('microsoft');
+
+  return isWSL
+    ? `${process.env.HOME}/foundrydata/Data/systems/polaris`
+    : `${process.env.HOME}/.local/share/FoundryVTT/Data/systems/polaris`;
+}
+
+const foundryPath = resolveFoundryPath();
 
 const CONFIG = {
   dataPath: 'packs',
   sourcePath: '_source',
-  distDataPath: `${process.env.HOME}/.local/share/FoundryVTT/Data/systems/polaris/packs`,
-  databases: [
-    'skills',
-  ],
+  distDataPath: `${foundryPath}/packs`,
+  databases: ['skills'],
   yaml: true,
 };
 
@@ -35,9 +50,7 @@ export async function compile() {
 
 const startup = new Command();
 
-startup
-  .name('foundrybuild')
-  .description('Module development and packaging tools');
+startup.name('foundrybuild').description('Module development and packaging tools');
 
 /* LevelDB format compiling from extracted plain-text files */
 startup
