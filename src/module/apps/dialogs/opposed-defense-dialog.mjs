@@ -9,7 +9,7 @@ import { POL3 } from '../../config/config.mjs';
  * @param {Pol3Actor} params.actor
  * @param {number} params.difficulty
  * @param {string} params.attackLabel
- * @returns {Promise<object|null>} A resolveTaskCheck outcome (+ rollLabel), or null if cancelled
+ * @returns {Promise<object|null>} A resolveTaskCheck outcome (+ rollLabel) and a list of modifiers, or null if cancelled
  */
 export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
   const attributeOptions = Object.values(POL3.ATTRIBUTE)
@@ -96,11 +96,16 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     valueCrit = skill.system.mastery;
   }
 
+  const modifiersList = difficulty !== 0 ? [{
+    label: 'POL3.WEAPON.SHEET.Reach',
+    value: difficulty,
+  }] : [];
+
   //TODO: handle askForModifier
-  const { roll, outcome } = await rollTaskCheck({
+  const { roll, outcome, modifiers: modifiersOutcome } = await rollTaskCheck({
     actor,
     actionValue,
-    difficulty,
+    modifiers: modifiersList,
     valueCrit,
     askForModifier: true,
     contextLabel: rollLabel,
@@ -115,5 +120,5 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     flavor: `<strong>${rollLabel}</strong> (${game.i18n.format('POL3.OPPOSED.RespondingTo', { attackLabel })})`,
   });
 
-  return { ...outcome, rollLabel };
+  return { ...outcome, rollLabel, modifiers: modifiersOutcome };
 }

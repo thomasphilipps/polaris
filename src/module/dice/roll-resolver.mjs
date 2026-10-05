@@ -2,28 +2,31 @@ import { POL3 } from '../config/config.mjs';
 import { consumeForcedD20 } from '../dev/dice-cheat.mjs';
 import { promptAdHocModifier } from '../apps/dialogs/modifier-dialog.mjs';
 import { collectAutomaticModifiers } from './automatic-modifiers.mjs';
+import { sumModifiers } from '../utils/helpers.mjs';
 
 /**
  * Calculates the result of a task roll based on known values.
  *
- * @param {number} rollResult              Initial 1d20 result
- * @param {number} actionValue             Base value tested (competence/value)
- * @param {number} difficulty              Sum of the applied modifiers
- * @param {number} [valueCrit=0]           Associated critical bonus
- * @param {number|null} [critFailReroll]   Result of the 1d20 re-roll in case of a critical failure
+ * @param {number} rollResult                             Initial 1d20 result
+ * @param {number} actionValue                            Base value tested (competence/value)
+ * @param {{label: string, value: number}[]} modifiers    List of the applied modifiers
+ * @param {number} [valueCrit=0]                          Associated critical bonus
+ * @param {number|null} [critFailReroll]                  Result of the 1d20 re-roll in case of a critical failure
  * @returns {object} outcome
  */
 export function resolveTaskCheck({
                                    rollResult,
                                    actionValue,
-                                   difficulty,
+                                   modifiers = [],
                                    valueCrit = 0,
                                    critFailReroll = null,
                                  }) {
-  const globalDifficulty = actionValue + difficulty;
+
+  const globalDifficulty = actionValue + sumModifiers(modifiers);
   const initialMargin = globalDifficulty - rollResult;
 
   const outcome = {
+    rollResult,
     globalDifficulty,
     isSuccess: true,
     isCritical: false,
@@ -102,33 +105,39 @@ export async function rollD20() {
  * @param {object} params
  * @param {Pol3Actor} params.actor
  * @param {number} params.actionValue
- * @param {number} params.difficulty
+ * @param {{label: string, value: number}[]} [params.modifiers=[]]
  * @param {number} [params.valueCrit=0]
  * @param {boolean} [params.askForModifier=true]
  * @param {string} [params.contextLabel='']
- * @returns {Promise<{roll: Roll, outcome: object}>}
+ * @returns {Promise<{roll: Roll, outcome: object, modifiers: array}>}
  */
 export async function rollTaskCheck({
                                       actor,
                                       actionValue,
-                                      difficulty,
+                                      modifiers = [],
                                       valueCrit = 0,
                                       askForModifier = true,
                                       contextLabel = '',
                                     }) {
-
   const automaticModifiersList = collectAutomaticModifiers(actor);
-  const automaticModifiers = automaticModifiersList.reduce((total, modifier) => total + modifier.value, 0);
+  let globalModifiersList = [...automaticModifiersList, ...modifiers];
 
-  difficulty += automaticModifiers;
+  const globalModifiers = sumModifiers(globalModifiersList);
 
   if (askForModifier) {
-    const addedDifficulty = await promptAdHocModifier(contextLabel, automaticModifiersList, automaticModifiers);
-    if (addedDifficulty === null) return { roll: null, outcome: null };
-    difficulty += addedDifficulty;
+    const addedDifficulty = await promptAdHocModifier(contextLabel, globalModifiersList, globalModifiers);
+    if (addedDifficulty === null) return { roll: null, outcome: null, modifiers: null };
+    if (addedDifficulty !== 0) {
+      globalModifiersList = [...globalModifiersList, {
+        label: 'POL3.DIALOG.OtherModifiers',
+        value: addedDifficulty,
+      }];
+    }
   }
 
   const roll = await rollD20();
+
+  const difficulty = sumModifiers(globalModifiersList);
 
   const globalDifficulty = actionValue + difficulty;
   let critFailReroll = null;
@@ -140,9 +149,9 @@ export async function rollTaskCheck({
   const outcome = resolveTaskCheck({
     rollResult: roll.total,
     actionValue,
-    difficulty,
+    modifiers: globalModifiersList,
     valueCrit,
     critFailReroll,
   });
-  return { roll, outcome };
+  return { roll, outcome, modifiers: globalModifiersList };
 }

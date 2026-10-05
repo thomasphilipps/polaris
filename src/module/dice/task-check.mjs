@@ -8,7 +8,7 @@ import { damageCheck } from './damage-check.mjs';
  * @param {Pol3Actor} params.actor
  * @param {string} params.rollLabel
  * @param {number} [params.actionValue=0]
- * @param {number} [params.difficulty=0]
+ * @param {{label: string, value: number}[]} [params.modifiers=[]]
  * @param {number} [params.valueCrit=0]
  * @param {boolean} [params.isAttack]
  * @param {Pol3Item} [params.weapon]
@@ -19,7 +19,7 @@ export async function taskCheck({
                                   actor,
                                   rollLabel,
                                   actionValue = 0,
-                                  difficulty = 0,
+                                  modifiers = [],
                                   valueCrit = 0,
                                   isAttack = false,
                                   weapon = null,
@@ -30,7 +30,7 @@ export async function taskCheck({
   const { roll, outcome } = await rollTaskCheck({
     actor,
     actionValue,
-    difficulty,
+    modifiers,
     valueCrit,
     askForModifier: true,
     contextLabel: rollLabel,

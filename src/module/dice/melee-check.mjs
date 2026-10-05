@@ -20,10 +20,18 @@ const OPPOSED_RESULT_LABELS = {
  * @param {string} params.rollLabel
  * @param {number} params.actionValue
  * @param {number} params.valueCrit
+ * @param {{label: string, value: number}[]} [params.modifiers=[]]
  * @param {Item} params.weapon   The Attacker's weapon
  * @param {Token} params.target  The Defender's token
  */
-export async function meleeCheck({ rollLabel, actionValue, valueCrit, weapon, target }) {
+export async function meleeCheck({
+                                   rollLabel,
+                                   actionValue,
+                                   valueCrit,
+                                   modifiers = [],
+                                   weapon,
+                                   target,
+                                 }) {
   const attackerActor = weapon.actor;
   const defenderActor = target.actor;
   if (!defenderActor) return;
@@ -33,14 +41,16 @@ export async function meleeCheck({ rollLabel, actionValue, valueCrit, weapon, ta
   );
 
   const allongeDiff = (weapon.system.allonge ?? 0) - (defenderWeapon?.system.allonge ?? 0);
-  const attackerDifficulty = allongeDiff > 0 ? allongeDiff : 0;
+  const attackerModifiersList = allongeDiff > 0
+    ? [...modifiers, { label: 'POL3.WEAPON.SHEET.Reach', value: allongeDiff }]
+    : modifiers;
   const defenderDifficulty = allongeDiff < 0 ? -allongeDiff : 0;
 
   //TODO: handle askForModifier
   const { outcome: attackerOutcome } = await rollTaskCheck({
     actor: attackerActor,
     actionValue,
-    difficulty: attackerDifficulty,
+    modifiers: attackerModifiersList,
     valueCrit,
     askForModifier: true,
     contextLabel: rollLabel,

@@ -35,23 +35,23 @@ export const SUBCATEGORY = {
 
 export const RANGE = {
   close: {
-    label: 'POL3.WEAPON.Range.Close',
+    label: 'POL3.WEAPON.Range.Close.Label',
     modifier: 5,
   },
   short: {
-    label: 'POL3.WEAPON.Range.Short',
+    label: 'POL3.WEAPON.Range.Short.Label',
     modifier: 0,
   },
   medium: {
-    label: 'POL3.WEAPON.Range.Medium',
+    label: 'POL3.WEAPON.Range.Medium.Label',
     modifier: -5,
   },
   long: {
-    label: 'POL3.WEAPON.Range.Long',
+    label: 'POL3.WEAPON.Range.Long.Label',
     modifier: -10,
   },
   extreme: {
-    label: 'POL3.WEAPON.Range.Extreme',
+    label: 'POL3.WEAPON.Range.Extreme.Label',
     modifier: -15,
   },
 };

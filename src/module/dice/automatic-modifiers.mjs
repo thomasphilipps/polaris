@@ -14,7 +14,7 @@
 export function getWoundModifier(actor) {
   const malus = actor.system.woundsSummary?.malus ?? 0;
   if (malus === 0) return null;
-  return { label: game.i18n.localize('POL3.WOUND.Malus'), value: malus };
+  return { label: 'POL3.WOUND.Malus', value: malus };
 }
 
 /**

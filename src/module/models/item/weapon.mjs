@@ -47,11 +47,14 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
       penetration: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Penetration' }),
       allonge: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Reach' }),
       hitDistance: new fields.SchemaField({
-        close: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Close' }),
-        short: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Short' }),
-        medium: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Medium' }),
-        long: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Long' }),
-        extreme: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Extreme' }),
+        close: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Close.Label' }),
+        short: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Short.Label' }),
+        medium: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Medium.Label' }),
+        long: new fields.NumberField({ required: true, label: 'POL3.WEAPON.Range.Long.Label' }),
+        extreme: new fields.NumberField({
+          required: true,
+          label: 'POL3.WEAPON.Range.Extreme.Label',
+        }),
       }),
       tags: new fields.SetField(
         new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS }),
@@ -70,7 +73,16 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
   /**
    * Builds the roll parameters for this weapon: the linked skill's value, plus
    * (for ranged weapons) the range modifier computed from the current target's distance.
-   * @returns {{rollLabel: string, actionValue: number, valueCrit: number, difficulty: number}|null}
+   * @returns {{
+   *   actor: Actor,
+   *   rollLabel: string,
+   *   actionValue: number,
+   *   valueCrit: number,
+   *   modifiers: {label: string, value: number}[],
+   *   isAttack: boolean,
+   *   weapon: Item,
+   *   target: Token
+   * }|null}
    */
   getRollData() {
     const actor = this.parent.actor;
@@ -86,13 +98,12 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
       return null;
     }
 
-    let difficulty = 0;
-    let target = null;
+    const target = getSingleTarget();
+    if (!target) return null;
+
+    const modifiers = [];
 
     if (this.category === 'ranged') {
-      target = getSingleTarget();
-      if (!target) return null;
-
       const attackerToken = getActorToken(actor);
       if (!attackerToken) return null;
 
@@ -104,13 +115,13 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         );
         return null;
       }
-      difficulty += CONFIG.POL3.WEAPON.RANGE[rangeBand].modifier;
-    } else {
-      // Melee/creatureAttack: only the target is needed here — Allonge and the
-      // opposition itself are computed in melee-check.mjs, which needs both
-      // combatants' weapons at once (out of scope for a single weapon's own data).
-      target = getSingleTarget();
-      if (!target) return null;
+      const rangeConfig = CONFIG.POL3.WEAPON.RANGE[rangeBand];
+      if (rangeConfig) {
+        modifiers.push({
+          label: rangeConfig.label,
+          value: rangeConfig.modifier,
+        });
+      }
     }
 
     return {
@@ -118,7 +129,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
       rollLabel: competence.label,
       actionValue: competence.value,
       valueCrit: competence.valueCrit,
-      difficulty,
+      modifiers,
       isAttack: true,
       weapon: this.parent,
       target,

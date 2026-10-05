@@ -64,7 +64,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
   const adHocDamageModifier = await promptAdHocModifier(
     game.i18n.format('POL3.DAMAGE.ModifierContext', { weaponName: weapon.name }),
     [],
-    0
+    0,
   );
   const adHocModifier = adHocDamageModifier ?? 0;
 
@@ -74,7 +74,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
   const damageResistance = targetActor.system.damageResistance?.value ?? 0;
   const armorZone = WOUND_ZONE_TO_ARMOR_ZONE[zone];
   const armor = targetActor.items.find(
-    i => i.type === 'armor' && i.system.isEquipped && armorZone && i.system.tags.has(armorZone)
+    i => i.type === 'armor' && i.system.isEquipped && armorZone && i.system.tags.has(armorZone),
   );
   const armorProtection = armor?.system.baseProtection ?? 0;
 
@@ -82,7 +82,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
     weaponDamageRoll: damageRoll.total,
     successModifier,
     closeCombatModifier,
-    adHocModifier,
+    otherModifiers: adHocModifier,
     damageResistance,
     armorProtection,
   });

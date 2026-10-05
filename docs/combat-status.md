@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-04 (branche `combat`).
+Dernière mise à jour : 2026-10-05 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -73,8 +73,8 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 ## 4. Décisions ouvertes et TODO
 
 - **Esquive active à distance** (Test d'opposition contre un tir) : le texte dit « pas d'opposition en combat à distance ». Ce serait une house rule — en attente de la relecture du livre par Thomas.
-- **Sauter le dialogue de modificateur** (`askForModifier = false`) : clic droit ? réglage système ? les deux ? `// TODO` présents dans le code, pas décidé.
-- **Chat cards personnalisées** : détailler chaque modificateur (portée, blessures, ad hoc…) plutôt qu'un total agrégé.
+- **Sauter le dialogue de modificateur (décision prise, à coder)** : Maj+clic + réglage **client** « demander par défaut » que Maj inverse ; le dialogue ad hoc des dégâts suit la même règle.
+- **Chat cards (décisions prises, en cours — étape 1/6 codée le 2026-10-05 : `rollTaskCheck` reçoit et renvoie `modifiers`, test en jeu à confirmer ; reste infrastructure, 3 cartes, saut du dialogue)** : modificateurs en liste `{ label (clé i18n), value }` de bout en bout ; cartes séparées (test, opposition, dégâts) en templates `templates/chat/` ; résumé court visible (type de jet, jet, réussite/échec, critique, marge, total), détail complet dans un `<details>` replié ; l'opposition affiche jet, seuil et marge des deux camps.
 - **Phase E (décision prise)** : pas de détection automatique des Techniques (dépendrait du couplage par nom, et Initiative / états multi-tours n'existent pas). À la place : champ ad hoc sur les dégâts (fait) + Journal Entry d'aide-mémoire à créer/vérifier dans Foundry.
 - **Vérification légale** : contact avec l'éditeur / Philippe Tessier avant toute publication officielle (nom « Polaris », liste de compétences) — hors code, en cours côté Thomas.
 
@@ -88,9 +88,9 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 ## 6. Prochaines étapes envisageables
 
-Choix en attente de Thomas entre les pistes 1 à 3 (recommandation : 1 puis 2, pour que les modificateurs de la phase D s'affichent sans retouche).
+Piste 1 choisie par Thomas le 2026-10-04 (architecture en cours de validation) ; ensuite 2, pour que les modificateurs de la phase D s'affichent sans retouche.
 
-1. Chat cards détaillées (dette #7) + trancher « sauter le dialogue ».
+1. **En cours** — Chat cards détaillées (dette #7) + trancher « sauter le dialogue ».
 2. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
 3. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
 

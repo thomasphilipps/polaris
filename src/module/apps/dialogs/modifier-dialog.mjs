@@ -1,26 +1,26 @@
 /**
  * Prompts the user (GM or Player) to make a modifier roll.
  * @param {string} contextLabel
- * @param {{label: string, value: number}[]} automaticModifiersList
- * @param {number} automaticModifiers
+ * @param {{label: string, value: number}[]} globalModifiersList
+ * @param {number} globalModifiers
  *@returns {Promise<number>} null if canceled
  */
-export async function promptAdHocModifier(contextLabel, automaticModifiersList, automaticModifiers) {
-  const automaticModifiersString = automaticModifiersList
-    .map(m => (`<li>${m.label}: ${m.value}</li>`))
+export async function promptAdHocModifier(contextLabel, globalModifiersList, globalModifiers) {
+  const globalModifiersString = globalModifiersList
+    .map(m => (`<li>${game.i18n.localize(m.label)}: ${m.value}</li>`))
     .join('');
 
   const content = `
   <div class="dialog dialog-list">
     <label>${game.i18n.localize('POL3.DIALOG.ExistingModifiers')}</label>
-    <ul>${automaticModifiersString || `<li>${game.i18n.localize('POL3.DIALOG.NoAutomaticModifier')}</li>`}</ul>
+    <ul>${globalModifiersString || `<li>${game.i18n.localize('POL3.DIALOG.NoAutomaticModifier')}</li>`}</ul>
   </div>
   <div class="form-group">
     <label>${contextLabel}</label>
     <input type="number" id="modifier-input" name="modifier" value="0">
   </div>
   <div class="dialog modifiers-total">
-    ${game.i18n.localize('POL3.DIALOG.Total')} : <span id="total-display">${automaticModifiers}</span>
+    ${game.i18n.localize('POL3.DIALOG.Total')} : <span id="total-display">${globalModifiers}</span>
   </div>
   `;
 
@@ -33,7 +33,7 @@ export async function promptAdHocModifier(contextLabel, automaticModifiersList, 
 
       const updateTotal = () => {
         const modifier = parseInt(modifierInput.value) || 0;
-        totalDisplay.textContent = modifier + automaticModifiers;
+        totalDisplay.textContent = modifier + globalModifiers;
       };
       modifierInput.addEventListener('input', updateTotal);
     },
