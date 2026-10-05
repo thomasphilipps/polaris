@@ -133,6 +133,9 @@
       "CoreRulebook1": "Livre de base 1",
       "CoreRulebook2": "Livre de base 2"
     },
+    "CHAT": {
+      "NoModifiers": "Aucun modificateur"
+    },
     "DAMAGE": {
       "Title": "Dégâts",
       "Points": "points de dégâts",

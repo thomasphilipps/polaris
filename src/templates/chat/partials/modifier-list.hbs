@@ -1,0 +1,8 @@
+<ul>
+  {{#each modifiers as |modifier| }}
+    <li class="modifier-item">{{localize modifier.label}}: {{numberFormat modifier.value decimals=0
+                                                                          sign=true}}</li>
+  {{else}}
+    <li class="modifier-item">{{localize 'POL3.CHAT.NoModifiers'}}</li>
+  {{/each}}
+</ul>
