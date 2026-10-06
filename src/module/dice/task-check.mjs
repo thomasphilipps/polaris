@@ -1,5 +1,7 @@
 import { rollTaskCheck } from './roll-resolver.mjs';
 import { damageCheck } from './damage-check.mjs';
+import { breakdownRoll, renderChatCard } from '../apps/chat/chat-card.mjs';
+import { sumModifiers } from '../utils/helpers.mjs';
 
 /**
  * Roll a task check
@@ -27,7 +29,7 @@ export async function taskCheck({
                                 } = {}) {
 
   //TODO: handle askForModifier
-  const { roll, outcome } = await rollTaskCheck({
+  const { roll, outcome, modifiers: modifiersOutcome } = await rollTaskCheck({
     actor,
     actionValue,
     modifiers,
@@ -38,12 +40,29 @@ export async function taskCheck({
 
   if (outcome === null) return null;
 
-  const flavor = `<strong>${rollLabel}</strong><br>
-    ${outcome.isSuccess ? 'Réussite' : 'Échec'}${outcome.isCritical ? ' critique' : ''}
-    — Marge : ${outcome.rollMargin}<br>
-    ${game.i18n.localize(outcome.degreeLabel)}`;
+  const rollBreakdown = breakdownRoll(roll);
+  const context = {
+    rollLabel,
+    actionValue,
+    outcome,
+    modifiersOutcome,
+    rollBreakdown,
+    hasModifiers: false,
+  };
+  
+  if (modifiersOutcome.length > 0) {
+    context.totalModifiers = sumModifiers(modifiersOutcome);
+    context.hasModifiers = true;
+  }
 
-  const message = await roll.toMessage({ speaker: ChatMessage.getSpeaker(), flavor });
+  const content = await renderChatCard('task-card', context);
+
+  const message = await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content,
+    rolls: [roll],
+    sound: CONFIG.sounds.dice,
+  });
 
   if (isAttack && outcome.isSuccess && weapon && target) {
     await damageCheck({

@@ -134,7 +134,8 @@
       "CoreRulebook2": "Livre de base 2"
     },
     "CHAT": {
-      "NoModifiers": "Aucun modificateur"
+      "NoModifiers": "Aucun modificateur",
+      "Test": "Test"
     },
     "DAMAGE": {
       "Title": "Dégâts",
@@ -186,20 +187,28 @@
     "ROLL": {
       "Bad": "Mauvais",
       "Barely": "De justesse",
+      "BaseDifficulty": "Difficulté de base",
       "Catastrophic": "Catastrophique",
       "Correct": "Correct",
+      "Critical": "Critique",
       "Extraordinary": "Extraordinaire",
       "Excellent": "Excellent",
       "Execrable": "Exécrable",
+      "Failure": "Échec",
       "Good": "Bon",
       "Heroic": "Héroïque",
       "Legendary": "Légendaire",
+      "Margin": "Marge",
+      "ModifiersDetail": "Détail des modificateurs",
+      "ModifiersTotal": "Total des modificateurs",
       "Perfect": "Parfait",
       "Poor": "Médiocre",
       "QuiteBad": "Assez mauvais",
       "QuiteGood": "Assez bon",
       "ReallyBad": "Très mauvais",
-      "ReallyGood": "Très bon"
+      "ReallyGood": "Très bon",
+      "Result": "Résultat",
+      "Success": "Réussite"
     },
     "SETTINGS": {
       "WorldAmbiance": {

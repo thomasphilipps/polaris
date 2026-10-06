@@ -1,0 +1,11 @@
+<div class="module-dice">
+  <div class="module-container">{{#each rollTerms as |rt|}}
+    {{#if (eq rt.type 'die')}}
+      <i class="fas fa-dice-d{{rt.faces}}"></i>
+      <span class="dice-result">
+        {{rt.value}}
+      </span>{{else}}
+      <span class="dice-term">{{rt.value}}</span>{{/if}}
+  {{/each}}
+  </div>
+</div>

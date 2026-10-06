@@ -9,3 +9,24 @@ export async function renderChatCard(templateName, data) {
   const path = `systems/polaris/templates/chat/${templateName}.hbs`;
   return foundry.applications.handlebars.renderTemplate(path, data);
 }
+
+/**
+ * Breaks down a roll into its component parts.
+ *
+ * @param { Roll } roll
+ * @returns {{type: string, value: number|string, faces?: number}[]}
+ */
+export function breakdownRoll(roll) {
+  const { DiceTerm, NumericTerm, OperatorTerm } = foundry.dice.terms;
+  return roll.terms.flatMap(t => {
+    if (t instanceof DiceTerm) {
+      return t.results.flatMap((r, i) => {
+        const die = { type: 'die', value: r.result, faces: t.faces };
+        return i < t.results.length - 1 ? [die, { type: 'operator', value: '+' }] : [die];
+      });
+    }
+    if (t instanceof NumericTerm) return { type: 'number', value: t.number };
+    if (t instanceof OperatorTerm) return { type: 'operator', value: t.operator };
+    return [];
+  });
+}
