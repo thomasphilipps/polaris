@@ -6,6 +6,7 @@ export async function preloadHandlebarsTemplates() {
     'systems/polaris/templates/sheets/actors/partials/actor-armors.hbs',
     'systems/polaris/templates/chat/partials/modifier-list.hbs',
     'systems/polaris/templates/chat/partials/dice-module.hbs',
+    'systems/polaris/templates/chat/partials/check-summary.hbs',
   ];
 
   return foundry.applications.handlebars.loadTemplates(templatePaths);

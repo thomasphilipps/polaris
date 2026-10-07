@@ -1,0 +1,29 @@
+<div class="module-details">
+  <div class="module-recap">
+    <div class="module-result">{{localize 'POL3.ROLL.Result'}}: {{outcome.rollResult}}</div>
+    <div class="module-middle">vs</div>
+    <div class="module-difficulty">{{outcome.globalDifficulty}}</div>
+    <details class="details">
+      <summary>{{localize 'POL3.ROLL.ModifiersDetail'}}</summary>
+      <div class="modifier-item">{{localize 'POL3.ROLL.BaseDifficulty'}}:&nbsp;
+        {{actionValue}}</div>
+      {{> 'systems/polaris/templates/chat/partials/modifier-list.hbs' modifiers=modifiers}}
+      {{#if hasModifiers}}
+        {{localize 'POL3.ROLL.ModifiersTotal'}}:&nbsp;
+        {{numberFormat totalModifiers decimals=0 sign=true}}
+      {{/if}}
+    </details>
+  </div>
+  <div class="module-outcome-text">
+    <div class="outcome-result">{{#if outcome.isSuccess}}
+      {{localize 'POL3.ROLL.Success'}}
+    {{else}}
+      {{localize 'POL3.ROLL.Failure'}}
+    {{/if}}
+      {{#if outcome.isCritical}}&nbsp;{{localize 'POL3.ROLL.Critical'}}{{/if}}
+    </div>
+    <div class="outcome-description">{{localize outcome.degreeLabel}}</div>
+    <div class="outcome-margin">{{localize 'POL3.ROLL.Margin'}}:&nbsp;
+      {{numberFormat outcome.rollMargin decimals=0 sign=true}}</div>
+  </div>
+</div>

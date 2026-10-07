@@ -7,15 +7,17 @@
     <ul class="attribute-list">
       {{#each attributeScores as |attribute|}}
         <li class="attribute flexrow" data-attribute-id="{{attribute.id}}"
-            data-attribute-name="{{localize attribute.abbr}}"
+            data-attribute-name="{{localize attribute.label}}"
             data-attribute-value="{{attribute.value}}">
           <div class="label">{{localize attribute.abbr}}</div>
           <span class="input value">{{attribute.value}}</span>
           <div class="action-button flexrow">
             <a class="button icon fa-solid fa-gears" data-action="configureAttribute"
-               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Configure' itemName=(localize attribute.label)}}"></a>
+               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Configure'
+                                        itemName=(localize attribute.label)}}"></a>
             <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test' itemName=(localize attribute.label)}}"></a>
+               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test'
+                                        itemName=(localize attribute.label)}}"></a>
           </div>
         </li>
       {{/each}}
@@ -31,7 +33,8 @@
         <span class="input value">{{variableAttributeScores.baseLuck.value}}</span>
         <div class="action-button flexrow">
           <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-             data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test' itemName=(localize 'POL3.ATTRIBUTE.SECONDARIES.BaseLuck')}}"></a>
+             data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test'
+                                      itemName=(localize 'POL3.ATTRIBUTE.SECONDARIES.BaseLuck')}}"></a>
         </div>
       </li>
     </ul>
@@ -41,13 +44,14 @@
     <ul class="attribute-variable">
       <li class="attribute flexrow"
           data-attribute-id="{{variableAttributeScores.baseInitiative.id}}"
-      data-attribute-value="{{variableAttributeScores.baseInitiative.value}}"
-      data-attribute-name="{{localize variableAttributeScores.baseInitiative.label}}">
+          data-attribute-value="{{variableAttributeScores.baseInitiative.value}}"
+          data-attribute-name="{{localize variableAttributeScores.baseInitiative.label}}">
         <div class="label">{{localize "POL3.ATTRIBUTE.SECONDARIES.BaseInitiative"}}</div>
         <span class="input value">{{variableAttributeScores.baseInitiative.value}}</span>
         <div class="action-button flexrow">
           <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-             data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test' itemName=(localize "POL3.ATTRIBUTE.SECONDARIES.BaseInitiative")}}"></a>
+             data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test'
+                                      itemName=(localize "POL3.ATTRIBUTE.SECONDARIES.BaseInitiative")}}"></a>
         </div>
       </li>
     </ul>
@@ -64,7 +68,8 @@
           <div class="label">{{localize secAttribute.label}}</div>
           <span class="input value">{{secAttribute.value}}</span>
           <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-             data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test' itemName=(localize secAttribute.label)}}"></a>
+             data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test'
+                                      itemName=(localize secAttribute.label)}}"></a>
         </li>
       {{/each}}
     </ul>
@@ -83,7 +88,8 @@
           : {{speed.groundSpeed.value.fast}}</span>
         <span class="input value">{{localize 'POL3.ATTRIBUTE.SECONDARIES.Speed.Sprint'}}
           : <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test' itemName=(localize speed.groundSpeed.label)}}"></a>
+               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test'
+                                        itemName=(localize speed.groundSpeed.label)}}"></a>
         </span>
       </li>
       <li class="attribute flexrow" data-attribute-id="{{speed.swimSpeed.id}}">
@@ -96,7 +102,8 @@
           : {{speed.swimSpeed.value.fast}}</span>
         <span class="input value">{{localize 'POL3.ATTRIBUTE.SECONDARIES.Speed.Sprint'}}
           : <a class="button icon fa-solid fa-dice-d20" data-action="testAttribute"
-               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test' itemName=(localize speed.swimSpeed.label)}}"></a>
+               data-tooltip="{{localize 'POL3.SHEETS.TOOLTIPS.Test'
+                                        itemName=(localize speed.swimSpeed.label)}}"></a>
         </span>
       </li>
     </ul>

@@ -1,7 +1,6 @@
 import { rollTaskCheck } from './roll-resolver.mjs';
 import { damageCheck } from './damage-check.mjs';
-import { breakdownRoll, renderChatCard } from '../apps/chat/chat-card.mjs';
-import { sumModifiers } from '../utils/helpers.mjs';
+import { breakdownRoll, renderChatCard, buildCheckContext } from '../apps/chat/chat-card.mjs';
 
 /**
  * Roll a task check
@@ -42,18 +41,9 @@ export async function taskCheck({
 
   const rollBreakdown = breakdownRoll(roll);
   const context = {
-    rollLabel,
-    actionValue,
-    outcome,
-    modifiersOutcome,
+    ...buildCheckContext({ rollLabel, actionValue, outcome, modifiers: modifiersOutcome }),
     rollBreakdown,
-    hasModifiers: false,
   };
-  
-  if (modifiersOutcome.length > 0) {
-    context.totalModifiers = sumModifiers(modifiersOutcome);
-    context.hasModifiers = true;
-  }
 
   const content = await renderChatCard('task-card', context);
 
