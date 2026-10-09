@@ -3,13 +3,12 @@ import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import sass from 'rollup-plugin-sass';
 import terser from '@rollup/plugin-terser';
-import copy from 'rollup-plugin-copy-watch';
+import copy from 'rollup-plugin-copy';
 import os from 'os';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 function resolveFoundryPath() {
-  // Override manuel si besoin (nouvelle machine, cas particulier, etc.)
   if (process.env.FOUNDRY_DATA_PATH) {
     return `${process.env.FOUNDRY_DATA_PATH}/systems/polaris`;
   }
@@ -40,14 +39,7 @@ export default {
     commonjs(),
     isProduction && terser(),
     copy({
-      watch: [
-        'src/assets/',
-        'src/lang/',
-        'src/templates/',
-        'src/system.json',
-        'src/polaris.css',
-        'src/packs',
-      ],
+      copyOnce: true, // Évite les recompilations en boucle au démarrage
       targets: [
         { src: ['src/assets/*', '!src/**/*~'], dest: `${foundryPath}/assets` },
         { src: ['src/lang/*', '!src/**/*~'], dest: `${foundryPath}/lang` },
