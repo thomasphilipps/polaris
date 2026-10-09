@@ -172,17 +172,21 @@
     "OPPOSED": {
       "RESULT": {
         "AttackerWins": "L'Attaquant touche sa cible.",
+        "BothFail": "Aucune des deux attaques ne passe.",
         "DefenderWins": "L'attaque est parée.",
-        "Tie": "Égalité — les deux combattants se touchent simultanément.",
-        "BothFail": "Aucune des deux attaques ne passe."
+        "Tie": "Égalité — les deux combattants se touchent simultanément."
       },
+      "AttacksWith": "attaque avec",
+      "Attribute": "Attribut",
+      "DefendsWith": "défend avec",
       "DefenseRequest": "{actorName} doit se défendre contre {attackLabel}.",
+      "DialogTitle": "Test d'opposition — Défense",
+      "EffectiveMargin": "Marge effective",
       "ForceDefense": "Répondre à sa place",
+      "OpposedTest": "Test d'opposition",
       "RespondingTo": "Défense contre : {attackLabel}",
       "TestType": "Type de test",
-      "Skill": "Compétence",
-      "Attribute": "Attribut",
-      "DialogTitle": "Test d'opposition — Défense"
+      "Skill": "Compétence"
     },
     "ROLL": {
       "Bad": "Mauvais",
@@ -361,7 +365,7 @@
       "Dead": "Mort",
       "Destroyed": "Détruit",
       "Heal": "Soigner la pire blessure",
-      "Malus": "Malus",
+      "Malus": "Malus des blessures",
       "SEVERITY": {
         "Critical": "Critique",
         "Deadly": "Fatale",

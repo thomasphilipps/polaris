@@ -17,18 +17,21 @@ import { breakdownRoll, renderChatCard, buildCheckContext } from '../apps/chat/c
  * @returns {Promise<*|null>}
  */
 export async function taskCheck({
-                                  actor,
-                                  rollLabel,
-                                  actionValue = 0,
-                                  modifiers = [],
-                                  valueCrit = 0,
-                                  isAttack = false,
-                                  weapon = null,
-                                  target = null,
-                                } = {}) {
-
+  actor,
+  rollLabel,
+  actionValue = 0,
+  modifiers = [],
+  valueCrit = 0,
+  isAttack = false,
+  weapon = null,
+  target = null,
+} = {}) {
   //TODO: handle askForModifier
-  const { roll, outcome, modifiers: modifiersOutcome } = await rollTaskCheck({
+  const {
+    roll,
+    outcome,
+    modifiers: modifiersOutcome,
+  } = await rollTaskCheck({
     actor,
     actionValue,
     modifiers,
@@ -39,11 +42,13 @@ export async function taskCheck({
 
   if (outcome === null) return null;
 
-  const rollBreakdown = breakdownRoll(roll);
-  const context = {
-    ...buildCheckContext({ rollLabel, actionValue, outcome, modifiers: modifiersOutcome }),
-    rollBreakdown,
-  };
+  const context = buildCheckContext({
+    rollBreakdown: breakdownRoll(roll),
+    rollLabel,
+    actionValue,
+    outcome,
+    modifiers: modifiersOutcome,
+  });
 
   const content = await renderChatCard('task-card', context);
 

@@ -13,25 +13,6 @@ export async function renderChatCard(templateName, data) {
 }
 
 /**
- * Normalize the context object for the chat card
- *
- * @param {object} params
- * @param {string} params.rollLabel
- * @param {number} params.actionValue
- * @param {Object} params.outcome
- * @param {{label: string, value: number}[]} params.modifiers
- * @returns {{rollLabel: string, actionValue: number, outcome: Object, modifiers: {label:string, value:number}[], hasModifiers: boolean, totalModifiers?: number}}
- */
-export function buildCheckContext({ rollLabel, actionValue, outcome, modifiers }) {
-  const context = { rollLabel, actionValue, outcome, modifiers, hasModifiers: false };
-  if (modifiers.length > 0) {
-    context.totalModifiers = sumModifiers(modifiers);
-    context.hasModifiers = true;
-  }
-  return context;
-}
-
-/**
  * Breaks down a roll into its component parts.
  *
  * @param { Roll } roll
@@ -50,4 +31,31 @@ export function breakdownRoll(roll) {
     if (t instanceof OperatorTerm) return { type: 'operator', value: t.operator };
     return [];
   });
+}
+
+/**
+ * Normalize the context object for the chat card
+ *
+ * @param {object} params
+ * @param {{type: string, value: number|string, faces?: number}[]} params.rollBreakdown
+ * @param {string} params.rollLabel
+ * @param {number} params.actionValue
+ * @param {Object} params.outcome
+ * @param {{label: string, value: number}[]} params.modifiers
+ * @returns {{rollLabel: string, actionValue: number, rollBreakdown: {type: string, value: (number|string), faces?: number}[],outcome: Object, modifiers: {label:string, value:number}[], hasModifiers: boolean, totalModifiers?: number}}
+ */
+export function buildCheckContext({ rollBreakdown, rollLabel, actionValue, outcome, modifiers }) {
+  const context = {
+    rollLabel,
+    actionValue,
+    rollBreakdown,
+    outcome,
+    modifiers,
+    hasModifiers: false,
+  };
+  if (modifiers.length > 0) {
+    context.totalModifiers = sumModifiers(modifiers);
+    context.hasModifiers = true;
+  }
+  return context;
 }

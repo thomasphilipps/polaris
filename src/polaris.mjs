@@ -8,7 +8,7 @@ import { registerSystemSettings } from './module/config/settings.mjs';
 import { initSocketListeners } from './module/net/socket.mjs';
 import { forceNextD20, clearForcedRolls } from './module/dev/dice-cheat.mjs';
 
-Hooks.once('init', async function () {
+Hooks.once('init', async function() {
   console.log('Polaris | Initializing Polaris config');
   globalThis.polaris = game.system;
 
@@ -51,7 +51,7 @@ Hooks.once('init', async function () {
       types: ['hero'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Hero',
-    }
+    },
   );
 
   foundry.documents.collections.Items.unregisterSheet('core', foundry.appv1.sheets.ItemSheet);
@@ -63,8 +63,8 @@ Hooks.once('init', async function () {
     {
       types: ['skill'],
       makeDefault: true,
-      label: 'POL3.SHEETS.GENERAL.Skill',
-    }
+      label: 'POL3.SHEETS.GENERAL.Skill_one',
+    },
   );
 
   foundry.applications.apps.DocumentSheetConfig.registerSheet(
@@ -75,7 +75,7 @@ Hooks.once('init', async function () {
       types: ['weapon'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Weapon',
-    }
+    },
   );
 
   foundry.applications.apps.DocumentSheetConfig.registerSheet(
@@ -86,7 +86,7 @@ Hooks.once('init', async function () {
       types: ['armor'],
       makeDefault: true,
       label: 'POL3.SHEETS.GENERAL.Armor',
-    }
+    },
   );
 
   registerSystemSettings();

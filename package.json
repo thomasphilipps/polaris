@@ -5,6 +5,7 @@
   },
   "devDependencies": {
     "@foundryvtt/foundryvtt-cli": "^1.0.3",
+    "@glimmer/syntax": "^0.95.0",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-replace": "^6.0.3",
@@ -13,6 +14,8 @@
     "gulp": "^5.0.0",
     "gulp-sass": "^5.1.0",
     "prettier": "^3.9.7",
+    "prettier-plugin-ember-template-tag": "^2.1.8",
+    "prettier-plugin-handlebars": "^0.0.1",
     "rollup": "^4.24.0",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-copy-watch": "^0.0.1",

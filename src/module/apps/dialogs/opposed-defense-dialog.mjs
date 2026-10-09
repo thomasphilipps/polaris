@@ -1,6 +1,7 @@
 import { groupItemsByField } from '../../utils/sheet-utils.mjs';
 import { rollTaskCheck } from '../../dice/roll-resolver.mjs';
 import { POL3 } from '../../config/config.mjs';
+import { breakdownRoll } from '../chat/chat-card.mjs';
 
 /**
  * Prompts whoever controls `actor` to choose an Attribute or Skill to defend
@@ -21,7 +22,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     .map(
       g => `<optgroup label="${g.label}">
         ${g.itemList.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
-      </optgroup>`,
+      </optgroup>`
     )
     .join('');
 
@@ -96,13 +97,22 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     valueCrit = skill.system.mastery;
   }
 
-  const modifiersList = difficulty !== 0 ? [{
-    label: 'POL3.WEAPON.SHEET.Reach',
-    value: difficulty,
-  }] : [];
+  const modifiersList =
+    difficulty !== 0
+      ? [
+          {
+            label: 'POL3.WEAPON.SHEET.Reach',
+            value: difficulty,
+          },
+        ]
+      : [];
 
   //TODO: handle askForModifier
-  const { roll, outcome, modifiers: modifiersOutcome } = await rollTaskCheck({
+  const {
+    roll,
+    outcome,
+    modifiers: modifiersOutcome,
+  } = await rollTaskCheck({
     actor,
     actionValue,
     modifiers: modifiersList,
@@ -113,12 +123,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
 
   if (outcome === null) return null;
 
-  // Visible locally on the Defender's client, regardless of the summary
-  // the Attacker will post once the challenge is resolved.
-  await roll.toMessage({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    flavor: `<strong>${rollLabel}</strong> (${game.i18n.format('POL3.OPPOSED.RespondingTo', { attackLabel })})`,
-  });
+  const rollBreakdown = breakdownRoll(roll);
 
-  return { ...outcome, rollLabel, modifiers: modifiersOutcome };
+  return { ...outcome, rollLabel, rollBreakdown, actionValue, modifiers: modifiersOutcome };
 }

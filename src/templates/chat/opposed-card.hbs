@@ -1,0 +1,19 @@
+<div class="module-summary">
+  <div>
+    <h6>{{attackerName}} {{localize 'POL3.OPPOSED.AttacksWith'}}: {{attackerContext.rollLabel}}</h6>
+    {{> 'systems/polaris/templates/chat/partials/dice-module.hbs' rollTerms=attackerContext.rollBreakdown }}
+    {{> 'systems/polaris/templates/chat/partials/check-summary.hbs' attackerContext}}
+  </div>
+  <div>
+    <h6>{{defenderName}} {{localize 'POL3.OPPOSED.DefendsWith'}}: {{defenderContext.rollLabel}}</h6>
+    {{> 'systems/polaris/templates/chat/partials/dice-module.hbs' rollTerms=defenderContext.rollBreakdown }}
+    {{> 'systems/polaris/templates/chat/partials/check-summary.hbs' defenderContext}}
+  </div>
+</div>
+<div class='pol3 module-footer'>
+{{localize result}}
+  {{#if effective}}
+    <div class="outcome-margin">{{localize 'POL3.OPPOSED.EffectiveMargin'}}:&nbsp;
+      {{numberFormat effective.margin decimals=0 sign=true}} — {{localize effective.degreeLabel}}</div>
+  {{/if}}
+</div>
