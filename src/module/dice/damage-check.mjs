@@ -4,6 +4,7 @@ import { promptLocationChoice } from '../apps/dialogs/location-dialog.mjs';
 import { toPascalCase } from '../utils/sheet-utils.mjs';
 import { requestApplyWound } from '../net/socket.mjs';
 import { rollD20 } from './roll-resolver.mjs';
+import { breakdownRoll, renderChatCard } from '../apps/chat/chat-card.mjs';
 
 // Armor zones (head/body/arms/legs) are coarser than wound zones
 // (head/body/armLeft/armRight/legLeft/legRight). Fish zones (finLeft/finRight)
@@ -103,15 +104,53 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
       ? game.i18n.localize('POL3.DAMAGE.NoWound')
       : game.i18n.localize('POL3.DAMAGE.NoDamage');
 
-  const flavor = `<strong>${game.i18n.localize('POL3.DAMAGE.Title')}</strong><br>
-    ${zoneLabel} — ${finalDamage} ${game.i18n.localize('POL3.DAMAGE.Points')}<br>
-    ${severityText}`;
+  const rollTerms = breakdownRoll(damageRoll);
 
   const rolls = locationRoll ? [locationRoll, damageRoll] : [damageRoll];
 
+  const modifiersList = [
+    {
+      label: 'POL3.DAMAGE.BaseDamage',
+      value: damageRoll.total,
+    },
+    {
+      label: 'POL3.DIALOG.SuccessModifier',
+      value: successModifier,
+    },
+    {
+      label: 'POL3.DIALOG.OtherModifiers',
+      value: adHocModifier,
+    },
+    {
+      label: 'POL3.ATTRIBUTE.SECONDARIES.CloseCombatModifier',
+      value: closeCombatModifier,
+    },
+    {
+      label: 'POL3.ATTRIBUTE.SECONDARIES.DamageResistance',
+      value: damageResistance,
+    },
+    {
+      label: 'POL3.DIALOG.ArmorProtection',
+      value: -armorProtection,
+    },
+  ];
+
+  const damageContext = {
+    targetName: targetActor.name,
+    weaponName: weapon.name,
+    rollTerms,
+    zoneLabel,
+    finalDamage,
+    severityText,
+    damageFormula: weapon.system.baseDamage,
+    modifiers: modifiersList,
+  };
+
+  const content = await renderChatCard('damage-card', damageContext);
+
   return ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: targetActor }),
-    content: flavor,
+    content,
     rolls,
     sound: CONFIG.sounds.dice,
   });

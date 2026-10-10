@@ -1,0 +1,16 @@
+<div class="damage-header">
+  {{localize 'POL3.DAMAGE.IsHitBy' targetName=targetName weaponName=weaponName}}
+</div>
+<div>
+  {{localize 'POL3.DAMAGE.RollDescription'}}
+  {{> 'systems/polaris/templates/chat/partials/dice-module.hbs' rollTerms=rollTerms }}
+</div>
+<div class="damage-description">
+  {{localize 'POL3.DAMAGE.DamageDescription' zoneLabel=zoneLabel finalDamage=finalDamage}}<br>
+  <strong><em>{{severityText}}</em></strong>
+</div>
+<details class="details">
+  <summary>{{localize 'POL3.SHEETS.GENERAL.Details'}}</summary>
+  {{localize 'POL3.DAMAGE.DamageFormula'}}: {{damageFormula}}
+  {{> 'systems/polaris/templates/chat/partials/modifier-list.hbs' modifiers=modifiers}}
+</details>

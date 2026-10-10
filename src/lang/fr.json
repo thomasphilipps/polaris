@@ -138,13 +138,17 @@
       "Test": "Test"
     },
     "DAMAGE": {
-      "Title": "Dégâts",
-      "Points": "points de dégâts",
-      "NoWound": "Aucune blessure",
+      "BaseDamage": "Dégâts de base",
+      "DamageDescription": "La zone {zoneLabel} subit {finalDamage} points de dégâts",
+      "DamageFormula": "Formule des dommages",
+      "IsHitBy": "{targetName} est touché par {weaponName}",
+      "ModifierContext": "Dégâts: {weaponName}",
       "NoDamage": "Aucun dégât",
-      "ModifierContext": "Dégâts: {weaponName}"
+      "NoWound": "Aucune blessure",
+      "RollDescription": "Jet de dégâts:"
     },
     "DIALOG": {
+      "ArmorProtection": "Protection de l'armure",
       "Cancel": "Annuler",
       "ConfigureTitle": "Configuration de {name}",
       "Confirm": "Confirmer",
@@ -160,6 +164,7 @@
       "NoAutomaticModifier": "Aucun modificateur automatique",
       "OtherModifiers": "Autres modificateurs",
       "SaveButton": "Enregistrer",
+      "SuccessModifier": "Modificateur de réussite",
       "Total": "Total"
     },
     "ERROR": {
