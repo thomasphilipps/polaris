@@ -24,6 +24,7 @@ const OPPOSED_RESULT_LABELS = {
  * @param {{label: string, value: number}[]} [params.modifiers=[]]
  * @param {Item} params.weapon   The Attacker's weapon
  * @param {Token} params.target  The Defender's token
+ * @param {boolean} [params.askForModifier=true]
  */
 export async function meleeCheck({
                                    rollLabel,
@@ -32,6 +33,7 @@ export async function meleeCheck({
                                    modifiers = [],
                                    weapon,
                                    target,
+                                   askForModifier = true,
                                  }) {
   const attackerActor = weapon.actor;
   const defenderActor = target.actor;
@@ -48,7 +50,6 @@ export async function meleeCheck({
       : modifiers;
   const defenderDifficulty = allongeDiff < 0 ? -allongeDiff : 0;
 
-  //TODO: handle askForModifier
   const {
     roll: attackerRoll,
     outcome: attackerOutcome,
@@ -58,7 +59,7 @@ export async function meleeCheck({
     actionValue,
     modifiers: attackerModifiersList,
     valueCrit,
-    askForModifier: true,
+    askForModifier,
     contextLabel: rollLabel,
   });
 
@@ -117,6 +118,7 @@ export async function meleeCheck({
       target,
       successModifier: attacker.nextModifier,
       combatType: 'melee',
+      askForModifier,
     });
   }
 
@@ -134,6 +136,7 @@ export async function meleeCheck({
         target: attackerToken,
         successModifier: defender.nextModifier,
         combatType: 'melee',
+        askForModifier,
       });
     }
   }

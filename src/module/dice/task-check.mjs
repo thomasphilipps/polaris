@@ -14,19 +14,20 @@ import { breakdownRoll, renderChatCard, buildCheckContext } from '../apps/chat/c
  * @param {boolean} [params.isAttack]
  * @param {Pol3Item} [params.weapon]
  * @param {Token} [params.target]
+ * @param {boolean} [params.askForModifier=true]
  * @returns {Promise<*|null>}
  */
 export async function taskCheck({
-  actor,
-  rollLabel,
-  actionValue = 0,
-  modifiers = [],
-  valueCrit = 0,
-  isAttack = false,
-  weapon = null,
-  target = null,
-} = {}) {
-  //TODO: handle askForModifier
+                                  actor,
+                                  rollLabel,
+                                  actionValue = 0,
+                                  modifiers = [],
+                                  valueCrit = 0,
+                                  isAttack = false,
+                                  weapon = null,
+                                  target = null,
+                                  askForModifier = true,
+                                } = {}) {
   const {
     roll,
     outcome,
@@ -36,7 +37,7 @@ export async function taskCheck({
     actionValue,
     modifiers,
     valueCrit,
-    askForModifier: true,
+    askForModifier,
     contextLabel: rollLabel,
   });
 
@@ -65,6 +66,7 @@ export async function taskCheck({
       target,
       successModifier: outcome.nextModifier,
       combatType: weapon.system.category === 'ranged' ? 'ranged' : 'melee',
+      askForModifier,
     });
   }
 

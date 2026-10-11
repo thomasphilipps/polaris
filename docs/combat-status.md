@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-10 (branche `combat`).
+Dernière mise à jour : 2026-10-11 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -12,6 +12,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 | C | Dommages + localisation (Auto d20 / Manuelle) | ✅ fait, testé |
 | B | Contact : Test d'opposition, défense via socket, Allonge automatique | ✅ fait, testé |
 | — | Modificateurs automatiques (blessures) + ad hoc sur touche **et** dégâts | ✅ fait, testé |
+| — | Chat cards détaillées (test, opposition, dégâts) + saut du dialogue de modificateur | ✅ fait, testé (CSS des cartes à faire) |
 | D | Rafales, tir à répétition, tir visé, deux armes | ⏳ à faire |
 | E | Arts martiaux / Techniques / Lutte | 🔶 volontairement limité (voir §4) |
 | F | Aveugle, sous l'eau, tir de suppression, boucliers | ⏳ à faire |
@@ -43,6 +44,12 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 **Modificateurs de jet**
 - Automatiques (`automatic-modifiers.mjs`) : malus de blessure = le pire de **toutes** les zones, quelle que soit la zone concernée par l'action. Architecture en liste de fournisseurs, extensible.
 - Ad hoc : saisi dans `modifier-dialog.mjs`, avec récapitulatif des automatiques et total en direct. Appliqué des deux côtés d'un Test d'opposition, et aussi aux dégâts.
+- Saut du dialogue ad hoc : réglage **client** `askForModifier` (« demander par défaut »), que Maj+clic inverse ; même règle pour le dialogue des dégâts. Le Défenseur d'une opposition suit son propre réglage, pas le Maj de l'Attaquant. Le dialogue de localisation reste systématique.
+- Les modificateurs circulent en liste `{ label (clé i18n), value }` de bout en bout, socket compris ; ils sont localisés au rendu.
+
+**Chat cards** (`apps/chat/chat-card.mjs`, `templates/chat/`)
+- Trois cartes (test, opposition, dégâts). Résumé court visible (type de jet, jet, réussite/échec, critique, marge, seuil final) ; détail des modificateurs dans un `<details>` replié.
+- Opposition : jet, seuil et marge des deux camps, puis marge effective du vainqueur. Le Défenseur ne poste pas de message : son jet, son breakdown et ses modificateurs reviennent par le socket.
 
 **Dégâts et localisation**
 - Dégâts = dé de l'arme + modificateur de réussite (+ modificateur de dégâts au contact si mêlée) + modificateur ad hoc + résistance aux dégâts de la cible (valeur négative) − protection d'armure (couvrant la zone **et** équipée). Plancher à 0 uniquement sur le résultat final.
@@ -62,8 +69,8 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 | 3 | Combat à mains nues non modélisé : sur égalité, un Défenseur sans arme de mêlée équipée n'inflige pas de riposte (simple `console.warn`). |
 | 4 | Zones d'armure (`head/body/arms/legs`) plus grossières que les zones de blessure ; les nageoires de poisson n'ont aucune zone d'armure correspondante (protection = 0). |
 | 5 | Champs `label: 'POL3.ZONE.*'` de `BODY_TEMPLATES` inutilisés ; les vrais labels viennent de `POL3.ZONES.<Zone>.Label`. |
-| 6 | Chaînes françaises en dur : flavor de `task-check` (« Réussite », « Échec », « Marge »), tooltips « Roll/Delete » dans les templates de fiche, message de `melee-check`, etc. |
-| 7 | Les messages de chat ne détaillent pas les modificateurs appliqués (le dialogue les affiche avant le jet, pas le chat). |
+| 6 | Chaînes en dur restantes : tooltips « Roll/Delete » dans les templates de fiche, `console.warn` en français, etc. (les messages de chat des jets passent désormais par i18n). |
+| 7 | Chat cards : aucun CSS propre pour l'instant (repoussé à la fin). La relance d'un échec critique n'apparaît pas dans la carte ; un d20 forcé par la triche s'affiche comme un nombre, sans icône de dé. |
 | 8 | `weapon.getRollData()` renvoie `actor`, inutilisé par `meleeCheck` (qui recalcule `weapon.actor`). |
 | 9 | Une seule arme de mêlée équipée du Défenseur est prise en compte (la première) ; un seul token actif pour l'Attaquant (`getActiveTokens()[0]`). |
 | 10 | Test de Résistance au Choc (`shock-check`) jamais reconstruit après la refonte. |
@@ -73,8 +80,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 ## 4. Décisions ouvertes et TODO
 
 - **Esquive active à distance** (Test d'opposition contre un tir) : le texte dit « pas d'opposition en combat à distance ». Ce serait une house rule — en attente de la relecture du livre par Thomas.
-- **Sauter le dialogue de modificateur (décision prise, à coder)** : Maj+clic + réglage **client** « demander par défaut » que Maj inverse ; le dialogue ad hoc des dégâts suit la même règle.
-- **Chat cards (décisions prises, en cours — au 2026-10-10 : `rollTaskCheck` reçoit et renvoie `modifiers`, infrastructure `apps/chat/chat-card.mjs` + partials, cartes de test simple et d'opposition codées (le Défenseur ne poste plus son propre message : son jet, son breakdown et ses modificateurs reviennent par le socket), carte de dégâts codée (termes du calcul listés dans l'accordéon ; le d20 de localisation n'y figure pas encore), tests en jeu à confirmer ; reste saut du dialogue, puis le CSS des cartes, repoussé à la toute fin)** : modificateurs en liste `{ label (clé i18n), value }` de bout en bout ; cartes séparées (test, opposition, dégâts) en templates `templates/chat/` ; résumé court visible (type de jet, jet, réussite/échec, critique, marge, seuil final = valeur + modificateurs), détail complet dans un `<details>` replié ; l'opposition affiche jet, seuil et marge des deux camps.
+- **CSS des chat cards** : à faire en dernier, une fois le reste prêt (décision de Thomas).
 - **Phase E (décision prise)** : pas de détection automatique des Techniques (dépendrait du couplage par nom, et Initiative / états multi-tours n'existent pas). À la place : champ ad hoc sur les dégâts (fait) + Journal Entry d'aide-mémoire à créer/vérifier dans Foundry.
 - **Vérification légale** : contact avec l'éditeur / Philippe Tessier avant toute publication officielle (nom « Polaris », liste de compétences) — hors code, en cours côté Thomas.
 
@@ -88,9 +94,9 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 ## 6. Prochaines étapes envisageables
 
-Piste 1 choisie par Thomas le 2026-10-04 (architecture en cours de validation) ; ensuite 2, pour que les modificateurs de la phase D s'affichent sans retouche.
+Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes.
 
-1. **En cours** — Chat cards détaillées (dette #7) + trancher « sauter le dialogue ».
+1. CSS des chat cards (dette #7).
 2. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
 3. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
 

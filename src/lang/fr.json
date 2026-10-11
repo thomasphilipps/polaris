@@ -226,6 +226,10 @@
         "Intermediate": "Intermédiaire",
         "Name": "Ambiance du jeu",
         "Realistic": "Réaliste"
+      },
+      "AskForModifier": {
+        "Name": "Demander automatiquement les modificateurs",
+        "Hint": "Activé: les modificateurs sont demandés à tous les jets, [Shift+Click] pour les passer. \n Désactivé: Les modificateurs sont demandés uniquement sur un [Shift+Click] de l'utilisateur."
       }
     },
     "SHEETS": {

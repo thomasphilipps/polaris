@@ -74,7 +74,7 @@ export default class Pol3Item extends Item {
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
       .map(tag =>
-        itemData.tags.has(tag) ? `| ${game.i18n.localize(properties[tag].symbol)} ` : ''
+        itemData.tags.has(tag) ? `| ${game.i18n.localize(properties[tag].symbol)} ` : '',
       )
       .join('');
     tagString = tagString ? tagString + '|' : tagString;
@@ -146,7 +146,13 @@ export default class Pol3Item extends Item {
     itemData.isShield = itemData.category === 'shield';
   }
 
-  async roll() {
+  /**
+   * Roll the item
+   *
+   * @param {boolean} askForModifier
+   * @returns {Promise<void>}
+   */
+  async roll(askForModifier) {
     if (typeof this.system.getRollData !== 'function') {
       console.warn(`POLARIS | L'item de type "${this.type}" ne définit pas getRollData()`);
       return;
@@ -154,6 +160,8 @@ export default class Pol3Item extends Item {
 
     const rollData = this.system.getRollData();
     if (!rollData) return;
+
+    rollData.askForModifier = askForModifier;
 
     if (this.type === 'weapon' && this.system.category !== 'ranged') {
       return meleeCheck(rollData);

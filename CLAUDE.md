@@ -50,31 +50,32 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 | `config/actor/` | `attributes`, `wounds` (SEVERITIES, BASE_MAX, RESISTANT_BONUS, MALUS, ACTION_IMPOSSIBLE, SEVERITY_THRESHOLDS, `ZONES()`, `buildDefaultWounds()`), `bodyTemplates` (BODY_TEMPLATES, TYPE, LOCATION_TABLES) |
 | `config/item/` | `skills`, `weapons` (CATEGORY, SUBCATEGORY, RANGE, BURST, CATEGORY_TO_SKILL_CATEGORY), `armor` (TYPE, CATEGORY, ZONES) |
 | `config/hooks.mjs` | Handlers de hooks (`onPreCreateItem`, `onPreUpdateItem`, `onRenderChatMessageHTML`) |
-| `config/settings.mjs`, `config/templates.mjs` | `registerSystemSettings` (réglage monde `worldAmbiance`) ; `preloadHandlebarsTemplates` (partials préchargés) |
+| `config/settings.mjs`, `config/templates.mjs` | `registerSystemSettings` (réglage monde `worldAmbiance`, réglage client `askForModifier`) ; `preloadHandlebarsTemplates` (partials préchargés, dont ceux des chat cards) |
 | `models/`, `documents/`, `apps/` → `_module.mjs` | Barrels importés par `polaris.mjs` (une classe à enregistrer = une ligne à y ajouter) |
 | `models/actor/` | `base-actor.mjs` (`Pol3ActorDataModel` : `bodyTemplate`, `wounds` en `TypedObjectField`, attributs ; `heroFields()`), `hero.mjs` (`Pol3Hero`) |
 | `models/item/` | `base-item.mjs` (`Pol3ItemDataModel`, `itemGlobalFields`, `specialNameOption`), `skill`, `weapon`, `armor` ; `getRollData()` sur skill et weapon |
 | `documents/actor.mjs` | `Pol3Actor` : données dérivées (attributs secondaires, malus de blessures), `applyWound`/`healWound`, `getSkillValue`, `_preCreate`/`_preUpdate` (synchro des zones selon `bodyTemplate`) |
 | `documents/item.mjs` | `Pol3Item` : `prepareBaseData` (niveaux de compétence…), `roll()` |
-| `dice/roll-resolver.mjs` | `resolveTaskCheck` (pur), `applyDegree`, `rollD20` (+ triche dev), `rollTaskCheck` (modificateurs auto + ad hoc, puis d20) |
+| `dice/roll-resolver.mjs` | `resolveTaskCheck` (pur), `applyDegree`, `rollD20` (+ triche dev), `rollTaskCheck` (modificateurs auto + ad hoc, puis d20 ; renvoie `{ roll, outcome, modifiers }`) |
 | `dice/opposed-resolver.mjs` | `resolveOpposedCheck` (pur, générique, réutilisable hors combat) |
 | `dice/task-check.mjs` | Test simple ; jet de touche à distance puis `damageCheck` |
 | `dice/melee-check.mjs` | Contact : Allonge auto, jet de l'Attaquant, défense via socket, opposition, dégâts |
 | `dice/damage-resolver.mjs`, `damage-check.mjs` | Pur : localisation, dégâts finaux, gravité. Orchestrateur : dialogues, jets, application de la blessure |
 | `dice/automatic-modifiers.mjs` | Fournisseurs de modificateurs automatiques (aujourd'hui : blessures) |
 | `net/socket.mjs` | Canal `system.polaris` : `initSocketListeners`, `requestOpposedDefense`, `requestApplyWound`, `handleOpposedDefensePrompt` (bouton MJ « Répondre à sa place », branché dans `hooks.mjs`) |
+| `apps/chat/chat-card.mjs` | `renderChatCard` (rendu d'un template `templates/chat/`), `breakdownRoll` (termes d'un `Roll` à afficher), `buildCheckContext` (contexte commun des cartes de test) |
 | `apps/dialogs/` | `modifier-dialog`, `location-dialog`, `opposed-defense-dialog` (DialogV2) |
 | `apps/sheets/` | `actor/` (`base-actor-sheet`, `hero-sheet`), `item/` (`base-item-sheet`, `skill-sheet`, `weapon-sheet`, `armor-sheet`) |
-| `utils/` | `sheet-utils` (`datasetOf`, `toPascalCase`, `groupItemsByField`, `openConfigDialog`), `combat-utils` (`getSingleTarget`, `getActorToken`, `measureTokenDistance`, `getRangeBand`) |
+| `utils/` | `sheet-utils` (`datasetOf`, `toPascalCase`, `groupItemsByField`, `openConfigDialog`), `combat-utils` (`getSingleTarget`, `getActorToken`, `measureTokenDistance`, `getRangeBand`), `helpers` (`sumModifiers`, `askForModifiers` : réglage client inversé par Maj) |
 | `dev/dice-cheat.mjs` | File de d20 forcés : `forceNextD20`, `clearForcedRolls` (console, dev), `consumeForcedD20` (lu par `rollD20`) |
 
-Hors module : `src/polaris.mjs` (init : modèles, sheets, hooks, sockets, réglages), `src/system.json` (`"socket": true`), `src/lang/fr.json`, `src/polaris.css`, `src/assets/icons/` (icônes de catégories de compétence), `src/templates/` (`sheets/`, `dialogs/` = dialogues de config de la fiche d'acteur), `src/_source/skills/*.yml` + `src/packs-maker.mjs` (compendium des compétences), `rollup.config.mjs`.
+Hors module : `src/polaris.mjs` (init : modèles, sheets, hooks, sockets, réglages), `src/system.json` (`"socket": true`), `src/lang/fr.json`, `src/polaris.css`, `src/assets/icons/` (icônes de catégories de compétence), `src/templates/` (`sheets/`, `dialogs/` = dialogues de config de la fiche d'acteur, `chat/` = `task-card`, `opposed-card`, `damage-card` + `partials/`), `src/_source/skills/*.yml` + `src/packs-maker.mjs` (compendium des compétences), `rollup.config.mjs`.
 
 ## Flux d'une attaque
 
-1. Fiche : action `rollItem` → `Pol3Item#roll()` → `system.getRollData()`.
+1. Fiche : action `rollItem` → `Pol3Item#roll(askForModifier)` → `system.getRollData()`. `askForModifier` vient de `askForModifiers(event.shiftKey)` et suit toute la chaîne jusqu'à `damageCheck`.
    - `weapon` : compétence via `actor.getSkillValue(linkedSkill)` (absente → notification, pas de jet) ; cible unique via `getSingleTarget()`.
    - Distance : bande de portée = distance canvas vs `hitDistance` de l'arme → modificateur `POL3.WEAPON.RANGE` ; au-delà de « extrême » = tir impossible.
 2. Arme `ranged` → `taskCheck` → `rollTaskCheck` → si succès → `damageCheck`.
 3. Arme non `ranged` → `meleeCheck` : jet de l'Attaquant, `requestOpposedDefense` (le Défenseur choisit librement n'importe quel Attribut ou Compétence), `resolveOpposedCheck`, puis `damageCheck` pour qui l'emporte (les deux sur égalité).
-4. `damageCheck` : dialogue de localisation (Auto d20 / Manuelle), jet de dégâts, dialogue de modificateur ad hoc, calcul, gravité, puis `requestApplyWound` (exécuté chez le propriétaire de la cible ou le MJ, pour respecter les permissions Foundry).
+4. `damageCheck` : dialogue de localisation (Auto d20 / Manuelle), jet de dégâts, dialogue de modificateur ad hoc (si `askForModifier`), calcul, gravité, puis `requestApplyWound` (exécuté chez le propriétaire de la cible ou le MJ, pour respecter les permissions Foundry).

@@ -2,6 +2,7 @@ import { groupItemsByField } from '../../utils/sheet-utils.mjs';
 import { rollTaskCheck } from '../../dice/roll-resolver.mjs';
 import { POL3 } from '../../config/config.mjs';
 import { breakdownRoll } from '../chat/chat-card.mjs';
+import { askForModifiers } from '../../utils/helpers.mjs';
 
 /**
  * Prompts whoever controls `actor` to choose an Attribute or Skill to defend
@@ -22,7 +23,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     .map(
       g => `<optgroup label="${g.label}">
         ${g.itemList.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
-      </optgroup>`
+      </optgroup>`,
     )
     .join('');
 
@@ -100,14 +101,14 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
   const modifiersList =
     difficulty !== 0
       ? [
-          {
-            label: 'POL3.WEAPON.SHEET.Reach',
-            value: difficulty,
-          },
-        ]
+        {
+          label: 'POL3.WEAPON.SHEET.Reach',
+          value: difficulty,
+        },
+      ]
       : [];
 
-  //TODO: handle askForModifier
+  // The Defender follows their own client setting: the Attacker's Shift key does not apply here.
   const {
     roll,
     outcome,
@@ -117,7 +118,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     actionValue,
     modifiers: modifiersList,
     valueCrit,
-    askForModifier: true,
+    askForModifier: askForModifiers(),
     contextLabel: rollLabel,
   });
 

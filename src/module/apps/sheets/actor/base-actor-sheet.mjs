@@ -6,6 +6,7 @@ import {
   groupItemsByField,
   openConfigDialog,
 } from '../../../utils/sheet-utils.mjs';
+import { askForModifiers } from '../../../utils/helpers.mjs';
 
 const { api, sheets } = foundry.applications;
 
@@ -408,6 +409,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
       rollLabel: attributeName,
       actionValue: parseInt(attributeValue) || 0,
       valueCrit: valueCrit,
+      askForModifier: askForModifiers(event.shiftKey),
     });
   }
 
@@ -437,12 +439,13 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target
    */
   static async #onRollItem(event, target) {
+    const askForModifier = askForModifiers(event.shiftKey);
     const { itemId } = datasetOf(target, '.item') ?? {};
     if (!itemId) return;
     const item = this.actor.items.get(itemId);
     if (!item) return;
 
-    await item.roll();
+    await item.roll(askForModifier);
   }
 
   /**

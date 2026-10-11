@@ -26,8 +26,15 @@ const WOUND_ZONE_TO_ARMOR_ZONE = {
  * @param {Token} params.target            The target token
  * @param {number} params.successModifier  nextModifier from the attack's outcome
  * @param {string} params.combatType       'melee' or 'ranged'
+ * @param {boolean} [params.askForModifier=true]  Whether to prompt for a modifier
  */
-export async function damageCheck({ weapon, target, successModifier, combatType }) {
+export async function damageCheck({
+                                    weapon,
+                                    target,
+                                    successModifier,
+                                    combatType,
+                                    askForModifier = true,
+                                  }) {
   const targetActor = target.actor;
   if (!targetActor) return;
 
@@ -62,12 +69,13 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
   const damageRoll = new Roll(weapon.system.baseDamage);
   await damageRoll.evaluate();
 
-  const adHocDamageModifier = await promptAdHocModifier(
+  const adHocModifier = askForModifier
+    ? (await promptAdHocModifier(
     game.i18n.format('POL3.DAMAGE.ModifierContext', { weaponName: weapon.name }),
     [],
     0,
-  );
-  const adHocModifier = adHocDamageModifier ?? 0;
+  )) ?? 0
+    : 0;
 
   const closeCombatModifier =
     combatType === 'melee' ? (weapon.actor?.system.closeCombatModifier?.value ?? 0) : 0;
@@ -131,7 +139,7 @@ export async function damageCheck({ weapon, target, successModifier, combatType 
     },
     {
       label: 'POL3.DIALOG.ArmorProtection',
-      value: -armorProtection,
+      value: armorProtection > 0 ? -armorProtection : 0,
     },
   ];
 
