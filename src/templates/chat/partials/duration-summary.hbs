@@ -1,0 +1,9 @@
+{{#if duration}}
+<div class="duration-module">
+  {{#if duration.effect}}
+  {{localize 'POL3.SHOCK.EffectLabel'}}: {{localize (concat 'POL3.SHOCK.EFFECT.' duration.effect '.Label')}}
+  {{else}}
+  {{localize 'POL3.SHOCK.EffectDuration'}}: {{duration.value}} {{localize (concat 'POL3.SHOCK.UNIT.' duration.unit '.Label' )}}
+  {{/if}}
+</div>
+{{/if}}

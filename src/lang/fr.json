@@ -219,6 +219,41 @@
       "Result": "Résultat",
       "Success": "Réussite"
     },
+    "SHOCK": {
+      "EffectLabel": "Effet",
+      "EffectDuration": "Durée de l'effet",
+      "ShockCheck": "Test de choc",
+      "EFFECT": {
+        "Stabilization": {
+          "Label": "Stabilisation nécessaire",
+          "Symbol": "Stab. Néc."
+        },
+        "MildComa": {
+          "Label": "Coma léger",
+          "Symbol": "C. Lég."
+        },
+        "DeepComa": {
+          "Label": "Coma profond",
+          "Symbol": "C. Prof."
+        }
+      },
+      "STATE": {
+        "None": "Aucun effet",
+        "Stun": "Étourdi(e)",
+        "Unconscious": "Inconscient(e)",
+        "Catastrophic": "Catastrophe possible"
+      },
+      "UNIT": {
+        "Round": {
+          "Label": "Tour(s) de combat",
+          "Symbol": "TC"
+        },
+        "Minutes": {
+          "Label": "Minute(s)",
+          "Symbol": "min"
+        }
+      }
+    },
     "SETTINGS": {
       "WorldAmbiance": {
         "Heroic": "Héroïque",
@@ -424,6 +459,10 @@
       "Legs": {
         "Label": "Jambes",
         "Symbol": "J"
+      },
+      "Limbs": {
+        "Label": "Membres",
+        "Symbol": "Mbrs"
       }
     }
   },

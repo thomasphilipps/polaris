@@ -80,6 +80,17 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 ## 4. Décisions ouvertes et TODO
 
 - **Esquive active à distance** (Test d'opposition contre un tir) : le texte dit « pas d'opposition en combat à distance ». Ce serait une house rule — en attente de la relecture du livre par Thomas.
+- **Test de Choc (décisions prises le 2026-10-11, à coder)** :
+  - Résolu comme un test d'Attribut (`resolveTaskCheck`, critiques compris) : valeur = seuil d'étourdissement, modificateur = malus de la blessure reçue (`POL3.WOUND.MALUS`). Réussite = rien ; échec avec jet ≤ seuil d'inconscience réduit = étourdi ; au-dessus = inconscient.
+  - Arme sans dommages de choc : test à partir d'une blessure `severe`, sauf grave sur un membre (pas de test). Arme avec dommages de choc : test systématique, quelle que soit la zone (chantier suivant).
+  - Le d20 est lancé par le propriétaire de la cible, via socket (le joueur garde la main sur ce qu'il subit).
+  - Statut Foundry posé sur l'acteur (étourdi / inconscient), retiré à la main par le MJ. Étourdi : −5 automatique (fournisseur dans `automatic-modifiers.mjs`) ; attaquer reste possible, avec une notification d'avertissement.
+  - Gravité retenue : celle que donnent les points de dommages comparés aux seuils de blessure (pas la gravité inscrite après débordement des cases).
+  - Catastrophe : marge d'échec de 15 ou plus par rapport au seuil d'étourdissement réduit, **si le MJ le souhaite** ; la carte la signale comme possible, l'effet de la table est indicatif, modifiable ou ignorable par le MJ.
+  - Durée : formule lue dans la table pour les humanoïdes, toujours modifiable par le MJ ; pour les autres gabarits, formule saisie à la main. Tours de combat = phases de combat, minutes = phases de jeu de rôle ; l'unité est stockée avec la formule. Décompte manuel par le MJ, à conserver quand les tours de combat Foundry seront gérés. Corrections de la table validées par Thomas pour les armes de choc : grave 2D6 / 2D6, mortelle 5D6 / 5D6, membre détruit 5D6 / 5D6.
+  - Pas de cas particulier « mort = pas de test » : la Chance pourra intervenir (non gérée, à traiter avant ou après les tours de combat).
+  - Non codé, laissé au MJ : inconscience, comas, réveil, stabilisation, limites de déplacement de l'étourdi.
+- **Armes de choc (chantier séparé après le Test de Choc, règle confirmée par Thomas)** : dommages physiques d'abord (blessure réelle). Puis jet des dommages de choc (formule de dés ; champ `chocDamage` à renommer `shockDamage` avec migration), auxquels s'appliquent la résistance aux dégâts de la cible et `shockProtection` de l'armure. Physiques + choc = blessure **virtuelle**, qui ne sert qu'au malus du Test de Choc et à la durée (colonne « armes de choc »).
 - **CSS des chat cards** : à faire en dernier, une fois le reste prêt (décision de Thomas).
 - **Phase E (décision prise)** : pas de détection automatique des Techniques (dépendrait du couplage par nom, et Initiative / états multi-tours n'existent pas). À la place : champ ad hoc sur les dégâts (fait) + Journal Entry d'aide-mémoire à créer/vérifier dans Foundry.
 - **Vérification légale** : contact avec l'éditeur / Philippe Tessier avant toute publication officielle (nom « Polaris », liste de compétences) — hors code, en cours côté Thomas.
@@ -96,9 +107,10 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes.
 
-1. CSS des chat cards (dette #7).
-2. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
-3. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
+1. **En cours** — Test de Choc (dette #10), plan en 7 étapes validé le 2026-10-11 ; puis armes de choc. Les conséquences dans la durée restent du ressort du MJ.
+2. CSS des chat cards (dette #7), en dernier.
+3. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
+4. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
 
 ## 7. Mise à jour de ce fichier
 

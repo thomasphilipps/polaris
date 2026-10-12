@@ -7,6 +7,7 @@ export async function preloadHandlebarsTemplates() {
     'systems/polaris/templates/chat/partials/modifier-list.hbs',
     'systems/polaris/templates/chat/partials/dice-module.hbs',
     'systems/polaris/templates/chat/partials/check-summary.hbs',
+    'systems/polaris/templates/chat/partials/duration-summary.hbs',
   ];
 
   return foundry.applications.handlebars.loadTemplates(templatePaths);

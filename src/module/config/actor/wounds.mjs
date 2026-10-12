@@ -1,5 +1,33 @@
 import { BODY_TEMPLATES } from './bodyTemplates.mjs';
 
+/**
+ * @typedef {Object} DurationEntry
+ * @property {string} [value] - Value or dice expression (e.g., '1', '2', '1d6')
+ * @property {string} [unit] - Time unit or status (e.g., 'Round', 'Minutes')
+ * @property {string} [effect] - Effect name (e.g., 'MildComa')
+ */
+
+/**
+ * Base shock effects (stunned and unconscious).
+ * @typedef {Object} BaseShockEffects
+ * @property {DurationEntry} [stun]
+ * @property {DurationEntry} [unconscious]
+ */
+
+/**
+ * Full shock effects including catastrophic.
+ * @typedef {BaseShockEffects} FullShockEffects
+ * @property {DurationEntry} [catastrophic]
+ */
+
+/**
+ * Body zone structure for full shock durations.
+ * @typedef {Object} SeverityLevel
+ * @property {FullShockEffects} [head]
+ * @property {FullShockEffects} [body]
+ * @property {FullShockEffects} [limbs]
+ */
+
 export const SEVERITIES = ['light', 'medium', 'severe', 'critical', 'deadly', 'destroyed'];
 export const BASE_MAX = { light: 3, medium: 3, severe: 2, critical: 2, deadly: 1, destroyed: 1 };
 export const RESISTANT_BONUS = {
@@ -66,3 +94,114 @@ export const SEVERITY_THRESHOLDS = [
   { threshold: 25, severity: 'deadly' },
   { threshold: 30, severity: 'destroyed' },
 ];
+
+/**
+ * Minimum severity for a wound to trigger the shock effect.
+ * @type {string}
+ */
+export const SHOCK_MIN_SEVERITY = 'severe';
+
+/**
+ * Groups of zones that trigger the shock effect.
+ * @type {Record<string, string>}
+ */
+export const SHOCK_ZONE_GROUPS = {
+  head: 'head',
+  body: 'body',
+  armLeft: 'limbs',
+  armRight: 'limbs',
+  legLeft: 'limbs',
+  legRight: 'limbs',
+};
+
+/**
+ * Shock durations based on severity and body zone.
+ * @type {Record<'severe' | 'critical' | 'deadly' | 'destroyed', Partial<SeverityLevel>>}
+ */
+export const SHOCK_DURATIONS = {
+
+  severe: {
+    head: {
+      stun: { value: '2', unit: 'Round' },
+      unconscious: { value: '2', unit: 'Minutes' },
+      catastrophic: { value: '1d6', unit: 'Minutes' },
+    },
+    body: {
+      stun: { value: '1', unit: 'Round' },
+      unconscious: { value: '1', unit: 'Minutes' },
+      catastrophic: { value: '1', unit: 'Minutes' },
+    },
+  },
+  critical: {
+    head: {
+      stun: { value: '3d6', unit: 'Round' },
+      unconscious: { value: '3d6', unit: 'Minutes' },
+      catastrophic: { effect: 'MildComa' },
+    },
+    body: {
+      stun: { value: '2d6', unit: 'Round' },
+      unconscious: { value: '2d6', unit: 'Minutes' },
+      catastrophic: { value: '3d6', unit: 'Minutes' },
+    },
+    limbs: {
+      stun: { value: '1d6', unit: 'Round' },
+      unconscious: { value: '1d6', unit: 'Minutes' },
+      catastrophic: { value: '2d6', unit: 'Minutes' },
+    },
+  },
+  deadly: {
+    head: {
+      stun: { value: '3d6', unit: 'Minutes' },
+      unconscious: { effect: 'MildComa' },
+      catastrophic: { effect: 'DeepComa' },
+    },
+    body: {
+      stun: { value: '2d6', unit: 'Minutes' },
+      unconscious: { value: '3d6', unit: 'Minutes' },
+      catastrophic: { effect: 'Stabilization' },
+    },
+    limbs: {
+      stun: { value: '1d6', unit: 'Minutes' },
+      unconscious: { value: '2d6', unit: 'Minutes' },
+      catastrophic: { effect: 'Stabilization' },
+    },
+  },
+  destroyed: {
+    limbs: {
+      stun: { value: '2d6', unit: 'Minutes' },
+      unconscious: { value: '3d6', unit: 'Minutes' },
+      catastrophic: { effect: 'Stabilization' },
+    },
+  },
+};
+
+/**
+ * Weapon shock durations based on their intensity level.
+ * @type {Record<'light' | 'medium' | 'severe' | 'critical' | 'deadly' | 'destroyed', BaseShockEffects>}
+ */
+export const SHOCK_WEAPON_DURATIONS = {
+  light: {
+    stun: { value: '1', unit: 'Round' },
+    unconscious: { value: '1', unit: 'Minutes' },
+  },
+  medium: {
+    stun: { value: '1d6', unit: 'Round' },
+    unconscious: { value: '1d6', unit: 'Minutes' },
+  },
+  severe: {
+    stun: { value: '2d6', unit: 'Round' },
+    unconscious: { value: '2d6', unit: 'Minutes' },
+  },
+  critical: {
+    stun: { value: '3d6', unit: 'Round' },
+    unconscious: { value: '3d6', unit: 'Minutes' },
+  },
+  deadly: {
+    stun: { value: '5d6', unit: 'Round' },
+    unconscious: { value: '5d6', unit: 'Minutes' },
+  },
+  destroyed: {
+    stun: { value: '5d6', unit: 'Round' },
+    unconscious: { value: '5d6', unit: 'Minutes' },
+  },
+};

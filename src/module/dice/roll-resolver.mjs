@@ -109,6 +109,7 @@ export async function rollD20() {
  * @param {number} [params.valueCrit=0]
  * @param {boolean} [params.askForModifier=true]
  * @param {string} [params.contextLabel='']
+ * @param {boolean} [params.applyAutomaticModifiers=true]
  * @returns {Promise<{roll: Roll, outcome: object, modifiers: array}>}
  */
 export async function rollTaskCheck({
@@ -118,8 +119,10 @@ export async function rollTaskCheck({
                                       valueCrit = 0,
                                       askForModifier = true,
                                       contextLabel = '',
+                                      applyAutomaticModifiers = true,
                                     }) {
-  const automaticModifiersList = collectAutomaticModifiers(actor);
+  const automaticModifiersList = applyAutomaticModifiers ? collectAutomaticModifiers(actor) : [];
+
   let globalModifiersList = [...automaticModifiersList, ...modifiers];
 
   const globalModifiers = sumModifiers(globalModifiersList);

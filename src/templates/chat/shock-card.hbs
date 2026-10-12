@@ -1,0 +1,17 @@
+<div class="pol3 module-header">
+  {{localize 'POL3.CHAT.Test'}}: <strong>{{rollLabel}}</strong>
+</div>
+{{> 'systems/polaris/templates/chat/partials/dice-module.hbs' rollTerms=rollBreakdown}}
+{{> 'systems/polaris/templates/chat/partials/check-summary.hbs'}}
+<div class="pol3 module-description">
+  {{#if (eq state 'none')}}
+  {{localize 'POL3.SHOCK.STATE.None'}}
+  {{else}}
+  {{localize stateKey}}
+  {{/if}}
+</div>
+{{> 'systems/polaris/templates/chat/partials/duration-summary.hbs' duration=duration}}
+{{#if isCatastrophic}}
+  {{localize 'POL3.SHOCK.STATE.Catastrophic'}}:<br>
+{{> 'systems/polaris/templates/chat/partials/duration-summary.hbs' duration=catastrophicDuration }}
+{{/if}}
