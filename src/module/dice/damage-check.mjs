@@ -2,9 +2,10 @@ import { resolveLocation, resolveFinalDamage, resolveWoundSeverity } from './dam
 import { promptAdHocModifier } from '../apps/dialogs/modifier-dialog.mjs';
 import { promptLocationChoice } from '../apps/dialogs/location-dialog.mjs';
 import { toPascalCase } from '../utils/sheet-utils.mjs';
-import { requestApplyWound } from '../net/socket.mjs';
+import { requestApplyWound, requestShockTest } from '../net/socket.mjs';
 import { rollD20 } from './roll-resolver.mjs';
 import { breakdownRoll, renderChatCard } from '../apps/chat/chat-card.mjs';
+import { needsShockTest } from './shock-resolver.mjs';
 
 // Armor zones (head/body/arms/legs) are coarser than wound zones
 // (head/body/armLeft/armRight/legLeft/legRight). Fish zones (finLeft/finRight)
@@ -156,10 +157,21 @@ export async function damageCheck({
 
   const content = await renderChatCard('damage-card', damageContext);
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: targetActor }),
     content,
     rolls,
     sound: CONFIG.sounds.dice,
   });
+
+  if (severity && needsShockTest({ severity, zone })) {
+    // The absence of 'await' here is intentional: we want to send the request to not block attacker flow
+    requestShockTest({
+      actor: targetActor,
+      woundedZone: zone,
+      baseSeverity: severity,
+    });
+  }
+
+  return message;
 }

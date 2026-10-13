@@ -222,7 +222,9 @@
     "SHOCK": {
       "EffectLabel": "Effet",
       "EffectDuration": "Durée de l'effet",
+      "ForceShock": "Répondre à sa place",
       "ShockCheck": "Test de choc",
+      "ShockRequest": "{actorName} doit faire un test de choc.",
       "EFFECT": {
         "Stabilization": {
           "Label": "Stabilisation nécessaire",

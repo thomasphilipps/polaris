@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-11 (branche `combat`).
+Dernière mise à jour : 2026-10-12 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -73,14 +73,15 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 | 7 | Chat cards : aucun CSS propre pour l'instant (repoussé à la fin). La relance d'un échec critique n'apparaît pas dans la carte ; un d20 forcé par la triche s'affiche comme un nombre, sans icône de dé. |
 | 8 | `weapon.getRollData()` renvoie `actor`, inutilisé par `meleeCheck` (qui recalcule `weapon.actor`). |
 | 9 | Une seule arme de mêlée équipée du Défenseur est prise en compte (la première) ; un seul token actif pour l'Attaquant (`getActiveTokens()[0]`). |
-| 10 | Test de Résistance au Choc (`shock-check`) jamais reconstruit après la refonte. |
+| 10 | Test de Résistance au Choc : résolution et carte faites (`shock-resolver`, `shock-check`), pas encore branché sur les dégâts (socket), ni le −5 de l'étourdi, ni le jet de durée. |
 | 11 | `creatureAttack` (compétence « Attaque » unique, contact ou distance selon la créature, table de localisation propre) : non traité. |
 | 12 | Clés i18n : vérifier que toutes celles utilisées existent dans `fr.json` (`POL3.OPPOSED.*`, `POL3.DAMAGE.*`, `POL3.ERROR.*`, `POL3.DIALOG.*`). Un audit des textes en dur et des clés manquantes reste à faire. |
+| 13 | **À vérifier en jeu** : les requêtes socket transmettent `actor.id` et le destinataire fait `game.actors.get(id)`. Pour un token non lié (PNJ), cela désigne l'acteur de base, pas l'acteur du token. Correctif envisagé : transmettre `actor.uuid` et résoudre avec `fromUuid`. |
 
 ## 4. Décisions ouvertes et TODO
 
 - **Esquive active à distance** (Test d'opposition contre un tir) : le texte dit « pas d'opposition en combat à distance ». Ce serait une house rule — en attente de la relecture du livre par Thomas.
-- **Test de Choc (décisions prises le 2026-10-11, à coder)** :
+- **Test de Choc (décisions prises le 2026-10-11, codage en cours)** :
   - Résolu comme un test d'Attribut (`resolveTaskCheck`, critiques compris) : valeur = seuil d'étourdissement, modificateur = malus de la blessure reçue (`POL3.WOUND.MALUS`). Réussite = rien ; échec avec jet ≤ seuil d'inconscience réduit = étourdi ; au-dessus = inconscient.
   - Arme sans dommages de choc : test à partir d'une blessure `severe`, sauf grave sur un membre (pas de test). Arme avec dommages de choc : test systématique, quelle que soit la zone (chantier suivant).
   - Le d20 est lancé par le propriétaire de la cible, via socket (le joueur garde la main sur ce qu'il subit).
@@ -107,7 +108,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes.
 
-1. **En cours** — Test de Choc (dette #10), plan en 7 étapes validé le 2026-10-11 ; puis armes de choc. Les conséquences dans la durée restent du ressort du MJ.
+1. **En cours** — Test de Choc (dette #10), plan en 7 étapes validé le 2026-10-11. Étapes 1 à 4 faites et testées en jeu le 2026-10-12 (config, résolution pure, option `applyAutomaticModifiers`, orchestrateur + carte). Restent : 5 socket + appel depuis les dégâts, 6 malus de l'étourdi, 7 jet de durée par le MJ ; puis armes de choc. Les conséquences dans la durée restent du ressort du MJ.
 2. CSS des chat cards (dette #7), en dernier.
 3. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
 4. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).

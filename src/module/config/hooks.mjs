@@ -1,4 +1,4 @@
-import { handleOpposedDefensePrompt } from '../net/socket.mjs';
+import { handleOpposedDefensePrompt, handleShockTestPrompt } from '../net/socket.mjs';
 
 export function onPreCreateItem(item, data, options, userId) {
   // Adding useful informations when dropping an item on an Actor's sheet
@@ -26,24 +26,40 @@ export function onPreUpdateItem(item, updateData, options, userId) {
 }
 
 /**
- * Attaches the click handler to the "force defense" button on the GM-only
- * opposed-defense chat message, letting a GM answer on behalf of an
+ * Attaches the click handler to the button on the GM-only
+ * chat message, letting a GM answer on behalf of an
  * unresponsive or absent player.
  * @param {ChatMessage} message
  * @param {HTMLElement} html
  */
 export function onRenderChatMessageHTML(message, html) {
-  const button = html.querySelector('[data-action="polaris-force-defense"]');
-  if (!button || !game.user.isGM) return;
+  if (!game.user.isGM) return;
+  const defenseButton = html.querySelector('[data-action="polaris-force-defense"]');
+  const shockButton = html.querySelector('[data-action="polaris-force-shock"]');
 
-  button.addEventListener('click', async () => {
-    const { requestId, actorId, difficulty, attackLabel } = button.dataset;
-    await handleOpposedDefensePrompt({
-      requestId,
-      actorId,
-      difficulty: Number(difficulty),
-      attackLabel,
+  if (defenseButton) {
+    defenseButton.addEventListener('click', async () => {
+      const { requestId, actorId, difficulty, attackLabel } = defenseButton.dataset;
+      await handleOpposedDefensePrompt({
+        requestId,
+        actorId,
+        difficulty: Number(difficulty),
+        attackLabel,
+      });
+      defenseButton.disabled = true;
     });
-    button.disabled = true;
-  });
+  }
+
+  if (shockButton) {
+    shockButton.addEventListener('click', async () => {
+      const { requestId, actorId, woundedZone, baseSeverity } = shockButton.dataset;
+      await handleShockTestPrompt({
+        requestId,
+        actorId,
+        woundedZone,
+        baseSeverity,
+      });
+      shockButton.disabled = true;
+    });
+  }
 }

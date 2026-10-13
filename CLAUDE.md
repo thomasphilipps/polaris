@@ -56,12 +56,13 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 | `models/item/` | `base-item.mjs` (`Pol3ItemDataModel`, `itemGlobalFields`, `specialNameOption`), `skill`, `weapon`, `armor` ; `getRollData()` sur skill et weapon |
 | `documents/actor.mjs` | `Pol3Actor` : données dérivées (attributs secondaires, malus de blessures), `applyWound`/`healWound`, `getSkillValue`, `_preCreate`/`_preUpdate` (synchro des zones selon `bodyTemplate`) |
 | `documents/item.mjs` | `Pol3Item` : `prepareBaseData` (niveaux de compétence…), `roll()` |
-| `dice/roll-resolver.mjs` | `resolveTaskCheck` (pur), `applyDegree`, `rollD20` (+ triche dev), `rollTaskCheck` (modificateurs auto + ad hoc, puis d20 ; renvoie `{ roll, outcome, modifiers }`) |
+| `dice/roll-resolver.mjs` | `resolveTaskCheck` (pur), `applyDegree`, `rollD20` (+ triche dev), `rollTaskCheck` (modificateurs auto, désactivables par `applyAutomaticModifiers`, + ad hoc, puis d20 ; renvoie `{ roll, outcome, modifiers }`) |
 | `dice/opposed-resolver.mjs` | `resolveOpposedCheck` (pur, générique, réutilisable hors combat) |
 | `dice/task-check.mjs` | Test simple ; jet de touche à distance puis `damageCheck` |
 | `dice/melee-check.mjs` | Contact : Allonge auto, jet de l'Attaquant, défense via socket, opposition, dégâts |
 | `dice/damage-resolver.mjs`, `damage-check.mjs` | Pur : localisation, dégâts finaux, gravité. Orchestrateur : dialogues, jets, application de la blessure |
 | `dice/automatic-modifiers.mjs` | Fournisseurs de modificateurs automatiques (aujourd'hui : blessures) |
+| `dice/shock-resolver.mjs`, `shock-check.mjs` | Test de Choc. Pur : `needsShockTest`, `resolveShockState`, `getShockDuration` (tables `SHOCK_*` de `config/actor/wounds.mjs`). Orchestrateur : `shockCheck` (jet sans modificateurs automatiques, statut Foundry, carte) |
 | `net/socket.mjs` | Canal `system.polaris` : `initSocketListeners`, `requestOpposedDefense`, `requestApplyWound`, `handleOpposedDefensePrompt` (bouton MJ « Répondre à sa place », branché dans `hooks.mjs`) |
 | `apps/chat/chat-card.mjs` | `renderChatCard` (rendu d'un template `templates/chat/`), `breakdownRoll` (termes d'un `Roll` à afficher), `buildCheckContext` (contexte commun des cartes de test) |
 | `apps/dialogs/` | `modifier-dialog`, `location-dialog`, `opposed-defense-dialog` (DialogV2) |
@@ -69,7 +70,7 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 | `utils/` | `sheet-utils` (`datasetOf`, `toPascalCase`, `groupItemsByField`, `openConfigDialog`), `combat-utils` (`getSingleTarget`, `getActorToken`, `measureTokenDistance`, `getRangeBand`), `helpers` (`sumModifiers`, `askForModifiers` : réglage client inversé par Maj) |
 | `dev/dice-cheat.mjs` | File de d20 forcés : `forceNextD20`, `clearForcedRolls` (console, dev), `consumeForcedD20` (lu par `rollD20`) |
 
-Hors module : `src/polaris.mjs` (init : modèles, sheets, hooks, sockets, réglages), `src/system.json` (`"socket": true`), `src/lang/fr.json`, `src/polaris.css`, `src/assets/icons/` (icônes de catégories de compétence), `src/templates/` (`sheets/`, `dialogs/` = dialogues de config de la fiche d'acteur, `chat/` = `task-card`, `opposed-card`, `damage-card` + `partials/`), `src/_source/skills/*.yml` + `src/packs-maker.mjs` (compendium des compétences), `rollup.config.mjs`.
+Hors module : `src/polaris.mjs` (init : modèles, sheets, hooks, sockets, réglages), `src/system.json` (`"socket": true`), `src/lang/fr.json`, `src/polaris.css`, `src/assets/icons/` (icônes de catégories de compétence), `src/templates/` (`sheets/`, `dialogs/` = dialogues de config de la fiche d'acteur, `chat/` = `task-card`, `opposed-card`, `damage-card`, `shock-card` + `partials/`), `src/_source/skills/*.yml` + `src/packs-maker.mjs` (compendium des compétences), `rollup.config.mjs`.
 
 ## Flux d'une attaque
 
