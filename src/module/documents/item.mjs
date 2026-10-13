@@ -158,6 +158,14 @@ export default class Pol3Item extends Item {
       return;
     }
 
+    if (this.type === 'weapon' && this.hasActor && this.actor.statuses.has('stun')) {
+      ui.notifications.warn(game.i18n.format('POL3.WARNING.ActorStunned', { actorName: this.actor.name }));
+    }
+
+    if (this.type === 'weapon' && this.hasActor && this.actor.statuses.has('unconscious')) {
+      ui.notifications.warn(game.i18n.format('POL3.WARNING.ActorUnconscious', { actorName: this.actor.name }));
+    }
+
     const rollData = this.system.getRollData();
     if (!rollData) return;
 

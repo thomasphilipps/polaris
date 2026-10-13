@@ -102,6 +102,12 @@ export const SEVERITY_THRESHOLDS = [
 export const SHOCK_MIN_SEVERITY = 'severe';
 
 /**
+ * Automatic malus applied for a stunned Actor.
+ * @type {number}
+ */
+export const STUN_MALUS = -5;
+
+/**
  * Groups of zones that trigger the shock effect.
  * @type {Record<string, string>}
  */

@@ -61,9 +61,9 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 | `dice/task-check.mjs` | Test simple ; jet de touche à distance puis `damageCheck` |
 | `dice/melee-check.mjs` | Contact : Allonge auto, jet de l'Attaquant, défense via socket, opposition, dégâts |
 | `dice/damage-resolver.mjs`, `damage-check.mjs` | Pur : localisation, dégâts finaux, gravité. Orchestrateur : dialogues, jets, application de la blessure |
-| `dice/automatic-modifiers.mjs` | Fournisseurs de modificateurs automatiques (aujourd'hui : blessures) |
+| `dice/automatic-modifiers.mjs` | Fournisseurs de modificateurs automatiques (blessures, étourdi) |
 | `dice/shock-resolver.mjs`, `shock-check.mjs` | Test de Choc. Pur : `needsShockTest`, `resolveShockState`, `getShockDuration` (tables `SHOCK_*` de `config/actor/wounds.mjs`). Orchestrateur : `shockCheck` (jet sans modificateurs automatiques, statut Foundry, carte) |
-| `net/socket.mjs` | Canal `system.polaris` : `initSocketListeners`, `requestOpposedDefense`, `requestApplyWound`, `handleOpposedDefensePrompt` (bouton MJ « Répondre à sa place », branché dans `hooks.mjs`) |
+| `net/socket.mjs` | Canal `system.polaris` : `initSocketListeners`, `requestOpposedDefense`, `requestShockTest`, `requestApplyWound` ; `postGmOverrideMessage` (bouton MJ « Répondre à sa place ») ; `handleOpposedDefensePrompt` et `handleShockTestPrompt`, branchés sur ce bouton dans `hooks.mjs` |
 | `apps/chat/chat-card.mjs` | `renderChatCard` (rendu d'un template `templates/chat/`), `breakdownRoll` (termes d'un `Roll` à afficher), `buildCheckContext` (contexte commun des cartes de test) |
 | `apps/dialogs/` | `modifier-dialog`, `location-dialog`, `opposed-defense-dialog` (DialogV2) |
 | `apps/sheets/` | `actor/` (`base-actor-sheet`, `hero-sheet`), `item/` (`base-item-sheet`, `skill-sheet`, `weapon-sheet`, `armor-sheet`) |
@@ -79,4 +79,4 @@ Hors module : `src/polaris.mjs` (init : modèles, sheets, hooks, sockets, régla
    - Distance : bande de portée = distance canvas vs `hitDistance` de l'arme → modificateur `POL3.WEAPON.RANGE` ; au-delà de « extrême » = tir impossible.
 2. Arme `ranged` → `taskCheck` → `rollTaskCheck` → si succès → `damageCheck`.
 3. Arme non `ranged` → `meleeCheck` : jet de l'Attaquant, `requestOpposedDefense` (le Défenseur choisit librement n'importe quel Attribut ou Compétence), `resolveOpposedCheck`, puis `damageCheck` pour qui l'emporte (les deux sur égalité).
-4. `damageCheck` : dialogue de localisation (Auto d20 / Manuelle), jet de dégâts, dialogue de modificateur ad hoc (si `askForModifier`), calcul, gravité, puis `requestApplyWound` (exécuté chez le propriétaire de la cible ou le MJ, pour respecter les permissions Foundry).
+4. `damageCheck` : dialogue de localisation (Auto d20 / Manuelle), jet de dégâts, dialogue de modificateur ad hoc (si `askForModifier`), calcul, gravité, puis `requestApplyWound` (exécuté chez le propriétaire de la cible ou le MJ, pour respecter les permissions Foundry). Après la carte de dégâts, si `needsShockTest` : `requestShockTest`, non attendu (le propriétaire de la cible lance `shockCheck`).

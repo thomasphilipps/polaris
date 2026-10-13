@@ -225,6 +225,7 @@
       "ForceShock": "Répondre à sa place",
       "ShockCheck": "Test de choc",
       "ShockRequest": "{actorName} doit faire un test de choc.",
+      "StunMalus": "Malus de choc (étourdi)",
       "EFFECT": {
         "Stabilization": {
           "Label": "Stabilisation nécessaire",
@@ -343,6 +344,8 @@
       }
     },
     "WARNING": {
+      "ActorStunned": "{actorName} est étourdi(e).",
+      "ActorUnconscious": "{actorName} est inconscient(e).",
       "NotOwner": "Vous n'êtes pas propriétaire de cet item",
       "SkillAlreadyExists": "Cette compétence existe déjà"
     },
