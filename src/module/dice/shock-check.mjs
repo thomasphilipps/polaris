@@ -3,6 +3,7 @@ import { getShockDuration, resolveShockState } from './shock-resolver.mjs';
 import { breakdownRoll, buildCheckContext, renderChatCard } from '../apps/chat/chat-card.mjs';
 import { toPascalCase } from '../utils/sheet-utils.mjs';
 import { MALUS } from '../config/actor/wounds.mjs';
+import { promptShockDuration } from '../apps/dialogs/shock-duration-dialog.mjs';
 
 /**@import('../config/actor/wounds.mjs').DurationEntry */
 
@@ -76,4 +77,44 @@ export async function shockCheck({ actor, woundedZone, baseSeverity }) {
   });
 
   return { state, isCatastrophic, duration, catastrophicDuration };
+}
+
+/**
+ * Lets the GM adjust the duration of a shock effect, rolls it and posts the result to the chat.
+ *
+ * @param {object} params
+ * @param {object} params.speaker        Speaker of the shock card, reused as is
+ * @param {string} params.formula        Default formula read from the table (may be empty)
+ * @param {string} params.unit           'Round' or 'Minutes' (may be empty)
+ * @param {string} params.effect         Effect without roll (e.g. 'MildComa'), shown in the dialog
+ * @param {string} params.durationType   'duration' or 'catastrophicDuration'
+ * @returns {Promise<ChatMessage|null>}  null if cancelled or if the formula is invalid
+ */
+export async function rollShockDuration({ speaker, formula, unit, effect, durationType }) {
+  const choice = await promptShockDuration({ formula, unit, effect });
+  if (!choice) return null;
+
+  if (!choice.formula.trim() || !Roll.validate(choice.formula)) {
+    ui.notifications.warn(game.i18n.format('POL3.WARNING.InvalidFormula', { formula: choice.formula }));
+    return null;
+  }
+
+  const durationRoll = new Roll(choice.formula);
+  await durationRoll.evaluate();
+
+  const durationContext = {
+    rollTerms: breakdownRoll(durationRoll),
+    duration: durationRoll.total,
+    unit: choice.unit,
+    isCatastrophic: durationType === 'catastrophicDuration',
+  };
+
+  const content = await renderChatCard('duration-card', durationContext);
+
+  return ChatMessage.create({
+    speaker,
+    content,
+    rolls: [durationRoll],
+    sound: CONFIG.sounds.dice,
+  });
 }

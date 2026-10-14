@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-13 (branche `combat`).
+Dernière mise à jour : 2026-10-14 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -13,6 +13,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 | B | Contact : Test d'opposition, défense via socket, Allonge automatique | ✅ fait, testé |
 | — | Modificateurs automatiques (blessures) + ad hoc sur touche **et** dégâts | ✅ fait, testé |
 | — | Chat cards détaillées (test, opposition, dégâts) + saut du dialogue de modificateur | ✅ fait, testé (CSS des cartes à faire) |
+| — | Test de Résistance au Choc (armes sans dommages de choc) | ✅ fait, testé |
 | D | Rafales, tir à répétition, tir visé, deux armes | ⏳ à faire |
 | E | Arts martiaux / Techniques / Lutte | 🔶 volontairement limité (voir §4) |
 | F | Aveugle, sous l'eau, tir de suppression, boucliers | ⏳ à faire |
@@ -74,7 +75,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 | 7 | Chat cards : aucun CSS propre pour l'instant (repoussé à la fin). La relance d'un échec critique n'apparaît pas dans la carte ; un d20 forcé par la triche s'affiche comme un nombre, sans icône de dé. |
 | 8 | `weapon.getRollData()` renvoie `actor`, inutilisé par `meleeCheck` (qui recalcule `weapon.actor`). |
 | 9 | Une seule arme de mêlée équipée du Défenseur est prise en compte (la première) ; un seul token actif pour l'Attaquant (`getActiveTokens()[0]`). |
-| 10 | Test de Résistance au Choc : résolution, carte et déclenchement depuis les dégâts (socket) faits. Reste le jet de durée par le MJ (étape 7). Si le joueur et le MJ répondent tous deux à la même demande, deux cartes sont postées (fermeture du dialogue de l'autre écartée par Thomas : trop de travail pour le gain). Sans propriétaire connecté ni MJ, personne ne lance le test. |
+| 10 | Test de Résistance au Choc : si le joueur et le MJ répondent tous deux à la même demande, deux cartes sont postées (fermeture du dialogue de l'autre écartée par Thomas : trop de travail pour le gain). Sans propriétaire connecté ni MJ, personne ne lance le test. |
 | 11 | `creatureAttack` (compétence « Attaque » unique, contact ou distance selon la créature, table de localisation propre) : non traité. |
 | 12 | Clés i18n : vérifier que toutes celles utilisées existent dans `fr.json` (`POL3.OPPOSED.*`, `POL3.DAMAGE.*`, `POL3.ERROR.*`, `POL3.DIALOG.*`). Un audit des textes en dur et des clés manquantes reste à faire. |
 | 13 | **À vérifier en jeu** : les requêtes socket transmettent `actor.id` et le destinataire fait `game.actors.get(id)`. Pour un token non lié (PNJ), cela désigne l'acteur de base, pas l'acteur du token. Correctif envisagé : transmettre `actor.uuid` et résoudre avec `fromUuid`. |
@@ -82,14 +83,14 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 ## 4. Décisions ouvertes et TODO
 
 - **Esquive active à distance** (Test d'opposition contre un tir) : le texte dit « pas d'opposition en combat à distance ». Ce serait une house rule — en attente de la relecture du livre par Thomas.
-- **Test de Choc (décisions prises le 2026-10-11, codage en cours)** :
+- **Test de Choc (décisions prises le 2026-10-11, fait le 2026-10-14)** :
   - Résolu comme un test d'Attribut (`resolveTaskCheck`, critiques compris) : valeur = seuil d'étourdissement, modificateur = malus de la blessure reçue (`POL3.WOUND.MALUS`). Réussite = rien ; échec avec jet ≤ seuil d'inconscience réduit = étourdi ; au-dessus = inconscient.
   - Arme sans dommages de choc : test à partir d'une blessure `severe`, sauf grave sur un membre (pas de test). Arme avec dommages de choc : test systématique, quelle que soit la zone (chantier suivant).
   - Le d20 est lancé par le propriétaire de la cible, via socket (le joueur garde la main sur ce qu'il subit).
-  - Statut Foundry posé sur l'acteur (étourdi / inconscient), retiré à la main par le MJ. Étourdi : −5 automatique (fournisseur dans `automatic-modifiers.mjs`) ; attaquer reste possible, avec une notification d'avertissement. Inconscient : avertissement aussi, sans blocage (décision du 2026-10-13).
+  - Statut Foundry posé sur l'acteur (étourdi / inconscient), retiré ou changé à la main par le MJ via le HUD du token (pas de bouton dédié sur la carte : décision du 2026-10-14). Étourdi : −5 automatique (fournisseur dans `automatic-modifiers.mjs`) ; attaquer reste possible, avec une notification d'avertissement. Inconscient : avertissement aussi, sans blocage (décision du 2026-10-13).
   - Gravité retenue : celle que donnent les points de dommages comparés aux seuils de blessure (pas la gravité inscrite après débordement des cases).
   - Catastrophe : marge d'échec de 15 ou plus par rapport au seuil d'étourdissement réduit, **si le MJ le souhaite** ; la carte la signale comme possible, l'effet de la table est indicatif, modifiable ou ignorable par le MJ.
-  - Durée : formule lue dans la table pour les humanoïdes, toujours modifiable par le MJ ; pour les autres gabarits, formule saisie à la main. Tours de combat = phases de combat, minutes = phases de jeu de rôle ; l'unité est stockée avec la formule. Décompte manuel par le MJ, à conserver quand les tours de combat Foundry seront gérés. Corrections de la table validées par Thomas pour les armes de choc : grave 2D6 / 2D6, mortelle 5D6 / 5D6, membre détruit 5D6 / 5D6.
+  - Durée : formule lue dans la table pour les humanoïdes, toujours modifiable par le MJ ; pour les autres gabarits, formule saisie à la main. Tours de combat = phases de combat, minutes = phases de jeu de rôle ; l'unité est stockée avec la formule. Jet de durée : bouton MJ sur la carte de choc (un par durée, catastrophe comprise), dialogue de formule et d'unité préremplies, carte de résultat publique au nom de l'acteur ; plusieurs clics autorisés. Décompte manuel par le MJ, à conserver quand les tours de combat Foundry seront gérés. Corrections de la table validées par Thomas pour les armes de choc : grave 2D6 / 2D6, mortelle 5D6 / 5D6, membre détruit 5D6 / 5D6.
   - Pas de cas particulier « mort = pas de test » : la Chance pourra intervenir (non gérée, à traiter avant ou après les tours de combat).
   - Non codé, laissé au MJ : inconscience, comas, réveil, stabilisation, limites de déplacement de l'étourdi.
 - **Armes de choc (chantier séparé après le Test de Choc, règle confirmée par Thomas)** : dommages physiques d'abord (blessure réelle). Puis jet des dommages de choc (formule de dés ; champ `chocDamage` à renommer `shockDamage` avec migration), auxquels s'appliquent la résistance aux dégâts de la cible et `shockProtection` de l'armure. Physiques + choc = blessure **virtuelle**, qui ne sert qu'au malus du Test de Choc et à la durée (colonne « armes de choc »).
@@ -109,7 +110,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes.
 
-1. **En cours** — Test de Choc (dette #10), plan en 7 étapes validé le 2026-10-11. Étapes 1 à 5 faites et testées en jeu (config, résolution pure, option `applyAutomaticModifiers`, orchestrateur + carte le 2026-10-12 ; socket, bouton MJ et appel depuis les dégâts le 2026-10-13). Étape 6 (−5 de l'étourdi, avertissements à l'attaque) codée le 2026-10-13. Reste : 7 jet de durée par le MJ ; puis armes de choc. Les conséquences dans la durée restent du ressort du MJ.
+1. **Suivant** — Armes de choc (voir §4) : renommage `chocDamage` → `shockDamage` avec migration, jet de choc, blessure virtuelle, colonne `SHOCK_WEAPON_DURATIONS`. Le Test de Choc (dette #10, plan en 7 étapes) est terminé et testé le 2026-10-14.
 2. CSS des chat cards (dette #7), en dernier.
 3. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
 4. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).

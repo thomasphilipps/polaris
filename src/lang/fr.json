@@ -220,6 +220,8 @@
       "Success": "Réussite"
     },
     "SHOCK": {
+      "ApplyDuration": "Durée",
+      "CatastrophicShock": "Choc catastrophique",
       "EffectLabel": "Effet",
       "EffectDuration": "Durée de l'effet",
       "ForceShock": "Répondre à sa place",
@@ -346,6 +348,7 @@
     "WARNING": {
       "ActorStunned": "{actorName} est étourdi(e).",
       "ActorUnconscious": "{actorName} est inconscient(e).",
+      "InvalidFormula": "La formule '{formula}' n'est pas valide.",
       "NotOwner": "Vous n'êtes pas propriétaire de cet item",
       "SkillAlreadyExists": "Cette compétence existe déjà"
     },

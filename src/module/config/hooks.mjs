@@ -1,4 +1,5 @@
 import { handleOpposedDefensePrompt, handleShockTestPrompt } from '../net/socket.mjs';
+import { rollShockDuration } from '../dice/shock-check.mjs';
 
 export function onPreCreateItem(item, data, options, userId) {
   // Adding useful informations when dropping an item on an Actor's sheet
@@ -26,16 +27,23 @@ export function onPreUpdateItem(item, updateData, options, userId) {
 }
 
 /**
- * Attaches the click handler to the button on the GM-only
- * chat message, letting a GM answer on behalf of an
- * unresponsive or absent player.
- * @param {ChatMessage} message
- * @param {HTMLElement} html
+ * Handles interactivity and event listeners for action buttons
+ * within chat messages (Foundry VTT / Polaris).
+ * Separates behaviors based on user permissions (GM vs Player)
+ *
+ * @param {ChatMessage} message - The Foundry VTT chat message object associated with the render.
+ * @param {HTMLElement} html - The root HTML element of the chat message currently being rendered.
+ * @returns {void}
  */
 export function onRenderChatMessageHTML(message, html) {
-  if (!game.user.isGM) return;
+  const shockDurationButtons = html.querySelectorAll('[data-action="polaris-apply-duration"]');
   const defenseButton = html.querySelector('[data-action="polaris-force-defense"]');
   const shockButton = html.querySelector('[data-action="polaris-force-shock"]');
+
+  if (!game.user.isGM) {
+    shockDurationButtons.forEach((button) => button.remove());
+    return;
+  }
 
   if (defenseButton) {
     defenseButton.addEventListener('click', async () => {
@@ -62,4 +70,9 @@ export function onRenderChatMessageHTML(message, html) {
       shockButton.disabled = true;
     });
   }
+
+  shockDurationButtons.forEach((button) => button.addEventListener('click', async () => {
+    const { value, unit, effect, durationType } = button.dataset;
+    await rollShockDuration({ speaker: message.speaker, formula: value, unit, effect, durationType });
+  }));
 }

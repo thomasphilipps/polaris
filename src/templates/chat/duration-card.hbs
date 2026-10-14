@@ -1,0 +1,11 @@
+<div class="pol3 chat-card duration-header">
+  {{#if isCatastrophic}}
+  <div class="catastrophic">{{localize 'POL3.SHOCK.CatastrophicShock'}}</div>
+  {{/if}}
+  {{> 'systems/polaris/templates/chat/partials/dice-module.hbs' rollTerms=rollTerms}}
+  <div>
+    <div class="duration-title">{{localize 'POL3.SHOCK.EffectDuration'}}</div>
+    <div
+      class="duration-time">{{duration}} {{localize (concat 'POL3.SHOCK.UNIT.' unit '.Label')}}</div>
+  </div>
+</div>
