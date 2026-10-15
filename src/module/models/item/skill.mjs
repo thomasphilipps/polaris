@@ -1,6 +1,10 @@
 import { Pol3ItemDataModel, specialNameOption } from './base-item.mjs';
 import { POL3 } from '../../config/config.mjs';
 
+/**
+ * Data model of the `skill` item type.
+ * @extends {Pol3ItemDataModel}
+ */
 export default class Pol3Skill extends Pol3ItemDataModel {
   static ITEM_ATTRIBUTES = POL3.ATTRIBUTE;
   static DEFAULT_ATTRIBUTE = 'FOR';
@@ -8,6 +12,7 @@ export default class Pol3Skill extends Pol3ItemDataModel {
   static ITEM_CATEGORIES = POL3.SKILL.CATEGORY;
   static DEFAULT_CATEGORY = 'physicalAptitude';
 
+  /** @override */
   static defineSchema() {
     const fields = foundry.data.fields;
     return {
@@ -39,6 +44,10 @@ export default class Pol3Skill extends Pol3ItemDataModel {
     };
   }
 
+  /**
+   * Data needed to roll the skill (see Pol3Item#roll).
+   * @returns {{actor: Actor|null, rollLabel: string, actionValue: number, valueCrit: number}}
+   */
   getRollData() {
     return {
       actor: this.parent.actor,

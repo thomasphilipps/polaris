@@ -5,7 +5,7 @@ import { toPascalCase } from '../utils/sheet-utils.mjs';
 import { MALUS } from '../config/actor/wounds.mjs';
 import { promptShockDuration } from '../apps/dialogs/shock-duration-dialog.mjs';
 
-/**@import('../config/actor/wounds.mjs').DurationEntry */
+/** @import { DurationEntry } from '../config/actor/wounds.mjs' */
 
 /**
  *

@@ -1,3 +1,4 @@
+/** Weapon categories (ranged, melee…). */
 export const CATEGORY = {
   ranged: {
     label: 'POL3.WEAPON.Category.Ranged',
@@ -13,6 +14,7 @@ export const CATEGORY = {
   },
 };
 
+/** Weapon subcategories, grouped by category. */
 export const SUBCATEGORY = {
   ranged: {
     draft: {
@@ -33,6 +35,7 @@ export const SUBCATEGORY = {
   },
 };
 
+/** Range bands, with their roll modifier. */
 export const RANGE = {
   close: {
     label: 'POL3.WEAPON.Range.Close.Label',
@@ -56,6 +59,7 @@ export const RANGE = {
   },
 };
 
+/** Fire modes (tags) of a weapon. */
 export const BURST = {
   single: {
     label: 'POL3.WEAPON.BURST.SingleShot.Label',
@@ -71,6 +75,7 @@ export const BURST = {
   },
 };
 
+/** Skill category a weapon of each category can be linked to. */
 export const CATEGORY_TO_SKILL_CATEGORY = {
   ranged: 'rangedCombat',
   melee: 'closeCombat',

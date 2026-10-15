@@ -1,3 +1,6 @@
+/**
+ * Registers the Polaris settings: world ambiance (world) and askForModifier (client).
+ */
 export const registerSystemSettings = function() {
   game.settings.register('polaris', 'worldAmbiance', {
     config: true,

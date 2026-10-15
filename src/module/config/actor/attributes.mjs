@@ -1,3 +1,4 @@
+/** Primary attributes, keyed by their id (e.g. 'FOR'). */
 export const ATTRIBUTE = Object.freeze({
   FOR: {
     id: 'FOR',

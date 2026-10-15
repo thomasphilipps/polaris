@@ -1,6 +1,14 @@
 import { handleOpposedDefensePrompt, handleShockTestPrompt } from '../net/socket.mjs';
 import { rollShockDuration } from '../dice/shock-check.mjs';
 
+/**
+ * preCreateItem hook: stores the source item id on embedded items and sets
+ * the default icon of a skill from its category.
+ * @param {Item} item       The item about to be created
+ * @param {object} data     Creation data
+ * @param {object} options  Creation options
+ * @param {string} userId   Id of the user creating the item
+ */
 export function onPreCreateItem(item, data, options, userId) {
   // Adding useful informations when dropping an item on an Actor's sheet
   if (item.parent instanceof Actor) {
@@ -14,6 +22,13 @@ export function onPreCreateItem(item, data, options, userId) {
   }
 }
 
+/**
+ * preUpdateItem hook: updates a skill's icon when its category changes.
+ * @param {Item} item           The item about to be updated
+ * @param {object} updateData   Pending changes (mutated in place)
+ * @param {object} options      Update options
+ * @param {string} userId       Id of the user updating the item
+ */
 export function onPreUpdateItem(item, updateData, options, userId) {
   switch (item.type) {
     case 'skill': {

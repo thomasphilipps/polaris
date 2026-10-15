@@ -4,8 +4,13 @@ import { Command } from 'commander';
 import { compilePack, extractPack } from '@foundryvtt/foundryvtt-cli';
 import os from 'os';
 
+/**
+ * Path of the Polaris system in the Foundry data folder: FOUNDRY_DATA_PATH if
+ * set, else the default location for WSL or Linux.
+ * @returns {string}
+ */
 function resolveFoundryPath() {
-  // Override manuel si besoin (nouvelle machine, cas particulier, etc.)
+  // Override manually if necessary (new workstation, special circumstances, etc.)
   if (process.env.FOUNDRY_DATA_PATH) {
     return `${process.env.FOUNDRY_DATA_PATH}/systems/polaris`;
   }
@@ -28,6 +33,10 @@ const CONFIG = {
   yaml: true,
 };
 
+/**
+ * Extracts the compiled compendium databases into YAML sources (`_source/`).
+ * @returns {Promise<void>}
+ */
 export async function extract() {
   for (const db of CONFIG.databases) {
     const dbPath = path.join(CONFIG.distDataPath, db);
@@ -38,6 +47,10 @@ export async function extract() {
   console.log(`Successfully extracted ${CONFIG.databases.length} databases.`);
 }
 
+/**
+ * Compiles the YAML sources (`_source/`) into compendium databases (`packs/`).
+ * @returns {Promise<void>}
+ */
 export async function compile() {
   for (const db of CONFIG.databases) {
     const dbPath = path.join(CONFIG.dataPath, db);

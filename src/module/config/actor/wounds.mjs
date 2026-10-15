@@ -28,8 +28,11 @@ import { BODY_TEMPLATES } from './bodyTemplates.mjs';
  * @property {FullShockEffects} [limbs]
  */
 
+/** Wound severities, from the lightest to the worst. */
 export const SEVERITIES = ['light', 'medium', 'severe', 'critical', 'deadly', 'destroyed'];
+/** Number of wound boxes per severity, before the resistant-zone bonus. */
 export const BASE_MAX = { light: 3, medium: 3, severe: 2, critical: 2, deadly: 1, destroyed: 1 };
+/** Extra wound boxes per severity on a resistant zone. */
 export const RESISTANT_BONUS = {
   light: 1,
   medium: 0,
@@ -38,6 +41,7 @@ export const RESISTANT_BONUS = {
   deadly: 1,
   destroyed: 0,
 };
+/** Roll modifier caused by a wound of each severity. */
 export const MALUS = {
   light: -1,
   medium: -3,
@@ -46,6 +50,7 @@ export const MALUS = {
   deadly: -15,
   destroyed: -30,
 };
+/** Whether a wound of each severity makes any action impossible. */
 export const ACTION_IMPOSSIBLE = {
   light: false,
   medium: false,
@@ -55,6 +60,11 @@ export const ACTION_IMPOSSIBLE = {
   destroyed: true,
 };
 
+/**
+ * Wound zones of a body template, keyed by zone name. Unknown types fall back to humanoid.
+ * @param {string} [creatureType='humanoid']  Body template key (see BODY_TEMPLATES)
+ * @returns {Record<string, object>}
+ */
 export const ZONES = (creatureType = 'humanoid') => {
   const templates = BODY_TEMPLATES[creatureType] ?? BODY_TEMPLATES.humanoid;
 

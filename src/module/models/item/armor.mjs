@@ -1,6 +1,10 @@
 import { Pol3ItemDataModel, itemGlobalFields, specialNameOption } from './base-item.mjs';
 import { POL3 } from '../../config/config.mjs';
 
+/**
+ * Data model of the `armor` item type (armor and shields).
+ * @extends {Pol3ItemDataModel}
+ */
 export default class Pol3Armor extends Pol3ItemDataModel {
   static ARMOR_TYPES = POL3.ARMOR.TYPE;
   static ARMOR_CATEGORY = POL3.ARMOR.CATEGORY;
@@ -8,6 +12,7 @@ export default class Pol3Armor extends Pol3ItemDataModel {
   static DEFAULT_TYPE = 'simple';
   static DEFAULT_CATEGORY = 'a';
 
+  /** @override */
   static defineSchema() {
     const fields = foundry.data.fields;
     return {

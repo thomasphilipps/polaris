@@ -9,6 +9,10 @@ import { POL3 } from '../../config/config.mjs';
 
 //function weapon
 
+/**
+ * Data model of the `weapon` item type.
+ * @extends {Pol3ItemDataModel}
+ */
 export default class Pol3Weapon extends Pol3ItemDataModel {
   static WEAPON_BURSTS = POL3.WEAPON.BURST;
   static ITEM_CATEGORIES = POL3.WEAPON.CATEGORY;
@@ -16,6 +20,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
   static WEAPON_RANGED_SUBCATEGORY = POL3.WEAPON.SUBCATEGORY.ranged;
   static DEFAULT_RANGED_SUBCATEGORY = 'draft';
 
+  /** @override */
   static defineSchema() {
     const fields = foundry.data.fields;
     return {

@@ -5,6 +5,7 @@ import * as WOUND from './actor/wounds.mjs';
 import * as ARMOR from './item/armor.mjs';
 import * as BODY_TEMPLATE from './actor/bodyTemplates.mjs';
 
+/** Polaris game configuration, exposed as CONFIG.POL3. */
 export const POL3 = {
   ATTRIBUTE,
   SKILL,

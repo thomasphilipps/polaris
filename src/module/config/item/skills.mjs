@@ -1,3 +1,4 @@
+/** Skill categories. */
 export const CATEGORY = {
   physicalAptitude: {
     label: "POL3.SKILL.Category.PhysicalAptitude",
@@ -34,6 +35,7 @@ export const CATEGORY = {
   },
 };
 
+/** Skill properties (tags), with the symbol shown on the sheet. */
 export const PROPERTY = {
   isDifficult: {
     label: "POL3.SKILL.Property.Difficult",

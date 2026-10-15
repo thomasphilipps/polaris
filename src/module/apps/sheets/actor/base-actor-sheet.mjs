@@ -145,6 +145,11 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
     };
   }
 
+  /**
+   * Sets up a subclass from its `DEFAULT_OPTIONS.actor.type`: own copies of
+   * PARTS and TABS, CSS class and description template.
+   * Call it from the subclass's static initialization block.
+   */
   static _initializeActorSheetClass() {
     this.PARTS = foundry.utils.deepClone(this.PARTS);
     this.TABS = foundry.utils.deepClone(this.TABS);
@@ -507,9 +512,19 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   // Callbacks required by Foundry’s DragDrop API, even without any associated logic:
   // Leaving them empty rather than removing them would break the binding above.
+  /**
+   * @param {DragEvent} event
+   * @returns {Promise<void>}
+   * @protected
+   */
   async _onDragStart(event) {
   }
 
+  /**
+   * @param {DragEvent} event
+   * @returns {Promise<void>}
+   * @protected
+   */
   async _onDragOver(event) {
   }
 

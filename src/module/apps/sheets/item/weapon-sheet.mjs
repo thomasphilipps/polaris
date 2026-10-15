@@ -1,5 +1,9 @@
 import Pol3BaseItemSheet from './base-item-sheet.mjs';
 
+/**
+ * Item sheet for weapons.
+ * @extends {Pol3BaseItemSheet}
+ */
 export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
   /** @inheritDoc */
   static DEFAULT_OPTIONS = {
@@ -14,6 +18,12 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
     this._initializeItemSheet();
   }
 
+  /**
+   * Adds the weapon-specific data to the base sheet context.
+   * @param {object} options  Render options
+   * @returns {Promise<object>}
+   * @override
+   */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     Object.assign(context, {
@@ -24,9 +34,14 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
     return context;
   }
 
+  /**
+   * Lists the skills a weapon can be linked to: world items and compendium
+   * entries whose category matches the weapon's category.
+   * @returns {Promise<Record<string, string>>}  Choices keyed and labelled by skill name
+   */
   async #getLinkedSkillOptions() {
-    // Attaque de créature : compétence unique fixe, pas de choix à proposer
-    
+    // Creature attack: fixed unique ability; no options to choose from
+
     const targetCategory = CONFIG.POL3.WEAPON.CATEGORY_TO_SKILL_CATEGORY[this.item.system.category];
     if (!targetCategory) return {};
 

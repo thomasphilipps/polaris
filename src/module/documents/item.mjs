@@ -2,7 +2,15 @@ import * as CONFIG from '../config/config.mjs';
 import { taskCheck } from '../dice/task-check.mjs';
 import { meleeCheck } from '../dice/melee-check.mjs';
 
+/**
+ * Polaris Item document: derived data for skills, weapons and armor, and rolls.
+ * @extends {Item}
+ */
 export default class Pol3Item extends Item {
+  /**
+   * Whether the item is embedded in an actor.
+   * @type {boolean}
+   */
   get hasActor() {
     return this.isOwned && this.actor !== null && this.actor !== undefined;
   }
@@ -35,8 +43,8 @@ export default class Pol3Item extends Item {
 
   /**
    * Prepare specific skill data.
-   * @param itemData
-   * @param actorData
+   * @param {object} itemData   The item's system data
+   * @param {object} actorData  The owning actor's system data ({} if unowned)
    */
   _prepareSkillData(itemData, actorData) {
     itemData.isBasicSkill = !(
@@ -57,7 +65,7 @@ export default class Pol3Item extends Item {
 
   /**
    * Sets the Items's displayed name for the Observer
-   * @param itemData
+   * @param {object} itemData  The item's system data
    */
   // TODO: handle displayed name on the app menubar and in the Item sidebar
   _prepareSpecializationName(itemData) {
@@ -68,8 +76,8 @@ export default class Pol3Item extends Item {
 
   /**
    * Displays hints for the Item's properties
-   * @param itemData
-   * @param properties from config file
+   * @param {object} itemData    The item's system data
+   * @param {object} properties  Tag definitions from the config file, keyed by tag
    */
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
@@ -83,7 +91,7 @@ export default class Pol3Item extends Item {
 
   /**
    * Sets the Item's book reference string for non-GM users
-   * @param itemData
+   * @param {object} itemData  The item's system data
    */
   _setBookReferenceString(itemData) {
     const bookRef = itemData.reference.book;
@@ -97,8 +105,8 @@ export default class Pol3Item extends Item {
 
   /**
    * Calculates the base level of the skill, depending on the actor's attributes.
-   * @param itemData
-   * @param actorData
+   * @param {object} itemData   The skill's system data
+   * @param {object} actorData  The owning actor's system data
    * @returns {number}
    */
   _computeAttributeBaseLevel(itemData, actorData) {
@@ -137,11 +145,21 @@ export default class Pol3Item extends Item {
     return baseNaturalAptitude;
   }
 
+  /**
+   * Prepare specific weapon data.
+   * @param {object} itemData   The item's system data
+   * @param {object} actorData  The owning actor's system data ({} if unowned)
+   */
   _prepareWeaponData(itemData, actorData) {
     itemData.isRanged = itemData.category === 'ranged';
     itemData.isMelee = itemData.category === 'melee';
   }
 
+  /**
+   * Prepare specific armor data.
+   * @param {object} itemData   The item's system data
+   * @param {object} actorData  The owning actor's system data ({} if unowned)
+   */
   _prepareArmorData(itemData, actorData) {
     itemData.isShield = itemData.category === 'shield';
   }
@@ -149,7 +167,7 @@ export default class Pol3Item extends Item {
   /**
    * Roll the item
    *
-   * @param {boolean} askForModifier
+   * @param {boolean} askForModifier  Whether to prompt for ad hoc modifiers
    * @returns {Promise<void>}
    */
   async roll(askForModifier) {

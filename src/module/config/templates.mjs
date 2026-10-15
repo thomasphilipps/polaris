@@ -1,3 +1,7 @@
+/**
+ * Preloads the Handlebars partials used by the sheets and chat cards.
+ * @returns {Promise<Function[]>}
+ */
 export async function preloadHandlebarsTemplates() {
   const templatePaths = [
     'systems/polaris/templates/sheets/items/partials/item-details.hbs',

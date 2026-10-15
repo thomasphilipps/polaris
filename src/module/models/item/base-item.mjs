@@ -1,6 +1,11 @@
 const fields = foundry.data.fields;
 import { POL3 } from '../../config/config.mjs';
 
+/**
+ * Schema fields shared by physical items (weapons, armor): quantity, price,
+ * weight, availability, tech level, manufacturer, integrity, equipped state.
+ * @returns {Record<string, foundry.data.fields.DataField>}
+ */
 export function itemGlobalFields() {
   return {
     quantity: new fields.NumberField({ initial: 0, label: 'POL3.SHEETS.DETAILS.Quantity' }),
@@ -24,6 +29,10 @@ export function itemGlobalFields() {
   };
 }
 
+/**
+ * Schema field for an item's specialization (e.g. a skill's sub-skill).
+ * @returns {Record<string, foundry.data.fields.DataField>}
+ */
 export function specialNameOption() {
   return {
     specialization: new fields.StringField({
@@ -33,12 +42,16 @@ export function specialNameOption() {
   };
 }
 
+/**
+ * Base data model shared by all item types: descriptions and book reference.
+ * @extends {foundry.abstract.TypeDataModel}
+ */
 export class Pol3ItemDataModel extends foundry.abstract.TypeDataModel {
   static ITEM_BOOK_REFERENCES = POL3.BOOK;
   static DEFAULT_BOOK_REFERENCE = 'coreRulebook1';
 
+  /** @override */
   static defineSchema() {
-
     return {
       description: new fields.SchemaField({
         public: new fields.HTMLField(),

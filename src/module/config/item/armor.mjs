@@ -1,3 +1,4 @@
+/** Armor types (simple armor, personal field…). */
 export const TYPE = {
   simple: {
     label: 'POL3.ARMOR.TYPE.Simple',
@@ -13,6 +14,7 @@ export const TYPE = {
   },
 };
 
+/** Armor categories, with their malus. */
 export const CATEGORY = {
   a: {
     label: 'A',
@@ -32,6 +34,7 @@ export const CATEGORY = {
   },
 };
 
+/** Body zones an armor can cover (coarser than wound zones). */
 export const ZONES = {
   head: {
     label: 'POL3.ZONES.Head.Label',

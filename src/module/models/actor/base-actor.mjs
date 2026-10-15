@@ -1,6 +1,10 @@
 const fields = foundry.data.fields;
 import { POL3 } from '../../config/config.mjs';
 
+/**
+ * Schema fields specific to heroes: physical description, genetic type, sex, handedness…
+ * @returns {Record<string, foundry.data.fields.DataField>}
+ */
 export function heroFields() {
   const ACTOR_GENETIC_TYPES = POL3.GENETICTYPE;
   const ACTOR_SEX = POL3.SEX;
@@ -51,7 +55,12 @@ export function heroFields() {
 }
 
 // TODO : adapt for other actor types (creatures...)
+/**
+ * Base data model shared by all actor types: body template, wound zones and attributes.
+ * @extends {foundry.abstract.TypeDataModel}
+ */
 export class Pol3ActorDataModel extends foundry.abstract.TypeDataModel {
+  /** @override */
   static defineSchema() {
     return {
       bodyTemplate: new fields.StringField({

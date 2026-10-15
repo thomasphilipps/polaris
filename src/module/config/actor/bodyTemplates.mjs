@@ -1,3 +1,4 @@
+/** Wound zones of each body template (resistant / lethal flags). */
 export const BODY_TEMPLATES = {
   humanoid: [
     { name: 'head', resistant: false, lethal: true, label: 'POL3.ZONE.Head' },

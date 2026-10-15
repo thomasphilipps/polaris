@@ -1,10 +1,9 @@
 /**
  * Sums modifiers values
  *
- * @param modifiersList {{label: string, value: number}[]}
+ * @param {{label: string, value: number}[]} modifiersList
  * @returns {number}
  */
-
 export function sumModifiers(modifiersList) {
   return modifiersList.reduce((total, modifier) => (total + modifier.value), 0);
 }

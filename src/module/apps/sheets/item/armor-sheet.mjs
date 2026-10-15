@@ -1,5 +1,9 @@
 import Pol3BaseItemSheet from './base-item-sheet.mjs';
 
+/**
+ * Item sheet for armor and shields.
+ * @extends {Pol3BaseItemSheet}
+ */
 export default class Pol3ArmorSheet extends Pol3BaseItemSheet {
   /** @inheritDoc */
   static DEFAULT_OPTIONS = {
@@ -14,6 +18,12 @@ export default class Pol3ArmorSheet extends Pol3BaseItemSheet {
     this._initializeItemSheet();
   }
 
+  /**
+   * Adds the armor-specific data to the base sheet context.
+   * @param {object} options  Render options
+   * @returns {Promise<object>}
+   * @override
+   */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     Object.assign(context, {

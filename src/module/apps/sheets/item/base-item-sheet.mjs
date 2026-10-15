@@ -1,6 +1,11 @@
 const { api, sheets } = foundry.applications;
 const hasProperty = foundry.utils.hasProperty;
 
+/**
+ * Base item sheet shared by all item types: header, description and configuration tabs.
+ * Subclasses set `DEFAULT_OPTIONS.item` and call `_initializeItemSheet` in a static block.
+ * @extends {ItemSheetV2}
+ */
 export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sheets.ItemSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ['polaris', 'sheet', 'item'],
@@ -58,6 +63,12 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
     description: 'public',
   };
 
+  /**
+   * Prepares the context shared by all item sheets.
+   * @param {object} options  Render options
+   * @returns {Promise<object>}
+   * @override
+   */
   async _prepareContext(options) {
     const tabGroups = this._getTabs();
     return {
@@ -73,6 +84,11 @@ export default class Pol3BaseItemSheet extends api.HandlebarsApplicationMixin(sh
     };
   }
 
+  /**
+   * Sets up a subclass from its `DEFAULT_OPTIONS.item` (type, GM description,
+   * extra templates): own copies of PARTS and TABS, configuration template.
+   * Call it from the subclass's static initialization block.
+   */
   static _initializeItemSheet() {
     const item = this.DEFAULT_OPTIONS.item;
     this.PARTS = foundry.utils.deepClone(this.PARTS);

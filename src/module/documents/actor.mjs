@@ -1,6 +1,10 @@
 import { POL3 } from '../config/config.mjs';
 import { buildDefaultWounds } from '../config/actor/wounds.mjs';
 
+/**
+ * Polaris Actor document: wound zones, derived attributes and wound handling.
+ * @extends {Actor}
+ */
 export default class Pol3Actor extends Actor {
 
   /** @override */
