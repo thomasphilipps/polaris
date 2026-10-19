@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-14 (branche `combat`).
+Dernière mise à jour : 2026-10-17 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -93,7 +93,13 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
   - Durée : formule lue dans la table pour les humanoïdes, toujours modifiable par le MJ ; pour les autres gabarits, formule saisie à la main. Tours de combat = phases de combat, minutes = phases de jeu de rôle ; l'unité est stockée avec la formule. Jet de durée : bouton MJ sur la carte de choc (un par durée, catastrophe comprise), dialogue de formule et d'unité préremplies, carte de résultat publique au nom de l'acteur ; plusieurs clics autorisés. Décompte manuel par le MJ, à conserver quand les tours de combat Foundry seront gérés. Corrections de la table validées par Thomas pour les armes de choc : grave 2D6 / 2D6, mortelle 5D6 / 5D6, membre détruit 5D6 / 5D6.
   - Pas de cas particulier « mort = pas de test » : la Chance pourra intervenir (non gérée, à traiter avant ou après les tours de combat).
   - Non codé, laissé au MJ : inconscience, comas, réveil, stabilisation, limites de déplacement de l'étourdi.
-- **Armes de choc (chantier séparé après le Test de Choc, règle confirmée par Thomas)** : dommages physiques d'abord (blessure réelle). Puis jet des dommages de choc (formule de dés ; champ `chocDamage` à renommer `shockDamage` avec migration), auxquels s'appliquent la résistance aux dégâts de la cible et `shockProtection` de l'armure. Physiques + choc = blessure **virtuelle**, qui ne sert qu'au malus du Test de Choc et à la durée (colonne « armes de choc »).
+- **Armes de choc (décisions du 2026-10-16, à coder)** : deux familles, distinguées par un booléen `shockOnly` sur l'arme ; formule de choc dans `shockDamage` (renommage de `chocDamage`, sans migration : système pas encore public, base de test vérifiée le 2026-10-17).
+  - Arme physique avec dommages additionnels de choc : jet physique d'abord, blessure réelle inscrite comme d'habitude. Puis jet de `shockDamage`, auquel s'appliquent la résistance aux dommages de la cible et `shockProtection` (qui s'ajoute à la protection d'armure pour le seul calcul du choc). La partie choc est plafonnée à 0 (elle ne fait jamais baisser la blessure virtuelle). Physiques + choc = blessure **virtuelle**, qui ne sert qu'au malus du Test de Choc et à la durée (colonne « armes de choc »). Test quelle que soit la zone touchée (le livre ne cite que la tête ; Thomas retient toute zone, 2026-10-16).
+  - Arme uniquement de choc (`shockOnly`) : même calcul qu'une arme ordinaire (réussite, contact, ad hoc, résistance), protection = armure de la zone + `shockProtection` ; aucune blessure inscrite, la gravité ne sert qu'au Test de Choc. Pas de test sous 5 points ; au-delà, test systématique quelle que soit la zone. Localisation conservée.
+  - Durée : `SHOCK_WEAPON_DURATIONS`, pour l'étourdissement et l'inconscience seulement. Catastrophe : signalée par la carte, effet géré manuellement par le MJ (pas de colonne dans la table).
+  - Hors périmètre : armes à action neurale (jouées en roleplay, trop spécifiques), exo-armures (traitées plus tard, avec leurs règles proches des véhicules), armes inopérantes sous l'eau (phase F).
+- **Pénétration (décision du 2026-10-16, à coder avant les armes de choc)** : protection d'armure effective = `max(0, protection − penetration)` ; la pénétration n'ajoute jamais de dommages sans armure et ne réduit pas `shockProtection`.
+- **Propagation des modifications d'objets (décisions du 2026-10-17, à faire après les armes de choc)** : sens unique compendium → objets du monde → copies embarquées dans les acteurs (une modification du monde ne touche jamais le compendium). Report automatique, sans confirmation, du diff de la mise à jour (`changes`), nom et image compris. Aucun champ exclu : le MJ doit pouvoir corriger une erreur de création en cours de partie ; une variante propre à un personnage passera par un objet distinct ou des ActiveEffects. Lien par l'uuid de l'original (flag posé au drop, ou `_stats.compendiumSource`), via le hook `updateItem` exécuté par le seul client auteur. L'ancien flag `parentItemId` n'est pas repris (système pas encore public, aucune migration). Tokens non liés hors périmètre (voir dette #13).
 - **CSS des chat cards** : à faire en dernier, une fois le reste prêt (décision de Thomas).
 - **Phase E (décision prise)** : pas de détection automatique des Techniques (dépendrait du couplage par nom, et Initiative / états multi-tours n'existent pas). À la place : champ ad hoc sur les dégâts (fait) + Journal Entry d'aide-mémoire à créer/vérifier dans Foundry.
 - **Vérification légale** : contact avec l'éditeur / Philippe Tessier avant toute publication officielle (nom « Polaris », liste de compétences) — hors code, en cours côté Thomas.
@@ -110,10 +116,11 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes.
 
-1. **Suivant** — Armes de choc (voir §4) : renommage `chocDamage` → `shockDamage` avec migration, jet de choc, blessure virtuelle, colonne `SHOCK_WEAPON_DURATIONS`. Le Test de Choc (dette #10, plan en 7 étapes) est terminé et testé le 2026-10-14.
-2. CSS des chat cards (dette #7), en dernier.
-3. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
-4. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
+1. **En cours** — Pénétration des armes, puis armes de choc (voir §4) : renommage `chocDamage` → `shockDamage`, booléen `shockOnly`, `isShockWeapon` pour `needsShockTest` / `getShockDuration`, branche dans `damageCheck`, transmission jusqu'à `shockCheck`. Le Test de Choc (dette #10, plan en 7 étapes) est terminé et testé le 2026-10-14.
+2. Propagation des modifications d'objets (voir §4).
+3. CSS des chat cards (dette #7), en dernier.
+4. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
+5. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
 
 ## 7. Mise à jour de ce fichier
 

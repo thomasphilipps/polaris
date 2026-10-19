@@ -48,7 +48,12 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         initial: '1d10',
         label: 'POL3.WEAPON.SHEET.BaseDamage',
       }),
-      chocDamage: new fields.StringField({ blank: true, label: 'POL3.WEAPON.SHEET.ChocDamage' }),
+      shockDamage: new fields.StringField({
+        initial: '',
+        blank: true,
+        label: 'POL3.WEAPON.SHEET.ShockDamage',
+      }),
+      shockOnly: new fields.BooleanField({ initial: false, label: 'POL3.WEAPON.SHEET.ShockOnly' }),
       penetration: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Penetration' }),
       allonge: new fields.NumberField({ blank: true, label: 'POL3.WEAPON.SHEET.Reach' }),
       hitDistance: new fields.SchemaField({

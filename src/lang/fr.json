@@ -163,6 +163,7 @@
       "ModifierTitle": "Modificateurs",
       "NoAutomaticModifier": "Aucun modificateur automatique",
       "OtherModifiers": "Autres modificateurs",
+      "WeaponPenetration": "Pénétration de l'arme",
       "SaveButton": "Enregistrer",
       "SuccessModifier": "Modificateur de réussite",
       "Total": "Total"
@@ -397,7 +398,8 @@
       "SHEET": {
         "BaseDamage": "Dégâts",
         "BurstMode": "Modes de tir",
-        "ChocDamage": "Dégâts de choc",
+        "ShockDamage": "Dégâts de choc",
+        "ShockOnly": "Choc uniquement",
         "InitiativeModifier": "Modificateur d'initiative",
         "MinimalStrength": "Force minimale",
         "Penetration": "Pénétration",

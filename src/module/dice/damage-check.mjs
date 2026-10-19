@@ -86,7 +86,9 @@ export async function damageCheck({
   const armor = targetActor.items.find(
     i => i.type === 'armor' && i.system.isEquipped && armorZone && i.system.tags.has(armorZone),
   );
+  const weaponPenetration = weapon.system.penetration ?? 0;
   const armorProtection = armor?.system.baseProtection ?? 0;
+  const mitigatedArmor = Math.max(0, armorProtection - weaponPenetration);
 
   const finalDamage = resolveFinalDamage({
     weaponDamageRoll: damageRoll.total,
@@ -94,7 +96,7 @@ export async function damageCheck({
     closeCombatModifier,
     otherModifiers: adHocModifier,
     damageResistance,
-    armorProtection,
+    armorProtection: mitigatedArmor,
   });
 
   const severity =
@@ -137,6 +139,10 @@ export async function damageCheck({
     {
       label: 'POL3.ATTRIBUTE.SECONDARIES.DamageResistance',
       value: damageResistance,
+    },
+    {
+      label: 'POL3.DIALOG.WeaponPenetration',
+      value: weaponPenetration,
     },
     {
       label: 'POL3.DIALOG.ArmorProtection',
