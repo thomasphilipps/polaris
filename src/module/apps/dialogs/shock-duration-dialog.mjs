@@ -2,9 +2,9 @@
  * Prompt the user (GM) to adjust or not the duration of a shock effect.
  *
  * @param {object} params
- * @param {string} params.formula
- * @param {string} params.unit
- * @param {string} params.effect
+ * @param {string} params.formula  Default formula (may be empty)
+ * @param {string} params.unit     Default unit, 'Round' or 'Minutes' (may be empty)
+ * @param {string} params.effect   Effect without roll (e.g. 'MildComa'), shown as information (may be empty)
  * @returns {Promise<{formula: string, unit:string}|null>}
  */
 export async function promptShockDuration({ formula, unit, effect }) {

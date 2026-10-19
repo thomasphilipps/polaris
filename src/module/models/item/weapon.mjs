@@ -6,6 +6,8 @@ import {
   getRangeBand,
 } from '../../utils/combat-utils.mjs';
 import { POL3 } from '../../config/config.mjs';
+/** @import Pol3Actor from '../../documents/actor.mjs' */
+/** @import Pol3Item from '../../documents/item.mjs' */
 
 //function weapon
 
@@ -84,13 +86,13 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
    * Builds the roll parameters for this weapon: the linked skill's value, plus
    * (for ranged weapons) the range modifier computed from the current target's distance.
    * @returns {{
-   *   actor: Actor,
+   *   actor: Pol3Actor,
    *   rollLabel: string,
    *   actionValue: number,
    *   valueCrit: number,
    *   modifiers: {label: string, value: number}[],
    *   isAttack: boolean,
-   *   weapon: Item,
+   *   weapon: Pol3Item,
    *   target: Token
    * }|null}
    */

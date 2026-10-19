@@ -3,15 +3,17 @@ import { consumeForcedD20 } from '../dev/dice-cheat.mjs';
 import { promptAdHocModifier } from '../apps/dialogs/modifier-dialog.mjs';
 import { collectAutomaticModifiers } from './automatic-modifiers.mjs';
 import { sumModifiers } from '../utils/helpers.mjs';
+/** @import Pol3Actor from '../documents/actor.mjs' */
 
 /**
  * Calculates the result of a task roll based on known values.
  *
- * @param {number} rollResult                             Initial 1d20 result
- * @param {number} actionValue                            Base value tested (competence/value)
- * @param {{label: string, value: number}[]} modifiers    List of the applied modifiers
- * @param {number} [valueCrit=0]                          Associated critical bonus
- * @param {number|null} [critFailReroll]                  Result of the 1d20 re-roll in case of a critical failure
+ * @param {object} params
+ * @param {number} params.rollResult                             Initial 1d20 result
+ * @param {number} params.actionValue                            Base value tested (competence/value)
+ * @param {{label: string, value: number}[]} [params.modifiers=[]]  List of the applied modifiers
+ * @param {number} [params.valueCrit=0]                          Associated critical bonus
+ * @param {number|null} [params.critFailReroll=null]             Result of the 1d20 re-roll in case of a critical failure
  * @returns {object} outcome
  */
 export function resolveTaskCheck({
@@ -68,7 +70,7 @@ export function resolveTaskCheck({
  * Exported so other resolvers (e.g. opposed checks) can recompute the degree
  * on an adjusted margin without duplicating this lookup.
  * @param {object} outcome  Must have a `rollMargin` property; mutated in place.
- * @param {{threshold: number, label: string, nextModifier: number}[]} table
+ * @param {{threshold: number, label: string, nextModifier: number}[]} table  POL3.SUCCESSTABLE or POL3.FAILURETABLE
  */
 export function applyDegree(outcome, table) {
   const isPositive = outcome.rollMargin >= 0;
@@ -103,14 +105,14 @@ export async function rollD20() {
  * "roll + resolve" together: task-check.mjs, melee-check.mjs, and the
  * opposed-defense dialog.
  * @param {object} params
- * @param {Pol3Actor} params.actor
- * @param {number} params.actionValue
- * @param {{label: string, value: number}[]} [params.modifiers=[]]
- * @param {number} [params.valueCrit=0]
- * @param {boolean} [params.askForModifier=true]
- * @param {string} [params.contextLabel='']
- * @param {boolean} [params.applyAutomaticModifiers=true]
- * @returns {Promise<{roll: Roll, outcome: object, modifiers: array}>}
+ * @param {Pol3Actor} params.actor                     The rolling actor (source of automatic modifiers)
+ * @param {number} params.actionValue                   Base value tested
+ * @param {{label: string, value: number}[]} [params.modifiers=[]]  Modifiers already known
+ * @param {number} [params.valueCrit=0]                 Critical bonus
+ * @param {boolean} [params.askForModifier=true]        Whether to prompt for an ad hoc modifier
+ * @param {string} [params.contextLabel='']             Localized text shown in the modifier dialog
+ * @param {boolean} [params.applyAutomaticModifiers=true]  Whether to add the automatic modifiers (wounds, stun)
+ * @returns {Promise<{roll: Roll, outcome: object, modifiers: {label: string, value: number}[]}>}  All three null if cancelled
  */
 export async function rollTaskCheck({
                                       actor,

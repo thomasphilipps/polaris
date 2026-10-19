@@ -2,11 +2,12 @@
  * Utility functions shared by Polaris sheets (ApplicationV2), actors and items.
  * These depend on the Foundry globals (`game`, `foundry`) but not on any specific sheet class.
  */
+/** @import Pol3Item from '../documents/item.mjs' */
 
 /**
  * Resolves the dataset of the nearest ancestor matching a selector.
- * @param {HTMLElement} target
- * @param {string} selector
+ * @param {HTMLElement} target  Element the search starts from
+ * @param {string} selector    CSS selector of the ancestor
  * @returns {DOMStringMap|null}
  */
 export function datasetOf(target, selector) {
@@ -15,7 +16,7 @@ export function datasetOf(target, selector) {
 
 /**
  * Converts a camelCase/kebab-case/snake_case string to PascalCase (e.g. ‘arm-left’ → ‘ArmLeft’).
- * @param {string} str
+ * @param {string} str  String to convert
  * @returns {string}
  */
 export function toPascalCase(str) {
@@ -28,11 +29,11 @@ export function toPascalCase(str) {
 /**
  * Group a collection of items of a given type by a field in their `system` (by default
  * `category`), displaying the group label and sorting the groups and items alphabetically.
- * @param {Iterable<Item>} items      An iterable of Items (e.g. actor.items)
+ * @param {Iterable<Pol3Item>} items  An iterable of Items (e.g. actor.items)
  * @param {string} itemType           The type of item to keep (e.g. “skill”, “weapon”, “armour”)
  * @param {string} i18nPrefix         The i18n key prefix for labels (e.g. “POL3.SKILL.Category”)
  * @param {string} [groupField]       The `system` field used for grouping (default: “category”)
- * @returns {{group: string, label: string, itemList: Item[]}[]}
+ * @returns {{group: string, label: string, itemList: Pol3Item[]}[]}
  */
 export function groupItemsByField(items, itemType, i18nPrefix, groupField = 'category') {
   const grouped = Map.groupBy(

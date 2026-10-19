@@ -6,15 +6,15 @@ import { MALUS } from '../config/actor/wounds.mjs';
 import { promptShockDuration } from '../apps/dialogs/shock-duration-dialog.mjs';
 
 /** @import { DurationEntry } from '../config/actor/wounds.mjs' */
+/** @import Pol3Actor from '../documents/actor.mjs' */
 
 /**
- *
  * Performs a shock check.
  *
  * @param {object} params
- * @param {Pol3Actor} params.actor
- * @param {string} params.woundedZone
- * @param {string} params.baseSeverity
+ * @param {Pol3Actor} params.actor         The actor taking the test
+ * @param {string} params.woundedZone      Zone of the wound causing the test
+ * @param {string} params.baseSeverity     Severity of that wound (e.g. 'severe')
  * @returns {Promise<{state: string, isCatastrophic: boolean, duration: DurationEntry|null, catastrophicDuration: DurationEntry|null}|null>}
  */
 export async function shockCheck({ actor, woundedZone, baseSeverity }) {

@@ -1,20 +1,22 @@
 import { rollTaskCheck } from './roll-resolver.mjs';
 import { damageCheck } from './damage-check.mjs';
 import { breakdownRoll, renderChatCard, buildCheckContext } from '../apps/chat/chat-card.mjs';
+/** @import Pol3Actor from '../documents/actor.mjs' */
+/** @import Pol3Item from '../documents/item.mjs' */
 
 /**
  * Roll a task check
  *
  * @param {object} params
- * @param {Pol3Actor} params.actor
- * @param {string} params.rollLabel
- * @param {number} [params.actionValue=0]
- * @param {{label: string, value: number}[]} [params.modifiers=[]]
- * @param {number} [params.valueCrit=0]
- * @param {boolean} [params.isAttack]
- * @param {Pol3Item} [params.weapon]
- * @param {Token} [params.target]
- * @param {boolean} [params.askForModifier=true]
+ * @param {Pol3Actor} params.actor                 The rolling actor
+ * @param {string} params.rollLabel                 Name of the roll (skill, attribute…)
+ * @param {number} [params.actionValue=0]           Base value tested
+ * @param {{label: string, value: number}[]} [params.modifiers=[]]  Modifiers already known (e.g. range)
+ * @param {number} [params.valueCrit=0]             Critical bonus
+ * @param {boolean} [params.isAttack=false]         Whether a success leads to damage (ranged attack)
+ * @param {Pol3Item|null} [params.weapon=null]      The weapon, for an attack
+ * @param {Token|null} [params.target=null]         The target token, for an attack
+ * @param {boolean} [params.askForModifier=true]    Whether to prompt for an ad hoc modifier
  * @returns {Promise<*|null>}
  */
 export async function taskCheck({

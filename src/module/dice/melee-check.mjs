@@ -4,6 +4,7 @@ import { requestOpposedDefense } from '../net/socket.mjs';
 import { damageCheck } from './damage-check.mjs';
 import { getActorToken } from '../utils/combat-utils.mjs';
 import { breakdownRoll, renderChatCard, buildCheckContext } from '../apps/chat/chat-card.mjs';
+/** @import Pol3Item from '../documents/item.mjs' */
 
 const OPPOSED_RESULT_LABELS = {
   attackerWins: 'POL3.OPPOSED.RESULT.AttackerWins',
@@ -18,13 +19,13 @@ const OPPOSED_RESULT_LABELS = {
  * requests the Defender's roll over the socket, compares the two outcomes,
  * and triggers damage for whoever's action lands (both, on a tie).
  * @param {object} params
- * @param {string} params.rollLabel
- * @param {number} params.actionValue
- * @param {number} params.valueCrit
- * @param {{label: string, value: number}[]} [params.modifiers=[]]
- * @param {Item} params.weapon   The Attacker's weapon
- * @param {Token} params.target  The Defender's token
- * @param {boolean} [params.askForModifier=true]
+ * @param {string} params.rollLabel    Name of the roll (the weapon's linked skill)
+ * @param {number} params.actionValue  Attacker's skill value
+ * @param {number} params.valueCrit    Critical bonus (the skill's mastery)
+ * @param {{label: string, value: number}[]} [params.modifiers=[]]  Modifiers already known (e.g. range)
+ * @param {Pol3Item} params.weapon  The Attacker's weapon
+ * @param {Token} params.target     The Defender's token
+ * @param {boolean} [params.askForModifier=true]  Whether to prompt the Attacker for ad hoc modifiers
  */
 export async function meleeCheck({
                                    rollLabel,

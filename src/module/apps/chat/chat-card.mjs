@@ -3,8 +3,8 @@ import { sumModifiers } from '../../utils/helpers.mjs';
 /**
  * Render a chat card
  *
- * @param {string} templateName
- * @param {object} data
+ * @param {string} templateName  File name in templates/chat/, without extension (e.g. 'task-card')
+ * @param {object} data          Template context
  * @returns {Promise<string>}
  */
 export async function renderChatCard(templateName, data) {
@@ -15,7 +15,7 @@ export async function renderChatCard(templateName, data) {
 /**
  * Breaks down a roll into its component parts.
  *
- * @param { Roll } roll
+ * @param {Roll} roll  An evaluated roll
  * @returns {{type: string, value: number|string, faces?: number}[]}
  */
 export function breakdownRoll(roll) {
@@ -37,11 +37,11 @@ export function breakdownRoll(roll) {
  * Normalize the context object for the chat card
  *
  * @param {object} params
- * @param {{type: string, value: number|string, faces?: number}[]} params.rollBreakdown
- * @param {string} params.rollLabel
- * @param {number} params.actionValue
- * @param {Object} params.outcome
- * @param {{label: string, value: number}[]} params.modifiers
+ * @param {{type: string, value: number|string, faces?: number}[]} params.rollBreakdown  Output of breakdownRoll
+ * @param {string} params.rollLabel    Localized name of what is rolled
+ * @param {number} params.actionValue  Base value tested, before modifiers
+ * @param {object} params.outcome      A resolveTaskCheck outcome
+ * @param {{label: string, value: number}[]} params.modifiers  Applied modifiers (i18n keys as labels)
  * @returns {{rollLabel: string, actionValue: number, rollBreakdown: {type: string, value: (number|string), faces?: number}[],outcome: Object, modifiers: {label:string, value:number}[], hasModifiers: boolean, totalModifiers?: number}}
  */
 export function buildCheckContext({ rollBreakdown, rollLabel, actionValue, outcome, modifiers }) {

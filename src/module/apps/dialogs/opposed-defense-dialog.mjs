@@ -3,14 +3,15 @@ import { rollTaskCheck } from '../../dice/roll-resolver.mjs';
 import { POL3 } from '../../config/config.mjs';
 import { breakdownRoll } from '../chat/chat-card.mjs';
 import { askForModifiers } from '../../utils/helpers.mjs';
+/** @import Pol3Actor from '../../documents/actor.mjs' */
 
 /**
  * Prompts whoever controls `actor` to choose an Attribute or Skill to defend
  * with, then rolls it against the given difficulty.
  * @param {object} params
- * @param {Pol3Actor} params.actor
- * @param {number} params.difficulty
- * @param {string} params.attackLabel
+ * @param {Pol3Actor} params.actor      The defending actor
+ * @param {number} params.difficulty   Pre-computed difficulty for the defender (e.g. Allonge)
+ * @param {string} params.attackLabel  Label of the attack, shown in the dialog
  * @returns {Promise<object|null>} A resolveTaskCheck outcome (+ rollLabel) and a list of modifiers, or null if cancelled
  */
 export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {

@@ -1,7 +1,7 @@
 /**
  * Sums modifiers values
  *
- * @param {{label: string, value: number}[]} modifiersList
+ * @param {{label: string, value: number}[]} modifiersList  Modifiers to add up
  * @returns {number}
  */
 export function sumModifiers(modifiersList) {

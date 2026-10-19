@@ -6,6 +6,7 @@ import { requestApplyWound, requestShockTest } from '../net/socket.mjs';
 import { rollD20 } from './roll-resolver.mjs';
 import { breakdownRoll, renderChatCard } from '../apps/chat/chat-card.mjs';
 import { needsShockTest } from './shock-resolver.mjs';
+/** @import Pol3Item from '../documents/item.mjs' */
 
 // Armor zones (head/body/arms/legs) are coarser than wound zones
 // (head/body/armLeft/armRight/legLeft/legRight). Fish zones (finLeft/finRight)
@@ -23,7 +24,7 @@ const WOUND_ZONE_TO_ARMOR_ZONE = {
  * Resolves damage and hit location for a successful attack, applies the resulting
  * wound to the target, and posts a chat message with the breakdown.
  * @param {object} params
- * @param {Item} params.weapon             The weapon used (for its damage formula)
+ * @param {Pol3Item} params.weapon         The weapon used (for its damage formula)
  * @param {Token} params.target            The target token
  * @param {number} params.successModifier  nextModifier from the attack's outcome
  * @param {string} params.combatType       'melee' or 'ranged'

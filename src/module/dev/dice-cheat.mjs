@@ -14,7 +14,7 @@ const queue = [];
 
 /**
  * Queues one or more forced results for the next 1d20 roll(s), in order.
- * @param {...number} values
+ * @param {...number} values  d20 results to force, from 1 to 20
  */
 export function forceNextD20(...values) {
   queue.push(...values);

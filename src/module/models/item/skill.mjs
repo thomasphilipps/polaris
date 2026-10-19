@@ -1,5 +1,6 @@
 import { Pol3ItemDataModel, specialNameOption } from './base-item.mjs';
 import { POL3 } from '../../config/config.mjs';
+/** @import Pol3Actor from '../../documents/actor.mjs' */
 
 /**
  * Data model of the `skill` item type.
@@ -46,7 +47,7 @@ export default class Pol3Skill extends Pol3ItemDataModel {
 
   /**
    * Data needed to roll the skill (see Pol3Item#roll).
-   * @returns {{actor: Actor|null, rollLabel: string, actionValue: number, valueCrit: number}}
+   * @returns {{actor: Pol3Actor|null, rollLabel: string, actionValue: number, valueCrit: number}}
    */
   getRollData() {
     return {

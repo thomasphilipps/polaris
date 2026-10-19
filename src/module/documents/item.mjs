@@ -130,7 +130,7 @@ export default class Pol3Item extends Item {
 
   /**
    * Calculates the natural aptitude for a given attribute value.
-   * @param {number} attributeTotalValue
+   * @param {number} attributeTotalValue  Total value of the attribute
    * @returns {number}
    */
   _computeAttributeNaturalAptitude(attributeTotalValue) {

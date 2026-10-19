@@ -1,4 +1,5 @@
 import { STUN_MALUS } from '../config/actor/wounds.mjs';
+/** @import Pol3Actor from '../documents/actor.mjs' */
 
 /**
  * Provides automatic modifiers for dice rolls
@@ -9,7 +10,7 @@ import { STUN_MALUS } from '../config/actor/wounds.mjs';
 
 /**
  * Returns the malus for the actor's wounds
- * @param {Pol3Actor} actor
+ * @param {Pol3Actor} actor  The rolling actor
  * @returns {{label: string, value: number}|null}
  */
 export function getWoundModifier(actor) {
@@ -20,7 +21,7 @@ export function getWoundModifier(actor) {
 
 /**
  * Returns the stun malus for the actor, if applicable
- * @param {Pol3Actor} actor
+ * @param {Pol3Actor} actor  The rolling actor
  * @returns {{label: string, value: number}|null}
  */
 export function getStunModifier(actor) {
@@ -29,7 +30,7 @@ export function getStunModifier(actor) {
 
 /**
  * Collects all automatic modifiers for an actor
- * @param {Pol3Actor} actor
+ * @param {Pol3Actor} actor  The rolling actor
  * @returns {{label: string, value: number}[]}
  */
 export function collectAutomaticModifiers(actor) {

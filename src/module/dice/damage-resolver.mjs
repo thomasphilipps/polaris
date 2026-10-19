@@ -50,8 +50,8 @@ export function resolveFinalDamage({
  * Resolves the wound severity for a given final damage value.
  * Returns null for damage below the lightest threshold (1-4) — the caller
  * distinguishes "no damage at all" (0) from "damage dealt but no wound" (1-4).
- * @param {number} finalDamage
- * @param {{threshold: number, severity: string}[]} severityThresholds
+ * @param {number} finalDamage  Output of resolveFinalDamage
+ * @param {{threshold: number, severity: string}[]} severityThresholds  Ascending thresholds (POL3.WOUND.SEVERITY_THRESHOLDS)
  * @returns {string|null}
  */
 export function resolveWoundSeverity(finalDamage, severityThresholds) {

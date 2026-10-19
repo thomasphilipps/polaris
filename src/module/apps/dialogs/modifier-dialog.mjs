@@ -1,9 +1,9 @@
 /**
  * Prompts the user (GM or Player) to make a modifier roll.
- * @param {string} contextLabel
- * @param {{label: string, value: number}[]} globalModifiersList
- * @param {number} globalModifiers
- *@returns {Promise<number>} null if canceled
+ * @param {string} contextLabel  Localized text shown above the field (what the roll is for)
+ * @param {{label: string, value: number}[]} globalModifiersList  Automatic modifiers, listed as a reminder
+ * @param {number} globalModifiers  Sum of the automatic modifiers, used for the running total
+ * @returns {Promise<number|null>} The ad hoc modifier, or null if cancelled
  */
 export async function promptAdHocModifier(contextLabel, globalModifiersList, globalModifiers) {
   const globalModifiersString = globalModifiersList

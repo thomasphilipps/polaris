@@ -2,6 +2,7 @@
  * Combat-related utilities: target/token resolution and range calculations,
  * shared across weapon types and combat phases.
  */
+/** @import Pol3Actor from '../documents/actor.mjs' */
 
 const RANGE_BAND_ORDER = ['close', 'short', 'medium', 'long', 'extreme'];
 
@@ -27,7 +28,7 @@ export function getSingleTarget() {
 /**
  * Resolves the first active token of an actor on the current scene.
  * Notifies the user and returns null if the actor has no token there.
- * @param {Actor} actor
+ * @param {Pol3Actor} actor  The actor whose token is looked for
  * @returns {Token|null}
  */
 export function getActorToken(actor) {
@@ -41,8 +42,8 @@ export function getActorToken(actor) {
 
 /**
  * Measures the distance between two tokens along the scene's grid.
- * @param {Token} tokenA
- * @param {Token} tokenB
+ * @param {Token} tokenA  Origin token
+ * @param {Token} tokenB  Destination token
  * @returns {number} Distance in the scene's configured units.
  */
 export function measureTokenDistance(tokenA, tokenB) {
@@ -53,8 +54,8 @@ export function measureTokenDistance(tokenA, tokenB) {
 /**
  * Resolves the range band for a given distance, based on a weapon's own
  * hitDistance thresholds (each weapon defines its own close/short/medium/long/extreme).
- * @param {number} distance
- * @param {{close: number, short: number, medium: number, long: number, extreme: number}} hitDistance
+ * @param {number} distance  Distance to the target, in scene units
+ * @param {{close: number, short: number, medium: number, long: number, extreme: number}} hitDistance  The weapon's range thresholds
  * @returns {string|null} The range band key, or null if beyond the weapon's Extreme threshold.
  */
 export function getRangeBand(distance, hitDistance) {

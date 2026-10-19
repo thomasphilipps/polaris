@@ -1,5 +1,6 @@
 import { promptOpposedDefense } from '../apps/dialogs/opposed-defense-dialog.mjs';
 import { shockCheck } from '../dice/shock-check.mjs';
+/** @import Pol3Actor from '../documents/actor.mjs' */
 
 const SOCKET_NAME = 'system.polaris';
 const pendingRequests = new Map(); // requestId -> { resolve }
@@ -46,7 +47,7 @@ function onResponse(message) {
 
 /**
  * Finds the connected, non-GM user(s) owning an actor. Empty array if none.
- * @param {Actor} actor  The actor whose owners are looked for
+ * @param {Pol3Actor} actor  The actor whose owners are looked for
  * @returns {string[]} User ids
  */
 function getConnectedOwnerIds(actor) {
@@ -64,7 +65,7 @@ function getConnectedOwnerIds(actor) {
  *
  * @param {object} params
  * @param {string} params.requestId  Id of the request the button answers
- * @param {Actor} params.actor        Actor the request is about
+ * @param {Pol3Actor} params.actor    Actor the request is about
  * @param {string} params.i18nKeyText - Text localization key (e.g. 'POL3.SHOCK.ShockRequest')
  * @param {string} params.i18nKeyButton - Button localization key (e.g 'POL3.SHOCK.ForceShock')
  * @param {string} params.action - data-action value (e.g. 'polaris-force-shock')
@@ -142,7 +143,7 @@ async function handleShockTestPrompt({ requestId, actorId, woundedZone, baseSeve
  * player if any, else the GM, and always a GM override button in the chat.
  *
  * @param {object} params
- * @param {Actor} params.actor           The wounded actor
+ * @param {Pol3Actor} params.actor       The wounded actor
  * @param {string} params.woundedZone    Zone of the wound causing the test
  * @param {string} params.baseSeverity   Severity of that wound (e.g. 'severe')
  * @returns {Promise<object>} A shockCheck-shaped outcome
@@ -192,7 +193,7 @@ export { handleShockTestPrompt };
  * the connected owning player if any, and always a GM override option via
  * a chat message button. Resolves with whichever outcome arrives first.
  * @param {object} params
- * @param {Actor} params.defenderActor
+ * @param {Pol3Actor} params.defenderActor  The defending actor
  * @param {number} params.difficulty   Pre-computed difficulty (e.g. Allonge) for the defender
  * @param {string} params.attackLabel  Label shown to the responder (e.g. attacker's weapon)
  * @returns {Promise<object>} A resolveTaskCheck-shaped outcome, enriched with rollLabel
@@ -279,7 +280,7 @@ export { handleOpposedDefensePrompt };
  * active GM, else the requester as a last-resort best effort) apply a wound
  * locally, on a client where the permission actually exists.
  * @param {object} params
- * @param {Actor} params.actor      The wounded actor
+ * @param {Pol3Actor} params.actor  The wounded actor
  * @param {string} params.zone      Wound zone (e.g. 'armLeft')
  * @param {string} params.severity  Wound severity (e.g. 'severe')
  * @returns {Promise<void>}

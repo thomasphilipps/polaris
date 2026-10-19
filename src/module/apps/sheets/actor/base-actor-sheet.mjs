@@ -7,6 +7,7 @@ import {
   openConfigDialog,
 } from '../../../utils/sheet-utils.mjs';
 import { askForModifiers } from '../../../utils/helpers.mjs';
+/** @import Pol3Item from '../../../documents/item.mjs' */
 
 const { api, sheets } = foundry.applications;
 
@@ -120,7 +121,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   /**
    * Prepares the complete rendering context passed to the sheet’s Handlebars templates.
    * @override
-   * @param {object} options
+   * @param {object} options  Render options
    * @returns {Promise<object>}
    */
   async _prepareContext(options) {
@@ -265,10 +266,10 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * PPrepares all the sections of grouped items displayed on the sheet (skills,
+   * Prepares all the sections of grouped items displayed on the sheet (skills,
    * weapons, armour, etc.). Each section delegates to a protected method `_prepareXxx`,
    * which can be overridden by subclasses.
-   * @returns {Record<string, {label: string, itemList: Item[]}[]>}
+   * @returns {Record<string, {label: string, itemList: Pol3Item[]}[]>}
    */
   #prepareItems() {
     return {
@@ -316,7 +317,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Groups the actor’s skills by category. Can be overridden by a subclass.
-   * @returns {{label: string, itemList: Item[]}[]}
+   * @returns {{label: string, itemList: Pol3Item[]}[]}
    */
   _prepareSkills() {
     return groupItemsByField(this.actor.items, 'skill', 'POL3.SKILL.Category');
@@ -324,7 +325,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Groups the actor’s weapons by category (ranged/melee/creatureAttack). Can be overridden.
-   * @returns {{label: string, itemList: Item[]}[]}
+   * @returns {{label: string, itemList: Pol3Item[]}[]}
    */
   _prepareWeapons() {
     return groupItemsByField(this.actor.items, 'weapon', 'POL3.WEAPON.Category');
@@ -334,7 +335,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * Groups the actor’s armour by type (simple/personalField/sphericalField/shield).
    * Note: Groups by `system.type` rather than `system.category`, as the latter represents
    * the protection category (A/B/C/D) rather than a thematic grouping. Overridable.
-   * @returns {{label: string, itemList: Item[]}[]}
+   * @returns {{label: string, itemList: Pol3Item[]}[]}
    */
   _prepareArmors() {
     return groupItemsByField(this.actor.items, 'armor', 'POL3.ARMOR.TYPE', 'type');
@@ -347,8 +348,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handler for configuring a skill (currently: mastery) via a dialogue box.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onConfigureSkill(event, target) {
     const { itemId } = datasetOf(target, '.item') ?? {};
@@ -372,8 +373,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   /**
    * Handler for configuring an attribute (base, genetic modifier, skill points)
    * via a dialogue box.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onConfigureAttribute(event, target) {
     const { attributeId } = datasetOf(target, '.attribute') ?? {};
@@ -400,8 +401,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handler for rolling an attribute test.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onTestAttribute(event, target) {
     const { attributeId, attributeName, attributeValue } =
@@ -420,8 +421,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handler for deleting an embedded Item, after confirmation.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onDeleteItem(event, target) {
     const { itemId, itemName } = datasetOf(target, '.item') ?? {};
@@ -440,8 +441,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handler for rolling an Item.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onRollItem(event, target) {
     const askForModifier = askForModifiers(event.shiftKey);
@@ -455,8 +456,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handler for toggling an item's equipped status.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onToggleEquipped(event, target) {
     const { itemId } = datasetOf(target, '.item') ?? {};
@@ -470,8 +471,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handler for applying a wound of given severity to a zone.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onApplyWound(event, target) {
     const { zone, severity } = datasetOf(target, '[data-zone]') ?? {};
@@ -482,8 +483,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handler for healing the worst active wound of a zone.
-   * @param {PointerEvent} event
-   * @param {HTMLElement} target
+   * @param {PointerEvent} event  The originating click event
+   * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onHealWound(event, target) {
     const { zone } = datasetOf(target, '[data-zone]') ?? {};
@@ -513,7 +514,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   // Callbacks required by Foundry’s DragDrop API, even without any associated logic:
   // Leaving them empty rather than removing them would break the binding above.
   /**
-   * @param {DragEvent} event
+   * @param {DragEvent} event  The originating drag event
    * @returns {Promise<void>}
    * @protected
    */
@@ -521,7 +522,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   }
 
   /**
-   * @param {DragEvent} event
+   * @param {DragEvent} event  The originating drag event
    * @returns {Promise<void>}
    * @protected
    */
@@ -530,7 +531,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * An event that occurs when data is dropped into a drop target.
-   * @param {DragEvent} event
+   * @param {DragEvent} event  The originating drop event
    * @returns {Promise<void>}
    * @protected
    */
@@ -549,8 +550,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
 
   /**
    * Handle a dropped document on the ActorSheet.
-   * @param {DragEvent} event
-   * @param {Document} document
+   * @param {DragEvent} event      The originating drop event
+   * @param {Document} document    The dropped document
    * @returns {Promise<void>}
    * @protected
    */
@@ -570,8 +571,8 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
   /**
    * Handle dropping an Item onto the sheet: refuse if not owner, refuse duplicate skills,
    * otherwise create the embedded item (keeping its id if it isn't already present).
-   * @param {DragEvent} event
-   * @param {Item} item
+   * @param {DragEvent} event  The originating drop event
+   * @param {Pol3Item} item    The dropped item (world, compendium or another actor's)
    * @returns {Promise<boolean|void>}
    * @protected
    */
