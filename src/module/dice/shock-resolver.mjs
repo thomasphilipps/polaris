@@ -3,17 +3,23 @@ import {
   SHOCK_MIN_SEVERITY,
   SHOCK_ZONE_GROUPS,
   SHOCK_DURATIONS,
+  SHOCK_WEAPON_DURATIONS,
 } from '../config/actor/wounds.mjs';
 
 /**
- * Defines if a shock test is needed
+ * Defines if a shock test is needed. No severity (under 5 points) never triggers a test.
+ * Shock weapon: any severity, whatever the zone. Otherwise: from 'severe' up, except a
+ * severe wound on a limb.
  *
  * @param {object} params
- * @param {string} params.severity
- * @param {string} params.zone
+ * @param {string|null} params.severity  Wound severity (virtual one for a shock weapon), null if none
+ * @param {string} params.zone           Wound zone (e.g. 'armLeft')
+ * @param {boolean} [params.isShockWeapon=false]  Whether the weapon deals shock damage
  * @returns {boolean}
  */
-export function needsShockTest({ severity, zone }) {
+export function needsShockTest({ severity, zone, isShockWeapon = false }) {
+  if (!SEVERITIES.includes(severity)) return false;
+  if (isShockWeapon) return true;
   const hasRequiredSeverity = SEVERITIES.indexOf(severity) >= SEVERITIES.indexOf(SHOCK_MIN_SEVERITY);
   if (!hasRequiredSeverity) return false;
   const zoneGroup = SHOCK_ZONE_GROUPS[zone];
@@ -23,7 +29,7 @@ export function needsShockTest({ severity, zone }) {
 /**
  * Calculates the result of a shock test
  *
- * @param {object} outcome The resolveTaskCheck's outcome
+ * @param {object} outcome  The resolveTaskCheck's outcome
  * @returns {{state: string, isCatastrophic: boolean}}
  */
 export function resolveShockState(outcome) {
@@ -37,15 +43,20 @@ export function resolveShockState(outcome) {
 }
 
 /**
- * Calculates the duration of a shock
+ * Calculates the duration of a shock, read from SHOCK_DURATIONS (by severity and
+ * zone group) or, for a shock weapon, from SHOCK_WEAPON_DURATIONS (by severity only).
  *
  * @param {object} params
- * @param {string} params.severity
- * @param {string} params.zone
- * @param {string} params.state
- * @returns {{value?: string, unit?: string, effect?: string} | null}
+ * @param {string} params.severity  Wound severity (virtual one for a shock weapon)
+ * @param {string} params.zone      Wound zone (ignored for a shock weapon)
+ * @param {string} params.state     'stun', 'unconscious' or 'catastrophic'
+ * @param {boolean} [params.isShockWeapon=false]  Whether the weapon deals shock damage
+ * @returns {{value?: string, unit?: string, effect?: string} | null}  null if the table has no entry
  */
-export function getShockDuration({ severity, zone, state }) {
+export function getShockDuration({ severity, zone, state, isShockWeapon = false }) {
+  if (isShockWeapon) {
+    return SHOCK_WEAPON_DURATIONS[severity]?.[state] ?? null;
+  }
   const zoneGroup = SHOCK_ZONE_GROUPS[zone];
   const states = SHOCK_DURATIONS[severity]?.[zoneGroup];
   if (states !== undefined && state in states) {

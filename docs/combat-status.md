@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-17 (branche `combat`).
+Dernière mise à jour : 2026-10-20 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -53,7 +53,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 - Opposition : jet, seuil et marge des deux camps, puis marge effective du vainqueur. Le Défenseur ne poste pas de message : son jet, son breakdown et ses modificateurs reviennent par le socket.
 
 **Dégâts et localisation**
-- Dégâts = dé de l'arme + modificateur de réussite (+ modificateur de dégâts au contact si mêlée) + modificateur ad hoc + résistance aux dégâts de la cible (valeur négative) − protection d'armure (couvrant la zone **et** équipée). Plancher à 0 uniquement sur le résultat final.
+- Dégâts = dé de l'arme + modificateur de réussite (+ modificateur de dégâts au contact si mêlée) + modificateur ad hoc + résistance aux dégâts de la cible (valeur négative) − protection d'armure (couvrant la zone **et** équipée), réduite par la pénétration de l'arme sans descendre sous 0. Plancher à 0 uniquement sur le résultat final.
 - Gravité : seuils 5 légère, 10 moyenne, 15 grave, 20 critique, 25 mortelle, 30 mort/membre détruit (`SEVERITY_THRESHOLDS`). 1–4 points : notifiés mais aucune blessure.
 - Localisation : tables d20 dans `bodyTemplates.mjs` (humanoïde : contact ≠ distance ; poisson et autres créatures/PNJ : table unique). Choix Auto / Manuelle systématique avant le jet.
 - Application de la blessure : `requestApplyWound` via socket (le propriétaire connecté, sinon le MJ).
@@ -98,7 +98,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
   - Arme uniquement de choc (`shockOnly`) : même calcul qu'une arme ordinaire (réussite, contact, ad hoc, résistance), protection = armure de la zone + `shockProtection` ; aucune blessure inscrite, la gravité ne sert qu'au Test de Choc. Pas de test sous 5 points ; au-delà, test systématique quelle que soit la zone. Localisation conservée.
   - Durée : `SHOCK_WEAPON_DURATIONS`, pour l'étourdissement et l'inconscience seulement. Catastrophe : signalée par la carte, effet géré manuellement par le MJ (pas de colonne dans la table).
   - Hors périmètre : armes à action neurale (jouées en roleplay, trop spécifiques), exo-armures (traitées plus tard, avec leurs règles proches des véhicules), armes inopérantes sous l'eau (phase F).
-- **Pénétration (décision du 2026-10-16, à coder avant les armes de choc)** : protection d'armure effective = `max(0, protection − penetration)` ; la pénétration n'ajoute jamais de dommages sans armure et ne réduit pas `shockProtection`.
+- **Pénétration (décision du 2026-10-16, faite le 2026-10-17)** : protection d'armure effective = `max(0, protection − penetration)` ; la pénétration n'ajoute jamais de dommages sans armure et ne réduit pas `shockProtection`.
 - **Propagation des modifications d'objets (décisions du 2026-10-17, à faire après les armes de choc)** : sens unique compendium → objets du monde → copies embarquées dans les acteurs (une modification du monde ne touche jamais le compendium). Report automatique, sans confirmation, du diff de la mise à jour (`changes`), nom et image compris. Aucun champ exclu : le MJ doit pouvoir corriger une erreur de création en cours de partie ; une variante propre à un personnage passera par un objet distinct ou des ActiveEffects. Lien par l'uuid de l'original (flag posé au drop, ou `_stats.compendiumSource`), via le hook `updateItem` exécuté par le seul client auteur. L'ancien flag `parentItemId` n'est pas repris (système pas encore public, aucune migration). Tokens non liés hors périmètre (voir dette #13).
 - **CSS des chat cards** : à faire en dernier, une fois le reste prêt (décision de Thomas).
 - **Phase E (décision prise)** : pas de détection automatique des Techniques (dépendrait du couplage par nom, et Initiative / états multi-tours n'existent pas). À la place : champ ad hoc sur les dégâts (fait) + Journal Entry d'aide-mémoire à créer/vérifier dans Foundry.
@@ -116,7 +116,12 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes.
 
-1. **En cours** — Pénétration des armes, puis armes de choc (voir §4) : renommage `chocDamage` → `shockDamage`, booléen `shockOnly`, `isShockWeapon` pour `needsShockTest` / `getShockDuration`, branche dans `damageCheck`, transmission jusqu'à `shockCheck`. Le Test de Choc (dette #10, plan en 7 étapes) est terminé et testé le 2026-10-14.
+1. **En cours** — Armes de choc (règles au §4). Faits : étape 0 pénétration, étape 1 champs `shockDamage` / `shockOnly` (commit `52125a1`), étape 2 `isShockWeapon` dans `needsShockTest` (aucun test sans gravité) et `getShockDuration` (2026-10-20). Reste :
+   - **3a** — `damageCheck`, arme `shockOnly` : jet de `shockDamage` au lieu de `baseDamage` ; protection = `max(0, armure − pénétration)` + `shockProtection` ; pas de `requestApplyWound` ; carte : la gravité est un choc, pas une blessure.
+   - **3b** — `damageCheck`, arme avec `shockDamage` et `shockOnly` faux : après le flux normal, jet de `shockDamage` + résistance − `shockProtection`, plafonné à 0, ajouté aux dommages physiques finaux → gravité virtuelle ; section « Choc » sur la carte. Question ouverte : la « Résistance aux blessures » du livre est-elle bien `damageResistance` ?
+   - **3c** — `requestShockTest` appelé avec la gravité réelle ou virtuelle (`needsShockTest` avec `isShockWeapon`).
+   - **4** — transmettre `isShockWeapon` par le socket et le bouton MJ jusqu'à `shockCheck` → `getShockDuration` (piège : `"false"` lu dans un `data-*` est vrai).
+   - **5** — tests en jeu, puis mise à jour de ce fichier (§1, §2, §4).
 2. Propagation des modifications d'objets (voir §4).
 3. CSS des chat cards (dette #7), en dernier.
 4. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
