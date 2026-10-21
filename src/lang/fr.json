@@ -145,7 +145,8 @@
       "ModifierContext": "Dégâts: {weaponName}",
       "NoDamage": "Aucun dégât",
       "NoWound": "Aucune blessure",
-      "RollDescription": "Jet de dégâts:"
+      "RollDescription": "Jet de dégâts:",
+      "ShockDamage": "Dégâts de choc"
     },
     "DIALOG": {
       "ArmorProtection": "Protection de l'armure",
@@ -350,6 +351,7 @@
       "ActorStunned": "{actorName} est étourdi(e).",
       "ActorUnconscious": "{actorName} est inconscient(e).",
       "InvalidFormula": "La formule '{formula}' n'est pas valide.",
+      "NoShockFormula": "L'arme '{weaponName}' n'a pas de formule de choc valide.",
       "NotOwner": "Vous n'êtes pas propriétaire de cet item",
       "SkillAlreadyExists": "Cette compétence existe déjà"
     },

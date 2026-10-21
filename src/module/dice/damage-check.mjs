@@ -39,11 +39,18 @@ export async function damageCheck({
                                   }) {
   const targetActor = target.actor;
   if (!targetActor) return;
+  const isShockOnly = weapon.system.shockOnly;
+  const damageFormula = isShockOnly ? weapon.system.shockDamage : weapon.system.baseDamage;
 
   const bodyTemplateKey = targetActor.system.bodyTemplate;
   const locationTables = CONFIG.POL3.BODY_TEMPLATE.LOCATION_TABLES[bodyTemplateKey];
   if (!locationTables) {
     console.warn(`POLARIS | No location table for body template "${bodyTemplateKey}"`);
+    return;
+  }
+
+  if (isShockOnly && (!damageFormula?.trim() || !Roll.validate(damageFormula))) {
+    ui.notifications.warn(game.i18n.format('POL3.WARNING.NoShockFormula', { weaponName: weapon.name }));
     return;
   }
 
@@ -68,7 +75,7 @@ export async function damageCheck({
     }
   }
 
-  const damageRoll = new Roll(weapon.system.baseDamage);
+  const damageRoll = new Roll(damageFormula);
   await damageRoll.evaluate();
 
   const adHocModifier = askForModifier
@@ -89,7 +96,10 @@ export async function damageCheck({
   );
   const weaponPenetration = weapon.system.penetration ?? 0;
   const armorProtection = armor?.system.baseProtection ?? 0;
+  const armorShockProtection = armor?.system.shockProtection ?? 0;
+  // Penetration never reduces shock protection
   const mitigatedArmor = Math.max(0, armorProtection - weaponPenetration);
+  const effectiveProtection = isShockOnly ? mitigatedArmor + armorShockProtection : mitigatedArmor;
 
   const finalDamage = resolveFinalDamage({
     weaponDamageRoll: damageRoll.total,
@@ -97,7 +107,7 @@ export async function damageCheck({
     closeCombatModifier,
     otherModifiers: adHocModifier,
     damageResistance,
-    armorProtection: mitigatedArmor,
+    armorProtection: effectiveProtection,
   });
 
   const severity =
@@ -105,7 +115,7 @@ export async function damageCheck({
       ? resolveWoundSeverity(finalDamage, CONFIG.POL3.WOUND.SEVERITY_THRESHOLDS)
       : null;
 
-  if (severity) {
+  if (severity && !isShockOnly) {
     await requestApplyWound({ actor: targetActor, zone, severity });
   }
 
@@ -122,7 +132,7 @@ export async function damageCheck({
 
   const modifiersList = [
     {
-      label: 'POL3.DAMAGE.BaseDamage',
+      label: isShockOnly ? 'POL3.DAMAGE.ShockDamage' : 'POL3.DAMAGE.BaseDamage',
       value: damageRoll.total,
     },
     {
@@ -158,7 +168,7 @@ export async function damageCheck({
     zoneLabel,
     finalDamage,
     severityText,
-    damageFormula: weapon.system.baseDamage,
+    damageFormula,
     modifiers: modifiersList,
   };
 
