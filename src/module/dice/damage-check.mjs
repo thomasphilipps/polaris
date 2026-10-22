@@ -22,6 +22,35 @@ const WOUND_ZONE_TO_ARMOR_ZONE = {
 };
 
 /**
+ * Resolves and formats the localized severity or damage text based on combat attributes.
+ *
+ * @param {object} params
+ * @param {string|null} params.severity   The wound severity key (e.g., 'light', 'critical').
+ * @param {number} params.finalDamage     The final damage value calculated.
+ * @param {boolean} params.isShockOnly    Whether the attack inflicts shock damage only.
+ * @returns {string}                      The localized damage description string.
+ */
+function getSeverityText({ severity, finalDamage, isShockOnly }) {
+  const localizedSeverity = severity
+    ? game.i18n.localize(`POL3.WOUND.SEVERITY.${toPascalCase(severity)}`)
+    : null;
+  if (isShockOnly) {
+    // "Destroyed limb" makes no sense for a shock
+    if (severity === 'destroyed') return game.i18n.localize('POL3.DAMAGE.DevastatingShock');
+    if (localizedSeverity) {
+      return game.i18n.format('POL3.DAMAGE.ShockSeverity', { severity: localizedSeverity });
+    }
+    return game.i18n.localize('POL3.DAMAGE.NoShock');
+  }
+  if (localizedSeverity) {
+    return localizedSeverity;
+  }
+  return game.i18n.localize(
+    finalDamage > 0 ? 'POL3.DAMAGE.NoWound' : 'POL3.DAMAGE.NoDamage',
+  );
+}
+
+/**
  * Resolves damage and hit location for a successful attack, applies the resulting
  * wound to the target, and posts a chat message with the breakdown.
  * @param {object} params
@@ -122,11 +151,8 @@ export async function damageCheck({
   }
 
   const zoneLabel = game.i18n.localize(`POL3.ZONES.${toPascalCase(zone)}.Label`);
-  const severityText = severity
-    ? game.i18n.localize(`POL3.WOUND.SEVERITY.${toPascalCase(severity)}`)
-    : finalDamage > 0
-      ? game.i18n.localize('POL3.DAMAGE.NoWound')
-      : game.i18n.localize('POL3.DAMAGE.NoDamage');
+
+  const severityText = getSeverityText({ severity, finalDamage, isShockOnly });
 
   const rollTerms = breakdownRoll(damageRoll);
 
@@ -163,7 +189,10 @@ export async function damageCheck({
       value: armorProtection - mitigatedArmor,
     },
     ...(isShockOnly
-      ? [{ label: 'POL3.ARMOR.ShockProtection', value: armorShockProtection > 0 ? -armorShockProtection : 0 }]
+      ? [{
+        label: 'POL3.ARMOR.ShockProtection',
+        value: armorShockProtection > 0 ? -armorShockProtection : 0,
+      }]
       : []),
   ];
 

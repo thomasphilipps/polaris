@@ -141,12 +141,17 @@
       "BaseDamage": "Dégâts de base",
       "DamageDescription": "La zone {zoneLabel} subit {finalDamage} points de dégâts",
       "DamageFormula": "Formule des dommages",
+      "DevastatingShock": "Choc foudroyant",
       "IsHitBy": "{targetName} est touché par {weaponName}",
       "ModifierContext": "Dégâts: {weaponName}",
       "NoDamage": "Aucun dégât",
+      "NoShock": "Aucun choc",
       "NoWound": "Aucune blessure",
       "RollDescription": "Jet de dégâts:",
-      "ShockDamage": "Dégâts de choc"
+      "ShockDamage": "Dégâts de choc",
+      "ShockDamageDescription": "La zone {zoneLabel} subit {finalDamage} dégâts de choc.",
+      "ShockRollDescription": "Jet des dégâts de choc:",
+      "ShockSeverity": "Intensité du choc: {severity}"
     },
     "DIALOG": {
       "ArmorProtection": "Protection de l'armure",

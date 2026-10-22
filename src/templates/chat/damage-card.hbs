@@ -2,11 +2,19 @@
   {{localize 'POL3.DAMAGE.IsHitBy' targetName=targetName weaponName=weaponName}}
 </div>
 <div>
+  {{#if isShockOnly}}
+  {{localize 'POL3.DAMAGE.ShockRollDescription'}}
+  {{else}}
   {{localize 'POL3.DAMAGE.RollDescription'}}
+  {{/if}}
   {{> 'systems/polaris/templates/chat/partials/dice-module.hbs' rollTerms=rollTerms }}
 </div>
 <div class="damage-description">
-  {{localize 'POL3.DAMAGE.DamageDescription' zoneLabel=zoneLabel finalDamage=finalDamage}}<br>
+  {{#if isShockOnly}}
+    {{localize 'POL3.DAMAGE.ShockDamageDescription' zoneLabel=zoneLabel finalDamage=finalDamage}}
+  {{else}}
+    {{localize 'POL3.DAMAGE.DamageDescription' zoneLabel=zoneLabel finalDamage=finalDamage}}
+  {{/if}}<br>
   <strong><em>{{severityText}}</em></strong>
 </div>
 <details class="details">
