@@ -6,6 +6,7 @@ import { requestApplyWound, requestShockTest } from '../net/socket.mjs';
 import { rollD20 } from './roll-resolver.mjs';
 import { breakdownRoll, renderChatCard } from '../apps/chat/chat-card.mjs';
 import { needsShockTest } from './shock-resolver.mjs';
+
 /** @import Pol3Item from '../documents/item.mjs' */
 
 // Armor zones (head/body/arms/legs) are coarser than wound zones
@@ -49,8 +50,9 @@ export async function damageCheck({
     return;
   }
 
-  if (isShockOnly && (!damageFormula?.trim() || !Roll.validate(damageFormula))) {
-    ui.notifications.warn(game.i18n.format('POL3.WARNING.NoShockFormula', { weaponName: weapon.name }));
+  if (!damageFormula?.trim() || !Roll.validate(damageFormula)) {
+    const warningKey = isShockOnly ? 'POL3.WARNING.NoShockFormula' : 'POL3.WARNING.NoDamageFormula';
+    ui.notifications.warn(game.i18n.format(warningKey, { weaponName: weapon.name }));
     return;
   }
 
@@ -152,13 +154,17 @@ export async function damageCheck({
       value: damageResistance,
     },
     {
-      label: 'POL3.DIALOG.WeaponPenetration',
-      value: weaponPenetration,
-    },
-    {
       label: 'POL3.DIALOG.ArmorProtection',
       value: armorProtection > 0 ? -armorProtection : 0,
     },
+    // Only the protection actually ignored, so the lines add up to the final damage
+    {
+      label: 'POL3.DIALOG.WeaponPenetration',
+      value: armorProtection - mitigatedArmor,
+    },
+    ...(isShockOnly
+      ? [{ label: 'POL3.ARMOR.ShockProtection', value: armorShockProtection > 0 ? -armorShockProtection : 0 }]
+      : []),
   ];
 
   const damageContext = {
@@ -169,6 +175,7 @@ export async function damageCheck({
     finalDamage,
     severityText,
     damageFormula,
+    isShockOnly,
     modifiers: modifiersList,
   };
 

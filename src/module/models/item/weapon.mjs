@@ -44,9 +44,10 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         choices: this.WEAPON_RANGED_SUBCATEGORY,
         initial: this.DEFAULT_RANGED_SUBCATEGORY,
       }),
+      // Blank allowed: a shock-only weapon has no physical damage (a non-blank field would reset to its initial value)
       baseDamage: new fields.StringField({
         required: true,
-        blank: false,
+        blank: true,
         initial: '1d10',
         label: 'POL3.WEAPON.SHEET.BaseDamage',
       }),
