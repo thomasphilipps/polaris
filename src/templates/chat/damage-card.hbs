@@ -17,8 +17,21 @@
   {{/if}}<br>
   <strong><em>{{severityText}}</em></strong>
 </div>
+{{#if hasShockPart}}
+<div class="shock-section">
+  <strong>{{localize 'POL3.DAMAGE.ShockSection'}}</strong>
+  <div>{{localize 'POL3.DAMAGE.ShockRollDescription'}}</div>
+  {{> 'systems/polaris/templates/chat/partials/dice-module.hbs' rollTerms=shockRollTerms }}
+  {{localize 'POL3.DAMAGE.ShockDamageText' shockPart=shockPart virtualDamage=virtualDamage}}
+  <strong><em>{{shockSeverityText}}</em></strong>
+</div>
+{{/if}}
 <details class="details">
   <summary>{{localize 'POL3.SHEETS.GENERAL.Details'}}</summary>
   {{localize 'POL3.DAMAGE.DamageFormula'}}: {{damageFormula}}
   {{> 'systems/polaris/templates/chat/partials/modifier-list.hbs' modifiers=modifiers}}
+  {{#if hasShockPart}}
+    {{localize 'POL3.DAMAGE.ShockFormula'}}: {{shockFormula}}
+    {{> 'systems/polaris/templates/chat/partials/modifier-list.hbs' modifiers=shockModifiers}}
+  {{/if}}
 </details>

@@ -147,13 +147,19 @@
       "NoDamage": "Aucun dégât",
       "NoShock": "Aucun choc",
       "NoWound": "Aucune blessure",
+      "PhysicalDamage": "Dégâts physiques",
       "RollDescription": "Jet de dégâts:",
       "ShockDamage": "Dégâts de choc",
       "ShockDamageDescription": "La zone {zoneLabel} subit {finalDamage} dégâts de choc.",
+      "ShockDamageText": "+{shockPart} choc, soit {virtualDamage} dégâts virtuels.",
+      "ShockFloor": "Plancher du choc (0)",
+      "ShockFormula": "Formule des chocs",
       "ShockRollDescription": "Jet des dégâts de choc:",
+      "ShockSection": "Dégâts additionnels de choc",
       "ShockSeverity": "Intensité du choc: {severity}"
     },
     "DIALOG": {
+      "ArmorShockProtection": "Protection armure (chocs)",
       "ArmorProtection": "Protection de l'armure",
       "Cancel": "Annuler",
       "ConfigureTitle": "Configuration de {name}",
@@ -169,10 +175,10 @@
       "ModifierTitle": "Modificateurs",
       "NoAutomaticModifier": "Aucun modificateur automatique",
       "OtherModifiers": "Autres modificateurs",
-      "WeaponPenetration": "Pénétration de l'arme",
       "SaveButton": "Enregistrer",
       "SuccessModifier": "Modificateur de réussite",
-      "Total": "Total"
+      "Total": "Total",
+      "WeaponPenetration": "Pénétration de l'arme"
     },
     "ERROR": {
       "CannotUse": "{actorName} ne peut pas utiliser {itemName}",

@@ -156,6 +156,7 @@ export async function damageCheck({
   let virtualDamage = null;
   let virtualSeverity = null;
   let shockDamageRoll = null;
+  let shockContext = null;
 
   if (hasShockPart) {
     shockDamageRoll = new Roll(weapon.system.shockDamage);
@@ -168,7 +169,42 @@ export async function damageCheck({
     });
 
     virtualDamage = finalDamage + shockPart;
+    // Shock part before its floor at 0, so the card lines add up to the virtual damage
+    const rawShockPart = shockDamageRoll.total + damageResistance - armorShockProtection;
     virtualSeverity = resolveWoundSeverity(virtualDamage, CONFIG.POL3.WOUND.SEVERITY_THRESHOLDS);
+
+    shockContext = {
+      shockRollTerms: breakdownRoll(shockDamageRoll),
+      shockFormula: weapon.system.shockDamage.trim(),
+      shockPart,
+      virtualDamage,
+      shockSeverityText: getSeverityText({
+        severity: virtualSeverity,
+        finalDamage: virtualDamage,
+        isShockOnly: true,
+      }),
+      shockModifiers: [
+        {
+          label: 'POL3.DAMAGE.PhysicalDamage',
+          value: finalDamage,
+        },
+        {
+          label: 'POL3.DAMAGE.ShockDamage',
+          value: shockDamageRoll.total,
+        },
+        {
+          label: 'POL3.ATTRIBUTE.SECONDARIES.DamageResistance',
+          value: damageResistance,
+        },
+        {
+          label: 'POL3.DIALOG.ArmorShockProtection',
+          value: armorShockProtection > 0 ? -armorShockProtection : 0,
+        },
+        ...(shockPart !== rawShockPart
+          ? [{ label: 'POL3.DAMAGE.ShockFloor', value: shockPart - rawShockPart }]
+          : []),
+      ],
+    };
   }
 
   const severity =
@@ -186,7 +222,11 @@ export async function damageCheck({
 
   const rollTerms = breakdownRoll(damageRoll);
 
-  const rolls = locationRoll ? [locationRoll, damageRoll] : [damageRoll];
+  const rolls = [
+    ...(locationRoll ? [locationRoll] : []),
+    damageRoll,
+    ...(hasShockPart ? [shockDamageRoll] : []),
+  ];
 
   const modifiersList = [
     {
@@ -231,6 +271,7 @@ export async function damageCheck({
   const damageContext = {
     targetName: targetActor.name,
     weaponName: weapon.name,
+    hasShockPart,
     rollTerms,
     zoneLabel,
     finalDamage,
@@ -238,6 +279,7 @@ export async function damageCheck({
     damageFormula,
     isShockOnly,
     modifiers: modifiersList,
+    ...shockContext,
   };
 
   const content = await renderChatCard('damage-card', damageContext);
