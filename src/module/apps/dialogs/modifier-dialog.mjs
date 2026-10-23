@@ -7,7 +7,7 @@
  */
 export async function promptAdHocModifier(contextLabel, globalModifiersList, globalModifiers) {
   const globalModifiersString = globalModifiersList
-    .map(m => (`<li>${game.i18n.localize(m.label)}: ${m.value}</li>`))
+    .map(m => `<li>${game.i18n.localize(m.label)}: ${m.value}</li>`)
     .join('');
 
   const content = `

@@ -20,16 +20,16 @@ import { breakdownRoll, renderChatCard, buildCheckContext } from '../apps/chat/c
  * @returns {Promise<*|null>}
  */
 export async function taskCheck({
-                                  actor,
-                                  rollLabel,
-                                  actionValue = 0,
-                                  modifiers = [],
-                                  valueCrit = 0,
-                                  isAttack = false,
-                                  weapon = null,
-                                  target = null,
-                                  askForModifier = true,
-                                } = {}) {
+  actor,
+  rollLabel,
+  actionValue = 0,
+  modifiers = [],
+  valueCrit = 0,
+  isAttack = false,
+  weapon = null,
+  target = null,
+  askForModifier = true,
+} = {}) {
   const {
     roll,
     outcome,

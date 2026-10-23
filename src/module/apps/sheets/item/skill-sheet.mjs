@@ -33,5 +33,4 @@ export default class Pol3SkillSheet extends Pol3BaseItemSheet {
     });
     return context;
   }
-
 }

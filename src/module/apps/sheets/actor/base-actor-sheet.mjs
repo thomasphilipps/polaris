@@ -16,7 +16,7 @@ const { api, sheets } = foundry.applications;
 /*-------------------------------------------------------------------------------------------*/
 
 export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
-  sheets.ActorSheetV2,
+  sheets.ActorSheetV2
 ) {
   static DEFAULT_OPTIONS = {
     classes: ['polaris', 'sheet', 'actor'],
@@ -303,7 +303,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
         const arrayLength = effectiveMax(severityKey);
         severitySquares[severityKey] = Array.from(
           { length: arrayLength },
-          (_, i) => i < severityValue,
+          (_, i) => i < severityValue
         );
       }
       zones[zoneKey] = {
@@ -405,8 +405,7 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @param {HTMLElement} target  The element carrying the data-action
    */
   static async #onTestAttribute(event, target) {
-    const { attributeId, attributeName, attributeValue } =
-    datasetOf(target, '.attribute') ?? {};
+    const { attributeId, attributeName, attributeValue } = datasetOf(target, '.attribute') ?? {};
     if (!attributeId) return;
 
     const valueCrit = Math.round(parseInt(attributeValue) / 2);
@@ -518,16 +517,14 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
    * @returns {Promise<void>}
    * @protected
    */
-  async _onDragStart(event) {
-  }
+  async _onDragStart(event) {}
 
   /**
    * @param {DragEvent} event  The originating drag event
    * @returns {Promise<void>}
    * @protected
    */
-  async _onDragOver(event) {
-  }
+  async _onDragOver(event) {}
 
   /**
    * An event that occurs when data is dropped into a drop target.

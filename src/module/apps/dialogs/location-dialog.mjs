@@ -30,8 +30,7 @@ export async function promptLocationChoice({ zoneChoices }) {
    */
   const syncZoneVisibility = root => {
     const mode = root.querySelector('[name="mode"]').value;
-    root.querySelector('[data-manual-zone-group]').style.display =
-      mode === 'manual' ? '' : 'none';
+    root.querySelector('[data-manual-zone-group]').style.display = mode === 'manual' ? '' : 'none';
   };
 
   const result = await foundry.applications.api.DialogV2.wait({
@@ -40,7 +39,9 @@ export async function promptLocationChoice({ zoneChoices }) {
     render: (event, dialog) => {
       const root = dialog.element;
       syncZoneVisibility(root);
-      root.querySelector('[name="mode"]').addEventListener('change', () => syncZoneVisibility(root));
+      root
+        .querySelector('[name="mode"]')
+        .addEventListener('change', () => syncZoneVisibility(root));
     },
     buttons: [
       {

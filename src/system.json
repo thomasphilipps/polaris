@@ -23,12 +23,8 @@
     "units": "m",
     "diagonals": 1
   },
-  "esmodules": [
-    "polaris.mjs"
-  ],
-  "styles": [
-    "polaris.css"
-  ],
+  "esmodules": ["polaris.mjs"],
+  "styles": ["polaris.css"],
   "packs": [
     {
       "name": "skills",

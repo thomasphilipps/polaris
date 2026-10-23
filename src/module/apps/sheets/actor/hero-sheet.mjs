@@ -29,5 +29,4 @@ export default class Pol3HeroSheet extends Pol3BaseActorSheet {
     });
     return context;
   }
-
 }

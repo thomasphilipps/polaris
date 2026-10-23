@@ -6,7 +6,6 @@ import { buildDefaultWounds } from '../config/actor/wounds.mjs';
  * @extends {Actor}
  */
 export default class Pol3Actor extends Actor {
-
   /** @override */
   async _preCreate(data, options, user) {
     await super._preCreate(data, options, user);
@@ -88,14 +87,14 @@ export default class Pol3Actor extends Actor {
    * @returns {number} The summed total of the attribute.
    */
   _calculateAttributeTotalValue({
-                                  base,
-                                  geneticModifier,
-                                  competencePointsModifier,
-                                  otherModifier,
-                                }) {
+    base,
+    geneticModifier,
+    competencePointsModifier,
+    otherModifier,
+  }) {
     return [base, geneticModifier, competencePointsModifier, otherModifier].reduce(
       (sum, val) => sum + val,
-      0,
+      0
     );
   }
 
@@ -141,7 +140,7 @@ export default class Pol3Actor extends Actor {
    */
   _prepareThresholds(system, attributes) {
     const stunThresholdValue = Math.round(
-      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3,
+      (attributes.FOR.total + attributes.CON.total + attributes.VOL.total) / 3
     );
     const unconsciounessThresholdValue = stunThresholdValue + 10;
     const breathValue = Math.round((attributes.CON.total + attributes.VOL.total) / 2);
@@ -192,7 +191,7 @@ export default class Pol3Actor extends Actor {
       conTemp,
       valueArray,
       illnessResultArray,
-      upperBonusCon,
+      upperBonusCon
     );
 
     this._setSystemAttribute(system, 'illnessResistance', illnessResistanceValue);
@@ -212,7 +211,7 @@ export default class Pol3Actor extends Actor {
       volconTemp,
       valueArray,
       illnessResultArray,
-      upperBonusVolCon,
+      upperBonusVolCon
     );
 
     this._setSystemAttribute(system, 'drugResistance', drugResistanceValue);
@@ -333,7 +332,7 @@ export default class Pol3Actor extends Actor {
     while (
       currentSeverity !== 'destroyed' &&
       counters[currentSeverity] > effectiveMax(currentSeverity)
-      ) {
+    ) {
       const overflow = counters[currentSeverity] - effectiveMax(currentSeverity);
       counters[currentSeverity] = effectiveMax(currentSeverity);
 
@@ -433,7 +432,7 @@ export default class Pol3Actor extends Actor {
   getSkillValue(skillName) {
     const normalized = skillName?.trim().toLowerCase();
     const competence = this.items.find(
-      i => i.type === 'skill' && i.name.trim().toLowerCase() === normalized,
+      i => i.type === 'skill' && i.name.trim().toLowerCase() === normalized
     );
     if (!competence) return;
 

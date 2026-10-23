@@ -8,7 +8,8 @@
  * @returns {Promise<{formula: string, unit:string}|null>}
  */
 export async function promptShockDuration({ formula, unit, effect }) {
-  const effectInfo = effect ? `
+  const effectInfo = effect
+    ? `
     <div class="dialog-info-text">
       ${game.i18n.localize('POL3.SHOCK.EffectLabel')}: ${game.i18n.localize('POL3.SHOCK.EFFECT.' + effect + '.Symbol')}
     </div>`
@@ -38,7 +39,7 @@ export async function promptShockDuration({ formula, unit, effect }) {
           const form = button.form;
           const formula = form.querySelector('[name="formula"]').value;
           const unit = form.querySelector('[name="unit"]').value;
-          return ({ formula, unit });
+          return { formula, unit };
         },
       },
       { action: 'cancel', label: game.i18n.localize('POL3.DIALOG.Cancel') },

@@ -1,7 +1,7 @@
 /**
  * Registers the Polaris settings: world ambiance (world) and askForModifier (client).
  */
-export const registerSystemSettings = function() {
+export const registerSystemSettings = function () {
   game.settings.register('polaris', 'worldAmbiance', {
     config: true,
     scope: 'world',
@@ -18,12 +18,11 @@ export const registerSystemSettings = function() {
   });
 
   game.settings.register('polaris', 'askForModifier', {
-      config: true,
-      scope: 'client',
-      name: 'POL3.SETTINGS.AskForModifier.Name',
-      hint: 'POL3.SETTINGS.AskForModifier.Hint',
-      type: Boolean,
-      default: true,
-    },
-  );
+    config: true,
+    scope: 'client',
+    name: 'POL3.SETTINGS.AskForModifier.Name',
+    hint: 'POL3.SETTINGS.AskForModifier.Hint',
+    type: Boolean,
+    default: true,
+  });
 };

@@ -20,7 +20,8 @@ import {
 export function needsShockTest({ severity, zone, isShockWeapon = false }) {
   if (!SEVERITIES.includes(severity)) return false;
   if (isShockWeapon) return true;
-  const hasRequiredSeverity = SEVERITIES.indexOf(severity) >= SEVERITIES.indexOf(SHOCK_MIN_SEVERITY);
+  const hasRequiredSeverity =
+    SEVERITIES.indexOf(severity) >= SEVERITIES.indexOf(SHOCK_MIN_SEVERITY);
   if (!hasRequiredSeverity) return false;
   const zoneGroup = SHOCK_ZONE_GROUPS[zone];
   return !(severity === 'severe' && zoneGroup === 'limbs');

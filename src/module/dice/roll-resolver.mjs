@@ -17,13 +17,12 @@ import { sumModifiers } from '../utils/helpers.mjs';
  * @returns {object} outcome
  */
 export function resolveTaskCheck({
-                                   rollResult,
-                                   actionValue,
-                                   modifiers = [],
-                                   valueCrit = 0,
-                                   critFailReroll = null,
-                                 }) {
-
+  rollResult,
+  actionValue,
+  modifiers = [],
+  valueCrit = 0,
+  critFailReroll = null,
+}) {
   const globalDifficulty = actionValue + sumModifiers(modifiers);
   const initialMargin = globalDifficulty - rollResult;
 
@@ -115,14 +114,14 @@ export async function rollD20() {
  * @returns {Promise<{roll: Roll, outcome: object, modifiers: {label: string, value: number}[]}>}  All three null if cancelled
  */
 export async function rollTaskCheck({
-                                      actor,
-                                      actionValue,
-                                      modifiers = [],
-                                      valueCrit = 0,
-                                      askForModifier = true,
-                                      contextLabel = '',
-                                      applyAutomaticModifiers = true,
-                                    }) {
+  actor,
+  actionValue,
+  modifiers = [],
+  valueCrit = 0,
+  askForModifier = true,
+  contextLabel = '',
+  applyAutomaticModifiers = true,
+}) {
   const automaticModifiersList = applyAutomaticModifiers ? collectAutomaticModifiers(actor) : [];
 
   let globalModifiersList = [...automaticModifiersList, ...modifiers];
@@ -130,13 +129,20 @@ export async function rollTaskCheck({
   const globalModifiers = sumModifiers(globalModifiersList);
 
   if (askForModifier) {
-    const addedDifficulty = await promptAdHocModifier(contextLabel, globalModifiersList, globalModifiers);
+    const addedDifficulty = await promptAdHocModifier(
+      contextLabel,
+      globalModifiersList,
+      globalModifiers
+    );
     if (addedDifficulty === null) return { roll: null, outcome: null, modifiers: null };
     if (addedDifficulty !== 0) {
-      globalModifiersList = [...globalModifiersList, {
-        label: 'POL3.DIALOG.OtherModifiers',
-        value: addedDifficulty,
-      }];
+      globalModifiersList = [
+        ...globalModifiersList,
+        {
+          label: 'POL3.DIALOG.OtherModifiers',
+          value: addedDifficulty,
+        },
+      ];
     }
   }
 

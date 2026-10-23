@@ -21,10 +21,12 @@ export async function shockCheck({ actor, woundedZone, baseSeverity }) {
   const contextLabel = game.i18n.localize('POL3.SHOCK.ShockCheck');
   const actionValue = actor.system.stunThreshold.value;
   const valueCrit = Math.round(actionValue / 2);
-  const woundModifiers = [{
-    label: 'POL3.WOUND.SEVERITY.' + toPascalCase(baseSeverity),
-    value: MALUS[baseSeverity],
-  }];
+  const woundModifiers = [
+    {
+      label: 'POL3.WOUND.SEVERITY.' + toPascalCase(baseSeverity),
+      value: MALUS[baseSeverity],
+    },
+  ];
 
   const { roll, outcome, modifiers } = await rollTaskCheck({
     actor,
@@ -39,11 +41,13 @@ export async function shockCheck({ actor, woundedZone, baseSeverity }) {
 
   const { state, isCatastrophic } = resolveShockState(outcome);
 
-  const catastrophicDuration = isCatastrophic ? getShockDuration({
-    severity: baseSeverity,
-    zone: woundedZone,
-    state: 'catastrophic',
-  }) : null;
+  const catastrophicDuration = isCatastrophic
+    ? getShockDuration({
+        severity: baseSeverity,
+        zone: woundedZone,
+        state: 'catastrophic',
+      })
+    : null;
 
   const duration = getShockDuration({ severity: baseSeverity, zone: woundedZone, state });
 
@@ -95,7 +99,9 @@ export async function rollShockDuration({ speaker, formula, unit, effect, durati
   if (!choice) return null;
 
   if (!choice.formula.trim() || !Roll.validate(choice.formula)) {
-    ui.notifications.warn(game.i18n.format('POL3.WARNING.InvalidFormula', { formula: choice.formula }));
+    ui.notifications.warn(
+      game.i18n.format('POL3.WARNING.InvalidFormula', { formula: choice.formula })
+    );
     return null;
   }
 

@@ -88,7 +88,7 @@ export function buildDefaultWounds(creatureType) {
         lethal: cfg.lethal,
         counters: Object.fromEntries(SEVERITIES.map(s => [s, 0])),
       },
-    ]),
+    ])
   );
 }
 
@@ -135,7 +135,6 @@ export const SHOCK_ZONE_GROUPS = {
  * @type {Record<'severe' | 'critical' | 'deadly' | 'destroyed', Partial<SeverityLevel>>}
  */
 export const SHOCK_DURATIONS = {
-
   severe: {
     head: {
       stun: { value: '2', unit: 'Round' },

@@ -28,20 +28,20 @@ const OPPOSED_RESULT_LABELS = {
  * @param {boolean} [params.askForModifier=true]  Whether to prompt the Attacker for ad hoc modifiers
  */
 export async function meleeCheck({
-                                   rollLabel,
-                                   actionValue,
-                                   valueCrit,
-                                   modifiers = [],
-                                   weapon,
-                                   target,
-                                   askForModifier = true,
-                                 }) {
+  rollLabel,
+  actionValue,
+  valueCrit,
+  modifiers = [],
+  weapon,
+  target,
+  askForModifier = true,
+}) {
   const attackerActor = weapon.actor;
   const defenderActor = target.actor;
   if (!defenderActor) return;
 
   const defenderWeapon = defenderActor.items.find(
-    i => i.type === 'weapon' && i.system.isEquipped && i.system.category !== 'ranged',
+    i => i.type === 'weapon' && i.system.isEquipped && i.system.category !== 'ranged'
   );
 
   const allongeDiff = (weapon.system.allonge ?? 0) - (defenderWeapon?.system.allonge ?? 0);
@@ -126,7 +126,7 @@ export async function meleeCheck({
   if (result === 'tie') {
     if (!defenderWeapon) {
       console.warn(
-        `POLARIS | ${defenderActor.name} n'a pas d'arme de mêlée équipée : dégâts de riposte ignorés (combat à mains nues non modélisé).`,
+        `POLARIS | ${defenderActor.name} n'a pas d'arme de mêlée équipée : dégâts de riposte ignorés (combat à mains nues non modélisé).`
       );
       return;
     }

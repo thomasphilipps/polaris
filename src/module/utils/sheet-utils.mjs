@@ -38,7 +38,7 @@ export function toPascalCase(str) {
 export function groupItemsByField(items, itemType, i18nPrefix, groupField = 'category') {
   const grouped = Map.groupBy(
     Array.from(items).filter(i => i.type === itemType),
-    item => item.system[groupField] ?? '',
+    item => item.system[groupField] ?? ''
   );
 
   return [...grouped.entries()]
@@ -60,11 +60,11 @@ export function groupItemsByField(items, itemType, i18nPrefix, groupField = 'cat
  * @returns {Promise<object|null>}         The data submitted, or null if the dialogue was cancelled.
  */
 export async function openConfigDialog({
-                                         template,
-                                         templateData = {},
-                                         title,
-                                         icon = 'fas fa-edit',
-                                       }) {
+  template,
+  templateData = {},
+  title,
+  icon = 'fas fa-edit',
+}) {
   const content = await foundry.applications.handlebars.renderTemplate(template, templateData);
 
   return foundry.applications.api.DialogV2.input({

@@ -79,10 +79,10 @@ export class Pol3ActorDataModel extends foundry.abstract.TypeDataModel {
           lethal: new fields.BooleanField(),
           counters: new fields.SchemaField(
             Object.fromEntries(
-              POL3.WOUND.SEVERITIES.map(s => [s, new fields.NumberField({ initial: 0, min: 0 })]),
-            ),
+              POL3.WOUND.SEVERITIES.map(s => [s, new fields.NumberField({ initial: 0, min: 0 })])
+            )
           ),
-        }),
+        })
       ),
       description: new fields.SchemaField({
         public: new fields.HTMLField(),
@@ -99,12 +99,11 @@ export class Pol3ActorDataModel extends foundry.abstract.TypeDataModel {
               competencePointsModifier: new fields.NumberField({ initial: 0, min: 0 }),
               otherModifier: new fields.NumberField({ initial: 0, min: 0 }),
             },
-            { label: attribute.abbr },
+            { label: attribute.abbr }
           );
           return obj;
-        }, {}),
+        }, {})
       ),
     };
   }
-
 }

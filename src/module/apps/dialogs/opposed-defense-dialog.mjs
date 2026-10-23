@@ -24,7 +24,7 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
     .map(
       g => `<optgroup label="${g.label}">
         ${g.itemList.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
-      </optgroup>`,
+      </optgroup>`
     )
     .join('');
 
@@ -102,11 +102,11 @@ export async function promptOpposedDefense({ actor, difficulty, attackLabel }) {
   const modifiersList =
     difficulty !== 0
       ? [
-        {
-          label: 'POL3.WEAPON.SHEET.Reach',
-          value: difficulty,
-        },
-      ]
+          {
+            label: 'POL3.WEAPON.SHEET.Reach',
+            value: difficulty,
+          },
+        ]
       : [];
 
   // The Defender follows their own client setting: the Attacker's Shift key does not apply here.

@@ -70,7 +70,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         }),
       }),
       tags: new fields.SetField(
-        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS }),
+        new fields.StringField({ blank: true, choices: this.WEAPON_BURSTS })
       ),
       minimalStrength: new fields.NumberField({
         blank: true,
@@ -106,7 +106,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
         game.i18n.format('POL3.ERROR.CannotUse', {
           actorName: actor?.name,
           itemName: this.parent.name,
-        }),
+        })
       );
       return null;
     }
@@ -124,7 +124,7 @@ export default class Pol3Weapon extends Pol3ItemDataModel {
       const rangeBand = getRangeBand(distance, this.hitDistance);
       if (!rangeBand) {
         ui.notifications.error(
-          game.i18n.format('POL3.ERROR.OutOfRange', { itemName: this.parent.name }),
+          game.i18n.format('POL3.ERROR.OutOfRange', { itemName: this.parent.name })
         );
         return null;
       }

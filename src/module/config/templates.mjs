@@ -16,4 +16,3 @@ export async function preloadHandlebarsTemplates() {
 
   return foundry.applications.handlebars.loadTemplates(templatePaths);
 }
-

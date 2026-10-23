@@ -73,13 +73,13 @@ function getConnectedOwnerIds(actor) {
  * @returns {Promise<void>}
  */
 async function postGmOverrideMessage({
-                                       requestId,
-                                       actor,
-                                       i18nKeyText,
-                                       i18nKeyButton,
-                                       action,
-                                       additionalData = {},
-                                     }) {
+  requestId,
+  actor,
+  i18nKeyText,
+  i18nKeyButton,
+  action,
+  additionalData = {},
+}) {
   // camelCase keys become kebab-case attributes (attackLabel -> data-attack-label),
   // which the browser exposes back as dataset.attackLabel.
   const dataAttributes = Object.entries(additionalData)
@@ -306,7 +306,9 @@ export function requestApplyWound({ actor, zone, severity }) {
       executeApplyWound({ requestId, actorId: actor.id, zone, severity });
     } else if (recipients.length === 0 && !hasActiveGM) {
       // Nobody connected can apply this remotely — best-effort local attempt.
-      console.warn(`POLARIS | No connected owner or GM for actor "${actor.name}" — attempting local applyWound.`);
+      console.warn(
+        `POLARIS | No connected owner or GM for actor "${actor.name}" — attempting local applyWound.`
+      );
       executeApplyWound({ requestId, actorId: actor.id, zone, severity });
     }
   });

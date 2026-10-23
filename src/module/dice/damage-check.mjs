@@ -45,9 +45,7 @@ function getSeverityText({ severity, finalDamage, isShockOnly }) {
   if (localizedSeverity) {
     return localizedSeverity;
   }
-  return game.i18n.localize(
-    finalDamage > 0 ? 'POL3.DAMAGE.NoWound' : 'POL3.DAMAGE.NoDamage',
-  );
+  return game.i18n.localize(finalDamage > 0 ? 'POL3.DAMAGE.NoWound' : 'POL3.DAMAGE.NoDamage');
 }
 
 /**
@@ -61,12 +59,12 @@ function getSeverityText({ severity, finalDamage, isShockOnly }) {
  * @param {boolean} [params.askForModifier=true]  Whether to prompt for a modifier
  */
 export async function damageCheck({
-                                    weapon,
-                                    target,
-                                    successModifier,
-                                    combatType,
-                                    askForModifier = true,
-                                  }) {
+  weapon,
+  target,
+  successModifier,
+  combatType,
+  askForModifier = true,
+}) {
   const targetActor = target.actor;
   if (!targetActor) return;
   const isShockOnly = weapon.system.shockOnly;
@@ -110,11 +108,11 @@ export async function damageCheck({
   await damageRoll.evaluate();
 
   const adHocModifier = askForModifier
-    ? (await promptAdHocModifier(
-    game.i18n.format('POL3.DAMAGE.ModifierContext', { weaponName: weapon.name }),
-    [],
-    0,
-  )) ?? 0
+    ? ((await promptAdHocModifier(
+        game.i18n.format('POL3.DAMAGE.ModifierContext', { weaponName: weapon.name }),
+        [],
+        0
+      )) ?? 0)
     : 0;
 
   const closeCombatModifier =
@@ -123,7 +121,7 @@ export async function damageCheck({
   const damageResistance = targetActor.system.damageResistance?.value ?? 0;
   const armorZone = WOUND_ZONE_TO_ARMOR_ZONE[zone];
   const armor = targetActor.items.find(
-    i => i.type === 'armor' && i.system.isEquipped && armorZone && i.system.tags.has(armorZone),
+    i => i.type === 'armor' && i.system.isEquipped && armorZone && i.system.tags.has(armorZone)
   );
   const weaponPenetration = weapon.system.penetration ?? 0;
   const armorProtection = armor?.system.baseProtection ?? 0;
@@ -189,10 +187,12 @@ export async function damageCheck({
       value: armorProtection - mitigatedArmor,
     },
     ...(isShockOnly
-      ? [{
-        label: 'POL3.ARMOR.ShockProtection',
-        value: armorShockProtection > 0 ? -armorShockProtection : 0,
-      }]
+      ? [
+          {
+            label: 'POL3.ARMOR.ShockProtection',
+            value: armorShockProtection > 0 ? -armorShockProtection : 0,
+          },
+        ]
       : []),
   ];
 

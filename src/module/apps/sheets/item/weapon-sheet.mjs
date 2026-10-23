@@ -28,7 +28,9 @@ export default class Pol3WeaponSheet extends Pol3BaseItemSheet {
     const context = await super._prepareContext(options);
     Object.assign(context, {
       tagsWidget: (field, groupConfig, inputConfig) =>
-        this._tagsWidget(field, groupConfig, inputConfig, { propertyConfig: CONFIG.POL3.WEAPON.BURST }),
+        this._tagsWidget(field, groupConfig, inputConfig, {
+          propertyConfig: CONFIG.POL3.WEAPON.BURST,
+        }),
       linkedSkillOptions: await this.#getLinkedSkillOptions(),
     });
     return context;

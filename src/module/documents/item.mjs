@@ -82,7 +82,7 @@ export default class Pol3Item extends Item {
   _prepareTags(itemData, properties) {
     let tagString = Object.keys(properties)
       .map(tag =>
-        itemData.tags.has(tag) ? `| ${game.i18n.localize(properties[tag].symbol)} ` : '',
+        itemData.tags.has(tag) ? `| ${game.i18n.localize(properties[tag].symbol)} ` : ''
       )
       .join('');
     tagString = tagString ? tagString + '|' : tagString;
@@ -177,11 +177,15 @@ export default class Pol3Item extends Item {
     }
 
     if (this.type === 'weapon' && this.hasActor && this.actor.statuses.has('stun')) {
-      ui.notifications.warn(game.i18n.format('POL3.WARNING.ActorStunned', { actorName: this.actor.name }));
+      ui.notifications.warn(
+        game.i18n.format('POL3.WARNING.ActorStunned', { actorName: this.actor.name })
+      );
     }
 
     if (this.type === 'weapon' && this.hasActor && this.actor.statuses.has('unconscious')) {
-      ui.notifications.warn(game.i18n.format('POL3.WARNING.ActorUnconscious', { actorName: this.actor.name }));
+      ui.notifications.warn(
+        game.i18n.format('POL3.WARNING.ActorUnconscious', { actorName: this.actor.name })
+      );
     }
 
     const rollData = this.system.getRollData();

@@ -57,7 +57,7 @@ export function onRenderChatMessageHTML(message, html) {
   const shockButton = html.querySelector('[data-action="polaris-force-shock"]');
 
   if (!game.user.isGM) {
-    shockDurationButtons.forEach((button) => button.remove());
+    shockDurationButtons.forEach(button => button.remove());
     return;
   }
 
@@ -87,8 +87,16 @@ export function onRenderChatMessageHTML(message, html) {
     });
   }
 
-  shockDurationButtons.forEach((button) => button.addEventListener('click', async () => {
-    const { value, unit, effect, durationType } = button.dataset;
-    await rollShockDuration({ speaker: message.speaker, formula: value, unit, effect, durationType });
-  }));
+  shockDurationButtons.forEach(button =>
+    button.addEventListener('click', async () => {
+      const { value, unit, effect, durationType } = button.dataset;
+      await rollShockDuration({
+        speaker: message.speaker,
+        formula: value,
+        unit,
+        effect,
+        durationType,
+      });
+    })
+  );
 }
