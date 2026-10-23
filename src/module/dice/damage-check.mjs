@@ -1,4 +1,9 @@
-import { resolveLocation, resolveFinalDamage, resolveWoundSeverity } from './damage-resolver.mjs';
+import {
+  resolveLocation,
+  resolveFinalDamage,
+  resolveWoundSeverity,
+  resolveShockDamage,
+} from './damage-resolver.mjs';
 import { promptAdHocModifier } from '../apps/dialogs/modifier-dialog.mjs';
 import { promptLocationChoice } from '../apps/dialogs/location-dialog.mjs';
 import { toPascalCase } from '../utils/sheet-utils.mjs';
@@ -68,6 +73,7 @@ export async function damageCheck({
   const targetActor = target.actor;
   if (!targetActor) return;
   const isShockOnly = weapon.system.shockOnly;
+  let hasShockPart = !isShockOnly && !!weapon.system.shockDamage?.trim();
   const damageFormula = isShockOnly ? weapon.system.shockDamage : weapon.system.baseDamage;
 
   const bodyTemplateKey = targetActor.system.bodyTemplate;
@@ -81,6 +87,13 @@ export async function damageCheck({
     const warningKey = isShockOnly ? 'POL3.WARNING.NoShockFormula' : 'POL3.WARNING.NoDamageFormula';
     ui.notifications.warn(game.i18n.format(warningKey, { weaponName: weapon.name }));
     return;
+  }
+
+  if (hasShockPart && !Roll.validate(weapon.system.shockDamage?.trim())) {
+    ui.notifications.warn(
+      game.i18n.format('POL3.WARNING.NoShockFormula', { weaponName: weapon.name })
+    );
+    hasShockPart = false;
   }
 
   const zoneChoices = Object.keys(targetActor.system.wounds).map(key => ({
@@ -138,6 +151,25 @@ export async function damageCheck({
     damageResistance,
     armorProtection: effectiveProtection,
   });
+
+  let shockPart = null;
+  let virtualDamage = null;
+  let virtualSeverity = null;
+  let shockDamageRoll = null;
+
+  if (hasShockPart) {
+    shockDamageRoll = new Roll(weapon.system.shockDamage);
+    await shockDamageRoll.evaluate();
+
+    shockPart = resolveShockDamage({
+      shockDamageRoll: shockDamageRoll.total,
+      damageResistance,
+      shockProtection: armorShockProtection,
+    });
+
+    virtualDamage = finalDamage + shockPart;
+    virtualSeverity = resolveWoundSeverity(virtualDamage, CONFIG.POL3.WOUND.SEVERITY_THRESHOLDS);
+  }
 
   const severity =
     finalDamage > 0
