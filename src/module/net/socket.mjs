@@ -121,17 +121,24 @@ async function onShockTestRequest(message) {
  * Runs the shock test locally and sends the outcome back to the requester.
  * Also used by the GM "answer for them" chat button.
  * @param {object} params
- * @param {string} params.requestId     Id of the original request
- * @param {string} params.actorId       Id of the actor taking the test
- * @param {string} params.woundedZone   Zone of the wound causing the test
- * @param {string} params.baseSeverity  Severity of that wound (e.g. 'severe')
+ * @param {string} params.requestId               Id of the original request
+ * @param {string} params.actorId                 Id of the actor taking the test
+ * @param {string} params.woundedZone             Zone of the wound causing the test
+ * @param {string} params.baseSeverity            Severity of that wound (e.g. 'severe')
+ * @param {boolean} [params.isShockWeapon=false]  Whether or not the weapon has only/additional shock damages
  * @returns {Promise<void>}
  */
-async function handleShockTestPrompt({ requestId, actorId, woundedZone, baseSeverity }) {
+async function handleShockTestPrompt({
+  requestId,
+  actorId,
+  woundedZone,
+  baseSeverity,
+  isShockWeapon = false,
+}) {
   const actor = game.actors.get(actorId);
   if (!actor) return;
 
-  const outcome = await shockCheck({ actor, woundedZone, baseSeverity });
+  const outcome = await shockCheck({ actor, woundedZone, baseSeverity, isShockWeapon });
   if (!outcome) return; // cancelled — the other responder (GM/player) may still answer
 
   game.socket.emit(SOCKET_NAME, { type: 'shockTestResponse', requestId, result: outcome });
@@ -143,12 +150,13 @@ async function handleShockTestPrompt({ requestId, actorId, woundedZone, baseSeve
  * player if any, else the GM, and always a GM override button in the chat.
  *
  * @param {object} params
- * @param {Pol3Actor} params.actor       The wounded actor
- * @param {string} params.woundedZone    Zone of the wound causing the test
- * @param {string} params.baseSeverity   Severity of that wound (e.g. 'severe')
+ * @param {Pol3Actor} params.actor                The wounded actor
+ * @param {string} params.woundedZone             Zone of the wound causing the test
+ * @param {string} params.baseSeverity            Severity of that wound (e.g. 'severe')
+ * @param {boolean} [params.isShockWeapon=false]  Whether or not the weapon has only/additional shock damages
  * @returns {Promise<object>} A shockCheck-shaped outcome
  */
-export function requestShockTest({ actor, woundedZone, baseSeverity }) {
+export function requestShockTest({ actor, woundedZone, baseSeverity, isShockWeapon = false }) {
   return new Promise(resolve => {
     const requestId = foundry.utils.randomID();
     pendingRequests.set(requestId, { resolve });
@@ -161,6 +169,7 @@ export function requestShockTest({ actor, woundedZone, baseSeverity }) {
       actorId: actor.id,
       woundedZone,
       baseSeverity,
+      isShockWeapon,
       recipients,
     });
 
@@ -173,11 +182,18 @@ export function requestShockTest({ actor, woundedZone, baseSeverity }) {
       additionalData: {
         woundedZone,
         baseSeverity,
+        isShockWeapon,
       },
     });
 
     if (recipients.includes(game.user.id) || (recipients.length === 0 && game.user.isGM)) {
-      handleShockTestPrompt({ requestId, actorId: actor.id, woundedZone, baseSeverity });
+      handleShockTestPrompt({
+        requestId,
+        actorId: actor.id,
+        woundedZone,
+        baseSeverity,
+        isShockWeapon,
+      });
     }
   });
 }

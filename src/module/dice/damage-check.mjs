@@ -300,6 +300,7 @@ export async function damageCheck({
       actor: targetActor,
       woundedZone: zone,
       baseSeverity: shockSeverity,
+      isShockWeapon,
     });
   }
 

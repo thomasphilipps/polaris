@@ -12,12 +12,13 @@ import { promptShockDuration } from '../apps/dialogs/shock-duration-dialog.mjs';
  * Performs a shock check.
  *
  * @param {object} params
- * @param {Pol3Actor} params.actor         The actor taking the test
- * @param {string} params.woundedZone      Zone of the wound causing the test
- * @param {string} params.baseSeverity     Severity of that wound (e.g. 'severe')
+ * @param {Pol3Actor} params.actor                The actor taking the test
+ * @param {string} params.woundedZone             Zone of the wound causing the test
+ * @param {string} params.baseSeverity            Severity of that wound (e.g. 'severe')
+ * @param {boolean} [params.isShockWeapon=false]  Whether or not the weapon has only/additional shock damages
  * @returns {Promise<{state: string, isCatastrophic: boolean, duration: DurationEntry|null, catastrophicDuration: DurationEntry|null}|null>}
  */
-export async function shockCheck({ actor, woundedZone, baseSeverity }) {
+export async function shockCheck({ actor, woundedZone, baseSeverity, isShockWeapon = false }) {
   const contextLabel = game.i18n.localize('POL3.SHOCK.ShockCheck');
   const actionValue = actor.system.stunThreshold.value;
   const valueCrit = Math.round(actionValue / 2);
@@ -46,10 +47,16 @@ export async function shockCheck({ actor, woundedZone, baseSeverity }) {
         severity: baseSeverity,
         zone: woundedZone,
         state: 'catastrophic',
+        isShockWeapon,
       })
     : null;
 
-  const duration = getShockDuration({ severity: baseSeverity, zone: woundedZone, state });
+  const duration = getShockDuration({
+    severity: baseSeverity,
+    zone: woundedZone,
+    state,
+    isShockWeapon,
+  });
 
   if (state !== 'none') {
     await actor.toggleStatusEffect(state, { active: true, overlay: true });

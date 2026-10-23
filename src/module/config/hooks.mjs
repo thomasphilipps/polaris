@@ -76,12 +76,13 @@ export function onRenderChatMessageHTML(message, html) {
 
   if (shockButton) {
     shockButton.addEventListener('click', async () => {
-      const { requestId, actorId, woundedZone, baseSeverity } = shockButton.dataset;
+      const { requestId, actorId, woundedZone, baseSeverity, isShockWeapon } = shockButton.dataset;
       await handleShockTestPrompt({
         requestId,
         actorId,
         woundedZone,
         baseSeverity,
+        isShockWeapon: isShockWeapon === 'true',
       });
       shockButton.disabled = true;
     });
