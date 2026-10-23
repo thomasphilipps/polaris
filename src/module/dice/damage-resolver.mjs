@@ -47,6 +47,21 @@ export function resolveFinalDamage({
 }
 
 /**
+ * Computes final shock damage: shock damage roll + damage resistance (already a negative value)
+ * then shock protection. Floored at 0.
+ *
+ * @param {object} params
+ * @param {number} params.shockDamageRoll       Result of the shock damage formula roll
+ * @param {number} [params.damageResistance=0]  Target's damage resistance (negative value)
+ * @param {number} [params.shockProtection=0]   Armor covering the hit zone's shock protection
+ * @returns {number} Final shock damage, floored at 0
+ */
+export function resolveShockDamage({ shockDamageRoll, damageResistance = 0, shockProtection = 0 }) {
+  const total = shockDamageRoll + damageResistance - shockProtection;
+  return Math.max(0, total);
+}
+
+/**
  * Resolves the wound severity for a given final damage value.
  * Returns null for damage below the lightest threshold (1-4) — the caller
  * distinguishes "no damage at all" (0) from "damage dealt but no wound" (1-4).
