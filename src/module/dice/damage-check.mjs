@@ -291,12 +291,15 @@ export async function damageCheck({
     sound: CONFIG.sounds.dice,
   });
 
-  if (severity && needsShockTest({ severity, zone })) {
+  const isShockWeapon = hasShockPart || isShockOnly;
+  const shockSeverity = hasShockPart ? virtualSeverity : severity;
+
+  if (needsShockTest({ severity: shockSeverity, zone, isShockWeapon })) {
     // The absence of 'await' here is intentional: we want to send the request to not block attacker flow
     requestShockTest({
       actor: targetActor,
       woundedZone: zone,
-      baseSeverity: severity,
+      baseSeverity: shockSeverity,
     });
   }
 

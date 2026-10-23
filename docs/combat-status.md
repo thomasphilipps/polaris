@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-23 (branche `combat`).
+Dernière mise à jour : 2026-10-24 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -118,8 +118,8 @@ Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes.
 
 1. **En cours** — Armes de choc (règles au §4). Faits : étape 0 pénétration, étape 1 champs `shockDamage` / `shockOnly` (commit `52125a1`), étape 2 `isShockWeapon` dans `needsShockTest` (aucun test sans gravité) et `getShockDuration` (2026-10-20). Reste :
    - ✅ **3a** (2026-10-23, commit `d2eadbc`) — `damageCheck`, arme `shockOnly` : jet de `shockDamage` au lieu de `baseDamage` ; protection = `max(0, armure − pénétration)` + `shockProtection` ; pas de `requestApplyWound` ; carte : la gravité est un choc, pas une blessure.
-   - **3b** — `damageCheck`, arme avec `shockDamage` et `shockOnly` faux : après le flux normal, jet de `shockDamage` + résistance − `shockProtection`, plafonné à 0, ajouté aux dommages physiques finaux → gravité virtuelle ; section « Choc » sur la carte. Formule de choc invalide : avertissement, le flux physique continue sans partie choc. Fonction pure `resolveShockDamage` dans `damage-resolver.mjs`.
-   - **3c** — `requestShockTest` appelé avec la gravité réelle ou virtuelle (`needsShockTest` avec `isShockWeapon`).
+   - ✅ **3b** (2026-10-24, commit `8f11f5d`) — `damageCheck`, arme avec `shockDamage` et `shockOnly` faux : après le flux normal, jet de `shockDamage` + résistance − `shockProtection`, plafonné à 0, ajouté aux dommages physiques finaux → gravité virtuelle ; section « Choc » sur la carte. Formule de choc invalide : avertissement, le flux physique continue sans partie choc. Fonction pure `resolveShockDamage` dans `damage-resolver.mjs`.
+   - ✅ **3c** (2026-10-24) — `requestShockTest` appelé avec la gravité réelle ou virtuelle (`needsShockTest` avec `isShockWeapon`).
    - **4** — transmettre `isShockWeapon` par le socket et le bouton MJ jusqu'à `shockCheck` → `getShockDuration` (piège : `"false"` lu dans un `data-*` est vrai).
    - **5** — tests en jeu, puis mise à jour de ce fichier (§1, §2, §4).
 2. Propagation des modifications d'objets (voir §4).
