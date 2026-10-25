@@ -4,6 +4,7 @@ import * as WEAPON from './item/weapons.mjs';
 import * as WOUND from './actor/wounds.mjs';
 import * as ARMOR from './item/armor.mjs';
 import * as BODY_TEMPLATE from './actor/bodyTemplates.mjs';
+import { PROPAGATION_EXCLUDED_PATHS } from './item/propagation.mjs';
 
 /** Polaris game configuration, exposed as CONFIG.POL3. */
 export const POL3 = {
@@ -13,6 +14,7 @@ export const POL3 = {
   WOUND,
   ARMOR,
   BODY_TEMPLATE,
+  PROPAGATION_EXCLUDED_PATHS,
 };
 
 POL3.SUCCESSTABLE = [
