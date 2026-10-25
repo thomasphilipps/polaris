@@ -187,6 +187,9 @@
       "NoToken": "{actorName} n'a pas de jeton sur cette scène.",
       "OutOfRange": "La cible est hors de portée pour {itemName}."
     },
+    "INFO": {
+      "ItemPropagated": "{itemName} : {count} copie(s) mise(s) à jour."
+    },
     "OPPOSED": {
       "RESULT": {
         "AttackerWins": "L'Attaquant touche sa cible.",

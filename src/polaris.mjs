@@ -99,6 +99,9 @@ Hooks.on('preCreateItem', (item, data, options, userId) => {
 Hooks.on('preUpdateItem', (item, updateData, options, userId) => {
   hooks.onPreUpdateItem(item, updateData, options, userId);
 });
+Hooks.on('updateItem', (item, updateData, options, userId) => {
+  hooks.onUpdateItem(item, updateData, options, userId);
+});
 Hooks.on('renderChatMessageHTML', (message, html, context) => {
   hooks.onRenderChatMessageHTML(message, html, context);
 });

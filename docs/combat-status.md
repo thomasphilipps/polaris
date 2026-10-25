@@ -15,6 +15,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 | — | Chat cards détaillées (test, opposition, dégâts) + saut du dialogue de modificateur | ✅ fait, testé (CSS des cartes à faire) |
 | — | Test de Résistance au Choc (armes ordinaires) | ✅ fait, testé |
 | — | Armes de choc (`shockOnly`, dommages additionnels de choc) + pénétration | ✅ fait, testé (2026-10-24) |
+| — | Propagation des modifications d'objets (compendium → monde → copies d'acteur) | ✅ fait, testé (2026-10-25) |
 | D | Rafales, tir à répétition, tir visé, deux armes | ⏳ à faire |
 | E | Arts martiaux / Techniques / Lutte | 🔶 volontairement limité (voir §4) |
 | F | Aveugle, sous l'eau, tir de suppression, boucliers | ⏳ à faire |
@@ -106,7 +107,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
   - Durée : `SHOCK_WEAPON_DURATIONS`, pour l'étourdissement et l'inconscience seulement. Catastrophe : signalée par la carte, effet géré manuellement par le MJ (pas de colonne dans la table).
   - Hors périmètre : armes à action neurale (jouées en roleplay, trop spécifiques), exo-armures (traitées plus tard, avec leurs règles proches des véhicules), armes inopérantes sous l'eau (phase F), charges supplémentaires (−1 au Test de Choc par charge en plus, dommages inchangés : géré par le MJ, à reprendre avec les munitions ; 2026-10-23).
 - **Pénétration (décision du 2026-10-16, faite le 2026-10-17)** : protection d'armure effective = `max(0, protection − penetration)` ; la pénétration n'ajoute jamais de dommages sans armure et ne réduit pas `shockProtection`.
-- **Propagation des modifications d'objets (décisions du 2026-10-17 et du 2026-10-25, en cours)** : sens unique compendium → objets du monde → copies embarquées dans les acteurs (une modification du monde ne touche jamais le compendium). Report automatique, sans confirmation, du diff de la mise à jour (`changes`), nom et image compris. Tous les champs de définition sont propagés (le MJ doit pouvoir corriger une erreur de création en cours de partie), sauf l'état propre au personnage (voir ci-dessous, 2026-10-25) ; une variante propre à un personnage passera par un objet distinct ou des ActiveEffects. Lien par l'uuid de l'original (flag posé au drop, ou `_stats.compendiumSource`), via le hook `updateItem` exécuté par le seul client auteur. L'ancien flag `parentItemId` n'est pas repris (système pas encore public, aucune migration). Tokens non liés hors périmètre (voir dette #13).
+- **Propagation des modifications d'objets (décisions du 2026-10-17 et du 2026-10-25, faite et testée le 2026-10-25)** : sens unique compendium → objets du monde → copies embarquées dans les acteurs (une modification du monde ne touche jamais le compendium). Report automatique, sans confirmation, du diff de la mise à jour (`changes`), nom et image compris. Tous les champs de définition sont propagés (le MJ doit pouvoir corriger une erreur de création en cours de partie), sauf l'état propre au personnage (voir ci-dessous, 2026-10-25) ; une variante propre à un personnage passera par un objet distinct ou des ActiveEffects. Lien par l'uuid de l'original (flag posé au drop, ou `_stats.compendiumSource`), via le hook `updateItem` exécuté par le seul client auteur. L'ancien flag `parentItemId` n'est pas repris (système pas encore public, aucune migration). Tokens non liés hors périmètre (voir dette #13).
   - Architecture (validée le 2026-10-25) : flag `flags.polaris.sourceUuid` posé au drop sur l'acteur (surcharge de `_onDropItem`, uuid de l'objet glissé, monde ou compendium) ; parent d'un objet du monde = `_stats.compendiumSource` (posé par Foundry). Hook `updateItem` → `onUpdateItem` : auteur seulement, MJ seulement, objets embarqués ignorés (feuilles, évite les boucles). Compendium → objets du monde liés + copies d'acteur liées directement ; la mise à jour d'un objet du monde redéclenche le hook pour ses propres copies. Diff = `changes` sans `_id`, `_stats`, `folder`, `sort`, `ownership`, ni les champs d'état propres au personnage (décision 2026-10-25, liste en config) : `system.mastery`, `system.specialization`, `system.isEquipped`, `system.quantity`, `system.integrity`. Écriture groupée par acteur (`updateEmbeddedDocuments`). Notification au MJ du nombre de copies mises à jour. Objets déjà embarqués sans flag : non liés (reglisser dans la base de test). Original supprimé : la copie reste, lien mort sans effet. Le code `parentItemId` de `onPreCreateItem` est supprimé.
   - **Munitions spéciales (à concevoir plus tard)** : ActiveEffects portés par l'objet ou objets à part, non tranché. À vérifier à ce moment-là : la propagation ne doit pas écraser ce que les munitions modifient. Des ActiveEffects ne touchent que les données dérivées (sans risque) ; une munition qui modifierait les données source de l'arme serait écrasée.
 - **CSS des chat cards** : à faire en dernier, une fois le reste prêt (décision de Thomas).
@@ -123,12 +124,11 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 ## 6. Prochaines étapes envisageables
 
-Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes. Armes de choc terminées et testées le 2026-10-24 (commits `52125a1` à `2daeb3d`).
+Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes. Armes de choc terminées et testées le 2026-10-24 (commits `52125a1` à `2daeb3d`). Propagation des objets terminée et testée le 2026-10-25.
 
-1. Propagation des modifications d'objets (voir §4).
-2. CSS des chat cards (dette #7), en dernier.
-3. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
-4. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
+1. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
+2. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
+3. CSS des chat cards (dette #7), en dernier.
 
 ## 7. Mise à jour de ce fichier
 

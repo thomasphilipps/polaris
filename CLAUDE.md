@@ -46,10 +46,10 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 
 | Chemin (`src/module/…`) | Rôle |
 |---|---|
-| `config/config.mjs` | Agrège `POL3` (ATTRIBUTE, SKILL, WEAPON, WOUND, ARMOR, BODY_TEMPLATE) + `SUCCESSTABLE`, `FAILURETABLE`, `DEGREE_BARELY`, GENETICTYPE, SEX, HANDEDNESS, BOOK, TABLEARRAY |
+| `config/config.mjs` | Agrège `POL3` (ATTRIBUTE, SKILL, WEAPON, WOUND, ARMOR, BODY_TEMPLATE, PROPAGATION_EXCLUDED_PATHS) + `SUCCESSTABLE`, `FAILURETABLE`, `DEGREE_BARELY`, GENETICTYPE, SEX, HANDEDNESS, BOOK, TABLEARRAY |
 | `config/actor/` | `attributes`, `wounds` (SEVERITIES, BASE_MAX, RESISTANT_BONUS, MALUS, ACTION_IMPOSSIBLE, SEVERITY_THRESHOLDS, `ZONES()`, `buildDefaultWounds()`), `bodyTemplates` (BODY_TEMPLATES, TYPE, LOCATION_TABLES) |
-| `config/item/` | `skills`, `weapons` (CATEGORY, SUBCATEGORY, RANGE, BURST, CATEGORY_TO_SKILL_CATEGORY), `armor` (TYPE, CATEGORY, ZONES) |
-| `config/hooks.mjs` | Handlers de hooks (`onPreCreateItem`, `onPreUpdateItem`, `onRenderChatMessageHTML` : boutons MJ des cartes, retirés chez les joueurs) |
+| `config/item/` | `skills`, `weapons` (CATEGORY, SUBCATEGORY, RANGE, BURST, CATEGORY_TO_SKILL_CATEGORY), `armor` (TYPE, CATEGORY, ZONES), `propagation` (`PROPAGATION_EXCLUDED_PATHS` : champs jamais propagés) |
+| `config/hooks.mjs` | Handlers de hooks (`onPreCreateItem`, `onPreUpdateItem`, `onUpdateItem` : propagation compendium → monde → copies d'acteur liées par `flags.polaris.sourceUuid`, `onRenderChatMessageHTML` : boutons MJ des cartes, retirés chez les joueurs) |
 | `config/settings.mjs`, `config/templates.mjs` | `registerSystemSettings` (réglage monde `worldAmbiance`, réglage client `askForModifier`) ; `preloadHandlebarsTemplates` (partials préchargés, dont ceux des chat cards) |
 | `models/`, `documents/`, `apps/` → `_module.mjs` | Barrels importés par `polaris.mjs` (une classe à enregistrer = une ligne à y ajouter) |
 | `models/actor/` | `base-actor.mjs` (`Pol3ActorDataModel` : `bodyTemplate`, `wounds` en `TypedObjectField`, attributs ; `heroFields()`), `hero.mjs` (`Pol3Hero`) |
@@ -66,8 +66,8 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 | `net/socket.mjs` | Canal `system.polaris` : `initSocketListeners`, `requestOpposedDefense`, `requestShockTest`, `requestApplyWound` ; `postGmOverrideMessage` (bouton MJ « Répondre à sa place ») ; `handleOpposedDefensePrompt` et `handleShockTestPrompt`, branchés sur ce bouton dans `hooks.mjs` |
 | `apps/chat/chat-card.mjs` | `renderChatCard` (rendu d'un template `templates/chat/`), `breakdownRoll` (termes d'un `Roll` à afficher), `buildCheckContext` (contexte commun des cartes de test) |
 | `apps/dialogs/` | `modifier-dialog`, `location-dialog`, `opposed-defense-dialog`, `shock-duration-dialog` (DialogV2) |
-| `apps/sheets/` | `actor/` (`base-actor-sheet`, `hero-sheet`), `item/` (`base-item-sheet`, `skill-sheet`, `weapon-sheet`, `armor-sheet`) |
-| `utils/` | `sheet-utils` (`datasetOf`, `toPascalCase`, `groupItemsByField`, `openConfigDialog`), `combat-utils` (`getSingleTarget`, `getActorToken`, `measureTokenDistance`, `getRangeBand`), `helpers` (`sumModifiers`, `askForModifiers` : réglage client inversé par Maj) |
+| `apps/sheets/` | `actor/` (`base-actor-sheet` : `_onDropItem` pose `flags.polaris.sourceUuid`, `hero-sheet`), `item/` (`base-item-sheet`, `skill-sheet`, `weapon-sheet`, `armor-sheet`) |
+| `utils/` | `sheet-utils` (`datasetOf`, `toPascalCase`, `groupItemsByField`, `openConfigDialog`), `combat-utils` (`getSingleTarget`, `getActorToken`, `measureTokenDistance`, `getRangeBand`), `helpers` (`sumModifiers`, `askForModifiers` : réglage client inversé par Maj), `item-propagation` (`buildPropagationDiff`, pur : diff aplati sans les chemins exclus) |
 | `dev/dice-cheat.mjs` | File de d20 forcés : `forceNextD20`, `clearForcedRolls` (console, dev), `consumeForcedD20` (lu par `rollD20`) |
 
 Hors module : `src/polaris.mjs` (init : modèles, sheets, hooks, sockets, réglages), `src/system.json` (`"socket": true`), `src/lang/fr.json`, `src/polaris.css`, `src/assets/icons/` (icônes de catégories de compétence), `src/templates/` (`sheets/`, `dialogs/` = dialogues de config de la fiche d'acteur, `chat/` = `task-card`, `opposed-card`, `damage-card`, `shock-card`, `duration-card` + `partials/`), `src/_source/skills/*.yml` + `src/packs-maker.mjs` (compendium des compétences), `rollup.config.mjs`.
