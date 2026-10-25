@@ -3,18 +3,14 @@ import { rollShockDuration } from '../dice/shock-check.mjs';
 /** @import Pol3Item from '../documents/item.mjs' */
 
 /**
- * preCreateItem hook: stores the source item id on embedded items and sets
- * the default icon of a skill from its category.
+ * preCreateItem hook:
+ * - sets the default icon of a skill from its category.
  * @param {Pol3Item} item   The item about to be created
  * @param {object} data     Creation data
  * @param {object} options  Creation options
  * @param {string} userId   Id of the user creating the item
  */
 export function onPreCreateItem(item, data, options, userId) {
-  // Adding useful informations when dropping an item on an Actor's sheet
-  if (item.parent instanceof Actor) {
-    item.updateSource({ 'flags.polaris.parentItemId': item.id });
-  }
   switch (item.type) {
     case 'skill':
       const initialSkillImage = `systems/polaris/assets/icons/${item.system.category}.png`;

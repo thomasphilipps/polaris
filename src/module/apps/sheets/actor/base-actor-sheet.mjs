@@ -584,9 +584,15 @@ export default class Pol3BaseActorSheet extends api.HandlebarsApplicationMixin(
       return false;
     }
 
-    // TODO: set a flag to retrieve the original object later, and handle in-sheet
-    // reordering via _onSortItem when dropping onto the same actor.
+    // TODO: reordering via _onSortItem when dropping onto the same actor.
+
     const keepId = !this.actor.items.has(item.id);
-    await Item.create(item, { parent: this.actor, keepId });
+
+    // keeping relevant UUID in a flag to propagate the Item's modifications
+    const data = item.toObject();
+    const sourceUuid = item.parent ? item.getFlag('polaris', 'sourceUuid') : item.uuid;
+    foundry.utils.setProperty(data, 'flags.polaris.sourceUuid', sourceUuid);
+
+    await Item.create(data, { parent: this.actor, keepId });
   }
 }
