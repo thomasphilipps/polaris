@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-25 (branche `combat`).
+Dernière mise à jour : 2026-10-27 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -16,7 +16,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 | — | Test de Résistance au Choc (armes ordinaires) | ✅ fait, testé |
 | — | Armes de choc (`shockOnly`, dommages additionnels de choc) + pénétration | ✅ fait, testé (2026-10-24) |
 | — | Propagation des modifications d'objets (compendium → monde → copies d'acteur) | ✅ fait, testé (2026-10-25) |
-| D | Rafales, tir à répétition, tir visé, deux armes | ⏳ à faire |
+| D | Mode de tir (répétition, rafales) + nombre de balles ; le reste laissé au MJ (voir §4) | ⏳ à faire |
 | E | Arts martiaux / Techniques / Lutte | 🔶 volontairement limité (voir §4) |
 | F | Aveugle, sous l'eau, tir de suppression, boucliers | ⏳ à faire |
 
@@ -110,6 +110,14 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 - **Propagation des modifications d'objets (décisions du 2026-10-17 et du 2026-10-25, faite et testée le 2026-10-25)** : sens unique compendium → objets du monde → copies embarquées dans les acteurs (une modification du monde ne touche jamais le compendium). Report automatique, sans confirmation, du diff de la mise à jour (`changes`), nom et image compris. Tous les champs de définition sont propagés (le MJ doit pouvoir corriger une erreur de création en cours de partie), sauf l'état propre au personnage (voir ci-dessous, 2026-10-25) ; une variante propre à un personnage passera par un objet distinct ou des ActiveEffects. Lien par l'uuid de l'original (flag posé au drop, ou `_stats.compendiumSource`), via le hook `updateItem` exécuté par le seul client auteur. L'ancien flag `parentItemId` n'est pas repris (système pas encore public, aucune migration). Tokens non liés hors périmètre (voir dette #13).
   - Architecture (validée le 2026-10-25) : flag `flags.polaris.sourceUuid` posé au drop sur l'acteur (surcharge de `_onDropItem`, uuid de l'objet glissé, monde ou compendium) ; parent d'un objet du monde = `_stats.compendiumSource` (posé par Foundry). Hook `updateItem` → `onUpdateItem` : auteur seulement, MJ seulement, objets embarqués ignorés (feuilles, évite les boucles). Compendium → objets du monde liés + copies d'acteur liées directement ; la mise à jour d'un objet du monde redéclenche le hook pour ses propres copies. Diff = `changes` sans `_id`, `_stats`, `folder`, `sort`, `ownership`, ni les champs d'état propres au personnage (décision 2026-10-25, liste en config) : `system.mastery`, `system.specialization`, `system.isEquipped`, `system.quantity`, `system.integrity`. Écriture groupée par acteur (`updateEmbeddedDocuments`). Notification au MJ du nombre de copies mises à jour. Objets déjà embarqués sans flag : non liés (reglisser dans la base de test). Original supprimé : la copie reste, lien mort sans effet. Le code `parentItemId` de `onPreCreateItem` est supprimé.
   - **Munitions spéciales (à concevoir plus tard)** : ActiveEffects portés par l'objet ou objets à part, non tranché. À vérifier à ce moment-là : la propagation ne doit pas écraser ce que les munitions modifient. Des ActiveEffects ne touchent que les données dérivées (sans risque) ; une munition qui modifierait les données source de l'arme serait écrasée.
+- **Phase D, distance (décisions du 2026-10-26 et du 2026-10-27, architecture validée le 2026-10-27, à coder)** : seuls le **mode de tir** et le **nombre de balles** sont automatisés (« faciliter, pas remplacer »).
+  - Sélecteur « Mode de tir » proposé seulement pour les modes de l'arme (`tags` → `BURST`) ; tir simple = aucun champ en plus. Champ « Balles » pour le tir à répétition (2 à 10) et la rafale longue (5 à 20).
+  - Tir à répétition (lecture de Thomas, 2026-10-27, plus généreuse que le texte strict qui attend 3 balles complètes par groupe) : 2 à 4 balles → +1 par balle au-delà de la première (max +3) ; 5 à 7 balles → 1 groupe, 8 à 10 balles → 2 groupes ; base +3 au tir, et chaque groupe donne au choix +1 au tir ou +3 aux dommages (panachage permis : 8 à 10 balles → +5 / +4 et +3 / +3 et +6). Bonus aux dommages à **courte portée seulement** (le bout portant a déjà son propre bonus).
+  - Rafale courte : +3 au tir, **ou** +5 aux dommages. Rafale longue : par groupe de 5 balles, +2 au tir **et** +2 aux dommages. Pour les rafales, bonus aux dommages à bout portant ou courte portée seulement ; le bonus au tir s'applique toujours.
+  - Bande de portée : la valeur calculée (canvas + `hitDistance`) devient la valeur par défaut, modifiable dans le dialogue par celui qui tire (le livre présente les portées comme indicatives) ; pas de verrou ni de notification : si la bande choisie diffère de la bande calculée, la carte de tir l'indique (« modifiée, calculée : … »), le MJ juge à la lecture (décision 2026-10-27 ; réglage « MJ seulement » possible plus tard en cas d'abus).
+  - Architecture : dialogue `ranged-attack-dialog.mjs` (DialogV2) pour les armes à distance, à la place du dialogue ad hoc (bande de portée, mode, balles, choix tir/dommages, ad hoc) ; mêmes règles de saut (`askForModifier`, Maj), sauté = bande calculée + tir simple. Logique pure `resolveFireMode` (`fire-mode-resolver.mjs`) → `{ hitModifier, damageModifier }` ; données dans `BURST` (`config/item/weapons.mjs`) : chaque capacité de l'arme porte ses `modes` (`single` → `singleShot`, `repeat` ; `short` → `shortBurst` ; `long` → `longBurst`), chaque mode = données pures `{ label, minBullets, maxBullets, damageRanges, groups }`, `groups` = paliers `{ bulletThreshold, shotBonus, damageBonus, isChoice }` (décision 2026-10-27 : pas de logique dans la config). `damageModifier` transmis à `damageCheck` (ligne dédiée sur la carte). Hors périmètre : coût d'Initiative du changement de mode, décompte des munitions.
+  - Laissé au MJ (ad hoc ou jets relancés) : taille de la cible, couverture, déplacements, obscurité, tir en aveugle, rafale sur plusieurs cibles, tir de suppression, tir de précision, deux armes (le −3 du tir simple à deux armes serait le malus de la main non directrice : supposition de Thomas, à confirmer). Tir visé bloqué par l'Initiative (§5).
+  - Le texte des règles est dans `rules.md` (racine, ignoré par git) : contenu du livre, ne jamais le committer.
 - **CSS des chat cards** : à faire en dernier, une fois le reste prêt (décision de Thomas).
 - **Phase E (décision prise)** : pas de détection automatique des Techniques (dépendrait du couplage par nom, et Initiative / états multi-tours n'existent pas). À la place : champ ad hoc sur les dégâts (fait) + Journal Entry d'aide-mémoire à créer/vérifier dans Foundry.
 - **Vérification légale** : contact avec l'éditeur / Philippe Tessier avant toute publication officielle (nom « Polaris », liste de compétences) — hors code, en cours côté Thomas.
@@ -121,12 +129,13 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 - **Test d'Observation / Perception** (combat et tir en aveugle) : vérifier qu'une compétence équivalente existe dans le compendium.
 - États persistants multi-tours (clé maintenue, étranglement progressif) : aucun mécanisme.
 - Condition exacte pour « être capable de manier deux armes » : non précisée par le texte.
+- Tir simple à deux armes : origine du malus que le bonus de +3 « annule » (supposé : main non directrice, à confirmer).
 
 ## 6. Prochaines étapes envisageables
 
 Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes. Armes de choc terminées et testées le 2026-10-24 (commits `52125a1` à `2daeb3d`). Propagation des objets terminée et testée le 2026-10-25.
 
-1. Phase D (distance) : demander à Thomas de coller les règles correspondantes avant de proposer l'architecture.
+1. **En cours** — Phase D (distance), architecture validée le 2026-10-27 (§4). Fait : étape 1, données des modes dans `BURST` (WIP). Reste : étape 2 `resolveFireMode` (pur, tests Node), étape 3 dialogue `ranged-attack-dialog.mjs` (portée présélectionnée, mode, balles, groupes aux dommages, ad hoc), étape 4 transmission (`hitModifier` dans le test de tir, `damageModifier` jusqu'à `damageCheck`, trace de portée modifiée sur la carte), étape 5 tests en jeu. Détail du travail en cours : `TODO-phase-d.md` (racine, temporaire).
 2. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
 3. CSS des chat cards (dette #7), en dernier.
 

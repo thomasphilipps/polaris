@@ -48,7 +48,7 @@ Avancement, règles déjà tranchées, dette technique et TODO : @docs/combat-st
 |---|---|
 | `config/config.mjs` | Agrège `POL3` (ATTRIBUTE, SKILL, WEAPON, WOUND, ARMOR, BODY_TEMPLATE, PROPAGATION_EXCLUDED_PATHS) + `SUCCESSTABLE`, `FAILURETABLE`, `DEGREE_BARELY`, GENETICTYPE, SEX, HANDEDNESS, BOOK, TABLEARRAY |
 | `config/actor/` | `attributes`, `wounds` (SEVERITIES, BASE_MAX, RESISTANT_BONUS, MALUS, ACTION_IMPOSSIBLE, SEVERITY_THRESHOLDS, `ZONES()`, `buildDefaultWounds()`), `bodyTemplates` (BODY_TEMPLATES, TYPE, LOCATION_TABLES) |
-| `config/item/` | `skills`, `weapons` (CATEGORY, SUBCATEGORY, RANGE, BURST, CATEGORY_TO_SKILL_CATEGORY), `armor` (TYPE, CATEGORY, ZONES), `propagation` (`PROPAGATION_EXCLUDED_PATHS` : champs jamais propagés) |
+| `config/item/` | `skills`, `weapons` (CATEGORY, SUBCATEGORY, RANGE, BURST : capacités de tir de l'arme + leurs `modes` et paliers de bonus, CATEGORY_TO_SKILL_CATEGORY), `armor` (TYPE, CATEGORY, ZONES), `propagation` (`PROPAGATION_EXCLUDED_PATHS` : champs jamais propagés) |
 | `config/hooks.mjs` | Handlers de hooks (`onPreCreateItem`, `onPreUpdateItem`, `onUpdateItem` : propagation compendium → monde → copies d'acteur liées par `flags.polaris.sourceUuid`, `onRenderChatMessageHTML` : boutons MJ des cartes, retirés chez les joueurs) |
 | `config/settings.mjs`, `config/templates.mjs` | `registerSystemSettings` (réglage monde `worldAmbiance`, réglage client `askForModifier`) ; `preloadHandlebarsTemplates` (partials préchargés, dont ceux des chat cards) |
 | `models/`, `documents/`, `apps/` → `_module.mjs` | Barrels importés par `polaris.mjs` (une classe à enregistrer = une ligne à y ajouter) |

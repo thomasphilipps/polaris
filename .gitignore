@@ -19,3 +19,7 @@ Thumbs.db
 
 # FoundryVTT
 packs/
+
+# Local working files (never commit: rules.md holds copyrighted book text)
+tests.mjs
+rules.md

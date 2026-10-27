@@ -64,14 +64,59 @@ export const BURST = {
   single: {
     label: 'POL3.WEAPON.BURST.SingleShot.Label',
     symbol: 'POL3.WEAPON.BURST.SingleShot.Symbol',
+    modes: {
+      singleShot: {
+        label: 'POL3.WEAPON.BURST.SingleShot.Label',
+        minBullets: 1,
+        maxBullets: 1,
+        damageRanges: [],
+        groups: [],
+      },
+      repeat: {
+        label: 'POL3.WEAPON.BURST.Repeat.Label',
+        minBullets: 2,
+        maxBullets: 10,
+        damageRanges: ['short'],
+        groups: [
+          { bulletThreshold: 2, shotBonus: 1, damageBonus: 0, isChoice: false },
+          { bulletThreshold: 3, shotBonus: 1, damageBonus: 0, isChoice: false },
+          { bulletThreshold: 4, shotBonus: 1, damageBonus: 0, isChoice: false },
+          { bulletThreshold: 5, shotBonus: 1, damageBonus: 3, isChoice: true },
+          { bulletThreshold: 8, shotBonus: 1, damageBonus: 3, isChoice: true },
+        ],
+      },
+    },
   },
   short: {
     label: 'POL3.WEAPON.BURST.ShortBurst.Label',
     symbol: 'POL3.WEAPON.BURST.ShortBurst.Symbol',
+    modes: {
+      shortBurst: {
+        label: 'POL3.WEAPON.BURST.ShortBurst.Label',
+        minBullets: 3,
+        maxBullets: 3,
+        damageRanges: ['close', 'short'],
+        groups: [{ bulletThreshold: 3, shotBonus: 3, damageBonus: 5, isChoice: true }],
+      },
+    },
   },
   long: {
     label: 'POL3.WEAPON.BURST.LongBurst.Label',
     symbol: 'POL3.WEAPON.BURST.LongBurst.Symbol',
+    modes: {
+      longBurst: {
+        label: 'POL3.WEAPON.BURST.LongBurst.Label',
+        minBullets: 5,
+        maxBullets: 20,
+        damageRanges: ['close', 'short'],
+        groups: [
+          { bulletThreshold: 5, shotBonus: 2, damageBonus: 2, isChoice: false },
+          { bulletThreshold: 10, shotBonus: 2, damageBonus: 2, isChoice: false },
+          { bulletThreshold: 15, shotBonus: 2, damageBonus: 2, isChoice: false },
+          { bulletThreshold: 20, shotBonus: 2, damageBonus: 2, isChoice: false },
+        ],
+      },
+    },
   },
 };
 

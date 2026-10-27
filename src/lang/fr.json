@@ -383,6 +383,10 @@
         "SingleShot": {
           "Label": "Coup par coup",
           "Symbol": "CC"
+        },
+        "Repeat": {
+          "Label": "Tir à répétition",
+          "Symbol": "TR"
         }
       },
       "Category": {
