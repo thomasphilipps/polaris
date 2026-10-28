@@ -1,6 +1,6 @@
 # État du combat — Polaris pour FoundryVTT
 
-Dernière mise à jour : 2026-10-27 (branche `combat`).
+Dernière mise à jour : 2026-10-28 (branche `combat`).
 Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu'une décision est prise.
 
 ## 1. Avancement
@@ -135,7 +135,7 @@ Fichier importé par `CLAUDE.md`. Mets-le à jour dès qu'une phase avance ou qu
 
 Piste 1 terminée et testée le 2026-10-11, hors CSS des cartes. Armes de choc terminées et testées le 2026-10-24 (commits `52125a1` à `2daeb3d`). Propagation des objets terminée et testée le 2026-10-25.
 
-1. **En cours** — Phase D (distance), architecture validée le 2026-10-27 (§4). Fait : étape 1, données des modes dans `BURST` (WIP). Reste : étape 2 `resolveFireMode` (pur, tests Node), étape 3 dialogue `ranged-attack-dialog.mjs` (portée présélectionnée, mode, balles, groupes aux dommages, ad hoc), étape 4 transmission (`hitModifier` dans le test de tir, `damageModifier` jusqu'à `damageCheck`, trace de portée modifiée sur la carte), étape 5 tests en jeu. Détail du travail en cours : `TODO-phase-d.md` (racine, temporaire).
+1. **En cours** — Phase D (distance), architecture validée le 2026-10-27 (§4). Fait : étape 1, données des modes dans `BURST` (WIP) ; étape 2, `resolveFireMode` (`dice/fire-mode-resolver.mjs`, pur, 9 cas validés sous Node le 2026-10-28). Reste : étape 3 dialogue `ranged-attack-dialog.mjs` (portée présélectionnée, mode, balles, groupes aux dommages, ad hoc), étape 4 transmission (`hitModifier` dans le test de tir, `damageModifier` jusqu'à `damageCheck`, trace de portée modifiée sur la carte), étape 5 tests en jeu. Détail du travail en cours : `TODO-phase-d.md` (racine, temporaire).
 2. Audit i18n (textes en dur, clés manquantes) et clés stables pour les compétences (supprime la dette #1).
 3. CSS des chat cards (dette #7), en dernier.
 
